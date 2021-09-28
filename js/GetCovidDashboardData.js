@@ -43,7 +43,6 @@ function GetDailyTesting() {
             "<th>StatGroup</th>" +
             "<th>PostiveTests1</th>" +
             "<th>TotalTests1</th>" +
-            "<th>TestingRate1</th>" +
             "</tr>";
         for (let x in myObj['features']) {
             reportDate = new Date(myObj['features'][x].attributes.Date);
@@ -52,7 +51,6 @@ function GetDailyTesting() {
                 "<td>" + myObj['features'][x].attributes.StatGroup + "</td>" +
                 "<td>" + myObj['features'][x].attributes.PostiveTests1 + "</td>" +
                 "<td>" + myObj['features'][x].attributes.TotalTests1 + "</td>" +
-                "<td>" + myObj['features'][x].attributes.TestingRate1 + "</td>" +
                 "</tr>";
         }
         text += "</table>"
@@ -214,7 +212,7 @@ function GetProvincialSummary(){
                 "<td>" + myObj['features'][x].attributes.Recovered + "</td>" +
                 "<td>" + myObj['features'][x].attributes.Deaths + "</td>" +
                 "<td>" + myObj['features'][x].attributes.TotalTests + "</td>" +
-                "<td>" + myObj['features'][x].attributes.Hospitalized + "</td>" +
+                "<td>" + myObj['features'][x].attributes.Hospitalised + "</td>" +
                 "<td>" + myObj['features'][x].attributes.ICU + "</td>" +
                 "</tr>";
 
