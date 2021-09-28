@@ -10,7 +10,7 @@ function GetVaccinationByAgeGroup() {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
-        let text = "<table class=\"table table-striped table-bordered\" id='tblData'>"
+        let text = "<table class=\"table table-striped table-hover table-bordered\" id='tblData'>"
         text += "<tr>" +
             "<th>Age Group</th>" +
             "<th>First Dose</th>" +
@@ -38,11 +38,12 @@ function GetDailyTesting() {
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
 
-        let text = "<table class=\"table table-striped table-bordered\" id='tblData'>"
+        let text = "<table class=\"table table-striped table-hover table-bordered\" id='tblData'>"
         text += "<tr>" +
             "<th>StatGroup</th>" +
             "<th>PostiveTests1</th>" +
             "<th>TotalTests1</th>" +
+            "<th>TestingRate1</th>" +
             "</tr>";
         for (let x in myObj['features']) {
             reportDate = new Date(myObj['features'][x].attributes.Date);
@@ -51,6 +52,7 @@ function GetDailyTesting() {
                 "<td>" + myObj['features'][x].attributes.StatGroup + "</td>" +
                 "<td>" + myObj['features'][x].attributes.PostiveTests1 + "</td>" +
                 "<td>" + myObj['features'][x].attributes.TotalTests1 + "</td>" +
+                "<td>" + myObj['features'][x].attributes.TestingRate1 + "</td>" +
                 "</tr>";
         }
         text += "</table>"
@@ -110,7 +112,7 @@ function GetVaccinationHistory() {
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
 
-        let text = "<table class=\"table table-striped table-bordered\" id='tblData'>"
+        let text = "<table class=\"table table-hover table-striped table-bordered\" id='tblData'>"
         text += "<tr>" +
             "<th>Date</th>" +
             "<th>TotalReceivedENG</th>" +
@@ -149,7 +151,7 @@ function GetCaseHistory(){
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
 
-        let text = "<table class=\"table table-striped table-bordered\" id='tblData'>"
+        let text = "<table class=\"table table-hover table-striped table-bordered\" id='tblData'>"
         text += "<tr>" +
             "<th>Date</th>" +
             "<th>Total</th>" +
@@ -187,42 +189,84 @@ function GetProvincialSummary(){
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
 
-        let text = "<table class=\"table table-striped table-bordered\" id='tblData'>"
+        let x = 0; // this report returns 1 row
+        reportDate = new Date(myObj['features'][x].attributes.LastUpdateText);
+        displayReportDate = reportDate.toISOString();
+        displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
+
+        let text = "<table class=\"table table-hover table-bordered\" id='tblData'>"
         text += "<tr>" +
-            "<th>Date</th>" +
-            "<th>TotalCases</th>" +
-            "<th>NewToday</th>" +
-            "<th>ActiveCases</th>" +
-            "<th>Recovered</th>" +
-            "<th>Deaths</th>" +
-            "<th>TotalTests</th>" +
-            "<th>Hospitalized</th>" +
-            "<th>ICU</th>" +
-            "</tr>";
-        for (let x in myObj['features']) {
-            reportDate = new Date(myObj['features'][x].attributes.LastUpdateText);
-            displayReportDate = reportDate.toISOString();
-            displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
+            "<th>Date</th>" + "<td>" + displayReportDate + "</td>" +
+            "<th>TotalCases</th>" + "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
+            "<th>NewToday</th>" + "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
+            "<th>ActiveCases</th>" + "<td>" + myObj['features'][x].attributes.ActiveCases + "</td>" +
+            "<th>Recovered</th>" + "<td>" + myObj['features'][x].attributes.Recovered + "</td>" +
+            "</tr><tr>" +
+            "<th>Deaths</th>" + "<td>" + myObj['features'][x].attributes.Deaths + "</td>" +
+            "<th>TotalHospitalized</th>" +"<td>" + myObj['features'][x].attributes.TtlHospitald + "</td>" +
+            "<th>Hospitalized</th>" +"<td>" + myObj['features'][x].attributes.Hospitalised + "</td>" +
+            "<th>ICU</th>" +"<td>" + myObj['features'][x].attributes.ICU + "</td>" +
+            "<th>Discharged</th>" +"<td>" + myObj['features'][x].attributes.DischHosp + "</td>" +
+            "</tr><tr>" +
+            "<th>TotalTests</th>" + "<td>" + myObj['features'][x].attributes.TotalTests + "</td>" +
+            "<th>CloseContacts</th>" +"<td>" + myObj['features'][x].attributes.ClsContct + "</td>" +
+            "<th>CommunityTransmission</th>" +"<td>" + myObj['features'][x].attributes.CommTrnsmsn + "</td>" +
+            "<th>TravelRelated</th>" +"<td>" + myObj['features'][x].attributes.TravelRel + "</td>" +
+            "<th>UnderInvestigation</th>" +"<td>" + myObj['features'][x].attributes.UnderInves + "</td>" +
+            "</tr><tr>" +
+            "<th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td>" +
+            "<th>HealthZoneEng</th>" +"<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
+            "<th>HealthZoneFr</th>" +"<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
+            "<th>&nbsp;</th>" +"<td>&nbsp;</td>" +
+            "<th>&nbsp;</th>" +"<td>&nbsp;</td>" +
+            "</tr>"
+        ;
 
-            text += "<tr>" +
-                "<td>" + displayReportDate + "</td>" +
-                "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
-                "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
-                "<td>" + myObj['features'][x].attributes.ActiveCases + "</td>" +
-                "<td>" + myObj['features'][x].attributes.Recovered + "</td>" +
-                "<td>" + myObj['features'][x].attributes.Deaths + "</td>" +
-                "<td>" + myObj['features'][x].attributes.TotalTests + "</td>" +
-                "<td>" + myObj['features'][x].attributes.Hospitalised + "</td>" +
-                "<td>" + myObj['features'][x].attributes.ICU + "</td>" +
-                "</tr>";
-
-
-        }
         text += "</table>"
 
         document.getElementById("showData").innerHTML = text;
     }
     xmlhttp.open("GET", "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/HealthZones/FeatureServer/0/query?where=HealthZone%3D%27Province%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=standard&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=50&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=");
+    xmlhttp.send("x=" + dbParam);
+
+    showExportButton();
+}
+
+function GetZoneSummary(){
+    const dbParam = JSON.stringify({table:"features",limit:20});
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function() {
+        const myObj = JSON.parse(this.responseText);
+
+        let text = "<table class=\"table table-hover table-bordered\" id='tblData'>";
+
+        for (let x in myObj['features']) {
+            reportDate = new Date(myObj['features'][x].attributes.LastUpdateText);
+            displayReportDate = reportDate.toISOString();
+            displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
+
+
+            text += "<tr>" +
+                "<th>Date</th>" + "<td>" + displayReportDate + "</td>" +
+                "<th>TotalCases</th>" + "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
+                "<th>NewToday</th>" + "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
+                "<th>ActiveCases</th>" + "<td>" + myObj['features'][x].attributes.ActiveCases + "</td>" +
+                "<th>Recovered</th>" + "<td>" + myObj['features'][x].attributes.Recovered + "</td>" +
+                "</tr><tr>" +
+                "<th>Deaths</th>" + "<td>" + myObj['features'][x].attributes.Deaths + "</td>" +
+                "<th>TotalTests</th>" + "<td>" + myObj['features'][x].attributes.TotalTests + "</td>" +
+                "<th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td>" +
+                "<th>HealthZoneEng</th>" + "<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
+                "<th>HealthZoneFr</th>" + "<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
+                "</tr>"
+            ;
+
+
+        }
+        text += "</table>";
+        document.getElementById("showData").innerHTML = text;
+    }
+    xmlhttp.open("GET", "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/HealthZones/FeatureServer/0/query?where=HealthZone%3C%3E%27Province%27+AND+HealthZone%3C%3E%27Outside+NB%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=standard&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=true&orderByFields=HealthZnEng+asc&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=");
     xmlhttp.send("x=" + dbParam);
 
     showExportButton();
@@ -263,7 +307,7 @@ function GetVaccineTimetable(){
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
 
-        let text = "<table class=\"table table-striped table-bordered\" id='tblData'>"
+        let text = "<table class=\"table table-hover table-striped table-bordered\" id='tblData'>"
         text += "<tr>" +
             "<th>Date</th>" +
             "<th>TotalReceived</th>" +
