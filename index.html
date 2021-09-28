@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="NB Covid Data Viewer">
+    <meta name="author" content="John Gunn">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./js/GetCovidDashboardData.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+    <style>
+        html { font-size: 80.5%; }
+        .scroll {
+            max-height: 700px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center mt-4 mb-4">NB Daily Covid Data</h2>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col col-md-12 text-center">
+                    <button type="button" class="btn btn-outline-primary" onclick="GetProvincialSummary()">Provincial Summary</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetDailyTesting()">Daily Testing</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetCaseHistory()">Case History</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetCaseOrigin()">Case Origin</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationSummary()">Vaccination Summary</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationByAgeGroup()">Vaccination Age Groups</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationHistory()">Vaccination History</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetVaccineTimetable()">Vaccine Timetable</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col col-md-12 scroll">
+                    <p id="showData"></p>
+                </div>
+            </div>
+            <div class="row" id="export_row" style="display:none">
+                <div class="col col-md-12 text-right">
+                    <button type="button" id="export_button" class="btn btn-success btn-sm">Export To Excel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="container-fluid text-center fixed-bottom">
+    <div class="byline">
+        <address class="author">Witten By <a rel="author" href="https://twitter.com/johnsgunn">John Gunn</a></address>
+        Data Source: <cite><a href="https://experience.arcgis.com/experience/8eeb9a2052d641c996dba5de8f25a8aa">NB Covid Dashboard</a></cite>
+    </div>
+    <!-- All your data are belong to us -->
+<script>
+    function html_table_to_excel(type)
+    {
+        var data = document.getElementById('tblData');
+
+        var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
+
+        XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+        XLSX.writeFile(file, 'NBCovidData.' + type);
+    }
+
+    const export_button = document.getElementById('export_button');
+
+    export_button.addEventListener('click', () =>  {
+        html_table_to_excel('xlsx');
+    });
+</script>
+</footer>
+</body>
+</html>
