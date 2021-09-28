@@ -258,7 +258,8 @@ function GetZoneSummary(){
                 "<th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td>" +
                 "<th>HealthZoneEng</th>" + "<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
                 "<th>HealthZoneFr</th>" + "<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
-                "</tr>"
+                "</tr><tr>" + 
+                "<td colspan=5>&nbsp;</td></tr>"
             ;
 
 
