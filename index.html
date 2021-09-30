@@ -30,7 +30,10 @@
                     <button type="button" class="btn btn-outline-primary" onclick="GetZoneSummary()">Health Zone Summary</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetDailyTesting()">Daily Testing</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetCaseHistory()">Case History</button>
-                    <button type="button" class="btn btn-outline-primary" onclick="GetCaseOrigin()">Case Origin</button><br /><br />
+                    <button type="button" class="btn btn-outline-primary" onclick="GetCaseOrigin()">Case Origin</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetHospitalStatusAll()">Hospital Status</button>
+                    <br /><br />
+
                     <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationSummary()">Vaccination Summary</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationByAgeGroup()">Vaccination Age Groups</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationHistory()">Vaccination History</button>
@@ -61,24 +64,7 @@
     </div>
     <!-- All your data are belong to us -->
 <script>
-    function html_table_to_excel(tableName)
-    {
-        var type = 'xlsx';
-
-        var data = document.getElementById(tableName);
-
-        var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
-
-        XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
-
-        XLSX.writeFile(file, 'NBCovidData.' + type);
-    }
-
-    //const export_button = document.getElementById('export_button');
-
-    //export_button.addEventListener('click', () =>  {
-    //    html_table_to_excel('xlsx');
-    //});
+    
 </script>
 </footer>
 </body>

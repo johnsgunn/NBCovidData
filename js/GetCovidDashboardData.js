@@ -12,6 +12,18 @@ function hideExportButton(){
     }
 }
 
+function html_table_to_excel(tableName){
+    var type = 'xlsx';
+
+    var data = document.getElementById(tableName);
+
+    var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
+
+    XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+    XLSX.writeFile(file, 'NBCovidData.' + type);
+ }
+
 function GetVaccinationByAgeGroup() {
     const dbParam = JSON.stringify({table:"features",limit:20});
     const xmlhttp = new XMLHttpRequest();
@@ -335,4 +347,67 @@ function GetVaccineTimetable(){
     xmlhttp.send("x=" + dbParam);
 
     showExportButton();
+}
+
+function GetHospitalStatusAll(){
+    var baseHospitalCall = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Hospitals/FeatureServer/0/query?where=1%3D1&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=102100&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=true&returnM=true&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&objectIds=";
+    var invalidHospitalIDs = [5,23,24];
+
+    hideExportButton();
+    document.getElementById("showData").innerHTML = "";
+
+    for (let i = 1; i <= 25; i++) {
+        if (!invalidHospitalIDs.includes(i)){
+            var thisHospitalCall = baseHospitalCall + i;
+            GetHospitalStatusSingle(thisHospitalCall,i);
+        }
+    }
+}
+
+function GetHospitalStatusSingle(url,id,text){
+    const dbParam = JSON.stringify({table:"features",limit:20});
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function() {
+        const myObj = JSON.parse(this.responseText);
+
+        let x = 0;
+        let text = "";
+
+        let reportDate = new Date(myObj['features'][x].attributes.UpdateRecord);
+        let displayReportDate = reportDate.toISOString();
+        displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
+
+        let englabel = myObj['features'][x].attributes.englabel;
+        let frelabel = myObj['features'][x].attributes.frelabel;
+        let TotalBedCount = myObj['features'][x].attributes.TotalBedCount;
+        let OccupiedBed = myObj['features'][x].attributes.OccupiedBed;
+        let TotICUBedCount = myObj['features'][x].attributes.TotICUBedCount;
+        let TotICUBedOCC = myObj['features'][x].attributes.TotICUBedOCC;
+
+        let PercentOccupied = (OccupiedBed/TotalBedCount) * 100;
+        let PercentICUOccupied = 0;
+        if (TotICUBedCount > 0){
+            PercentICUOccupied = (TotICUBedOCC/TotICUBedCount) * 100;
+        } 
+
+        text += "<table class=\"table table-hover table-bordered \" id='tblData" + id + "'>";
+
+        text += "<tr><th width='30px'>englabel</th>" + "<td>" + englabel + "</td></tr>" +
+            "<tr><th>frelabel</th>" + "<td>" + frelabel + "</td></tr>" +
+            "<tr><th>UpdateRecord</th>" + "<td>" + displayReportDate + "</td></tr>" +
+            "<tr><th>TotalBedCount</th>" + "<td>" + TotalBedCount + "</td></tr>" +
+            "<tr><th>OccupiedBed</th>" + "<td>" + OccupiedBed + "</td></tr>" +
+            "<tr><th>TotICUBedCount</th>" + "<td>" + TotICUBedCount + "</td></tr>" +
+            "<tr><th>TotICUBedOCC</th>" + "<td>" + TotICUBedOCC + "</td></tr>" +
+            "<tr><th>Occupied %</th>" + "<td>" + Math.round(PercentOccupied) + "</td></tr>" +
+            "<tr><th>ICU Occupied %</th>" + "<td>" + Math.round(PercentICUOccupied) + "</td></tr>" ;
+
+        text += "</table>" + 
+        "<button type=\"button\" id=\"export_button" + x + "\" onclick=\"html_table_to_excel('tblData" + id + "')\" class=\"btn btn-success btn-sm\">Export To Excel</button>" + 
+        "<br /><br />";
+
+        document.getElementById("showData").innerHTML += text;
+    }
+    xmlhttp.open("GET", url);
+    xmlhttp.send("x=" + dbParam);
 }
