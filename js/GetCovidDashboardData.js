@@ -5,6 +5,13 @@ function showExportButton(){
     }
 }
 
+function hideExportButton(){
+    let x = document.getElementById("export_row");
+    if (x.style.display === "block") {
+        x.style.display = "none";
+    }
+}
+
 function GetVaccinationByAgeGroup() {
     const dbParam = JSON.stringify({table:"features",limit:20});
     const xmlhttp = new XMLHttpRequest();
@@ -195,31 +202,24 @@ function GetProvincialSummary(){
         displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
 
         let text = "<table class=\"table table-hover table-bordered\" id='tblData'>"
-        text += "<tr>" +
-            "<th>Date</th>" + "<td>" + displayReportDate + "</td>" +
-            "<th>TotalCases</th>" + "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
-            "<th>NewToday</th>" + "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
-            "<th>ActiveCases</th>" + "<td>" + myObj['features'][x].attributes.ActiveCases + "</td>" +
-            "<th>Recovered</th>" + "<td>" + myObj['features'][x].attributes.Recovered + "</td>" +
-            "</tr><tr>" +
-            "<th>Deaths</th>" + "<td>" + myObj['features'][x].attributes.Deaths + "</td>" +
-            "<th>TotalHospitalized</th>" +"<td>" + myObj['features'][x].attributes.TtlHospitald + "</td>" +
-            "<th>Hospitalized</th>" +"<td>" + myObj['features'][x].attributes.Hospitalised + "</td>" +
-            "<th>ICU</th>" +"<td>" + myObj['features'][x].attributes.ICU + "</td>" +
-            "<th>Discharged</th>" +"<td>" + myObj['features'][x].attributes.DischHosp + "</td>" +
-            "</tr><tr>" +
-            "<th>TotalTests</th>" + "<td>" + myObj['features'][x].attributes.TotalTests + "</td>" +
-            "<th>CloseContacts</th>" +"<td>" + myObj['features'][x].attributes.ClsContct + "</td>" +
-            "<th>CommunityTransmission</th>" +"<td>" + myObj['features'][x].attributes.CommTrnsmsn + "</td>" +
-            "<th>TravelRelated</th>" +"<td>" + myObj['features'][x].attributes.TravelRel + "</td>" +
-            "<th>UnderInvestigation</th>" +"<td>" + myObj['features'][x].attributes.UnderInves + "</td>" +
-            "</tr><tr>" +
-            "<th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td>" +
-            "<th>HealthZoneEng</th>" +"<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
-            "<th>HealthZoneFr</th>" +"<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
-            "<th>&nbsp;</th>" +"<td>&nbsp;</td>" +
-            "<th>&nbsp;</th>" +"<td>&nbsp;</td>" +
-            "</tr>"
+        text += "<tr><th>HealthZoneEng</th>" +"<td>" + myObj['features'][x].attributes.HealthZnEng + "</td></tr>" +
+            "<tr><th>HealthZoneFr</th>" +"<td>" + myObj['features'][x].attributes.HealthZnFre + "</td></tr>" +
+            "<tr><th>Date</th>" + "<td>" + displayReportDate + "</td></tr>" +
+            "<tr><th>TotalCases</th>" + "<td>" + myObj['features'][x].attributes.TotalCases + "</td></tr>" +
+            "<tr><th>NewToday</th>" + "<td>" + myObj['features'][x].attributes.NewToday + "</td></tr>" +
+            "<tr><th>ActiveCases</th>" + "<td>" + myObj['features'][x].attributes.ActiveCases + "</td></tr>" +
+            "<tr><th>Recovered</th>" + "<td>" + myObj['features'][x].attributes.Recovered + "</td></tr>" +
+            "<tr><th>Deaths</th>" + "<td>" + myObj['features'][x].attributes.Deaths + "</td></tr>" +
+            "<tr><th>TotalHospitalized</th>" +"<td>" + myObj['features'][x].attributes.TtlHospitald + "</td></tr>" +
+            "<tr><th>Hospitalized</th>" +"<td>" + myObj['features'][x].attributes.Hospitalised + "</td></tr>" +
+            "<tr><th>ICU</th>" +"<td>" + myObj['features'][x].attributes.ICU + "</td></tr>" +
+            "<tr><th>Discharged</th>" +"<td>" + myObj['features'][x].attributes.DischHosp + "</td></tr>" +
+            "<tr><th>TotalTests</th>" + "<td>" + myObj['features'][x].attributes.TotalTests + "</td></tr>" +
+            "<tr><th>CloseContacts</th>" +"<td>" + myObj['features'][x].attributes.ClsContct + "</td></tr>" +
+            "<tr><th>CommunityTransmission</th>" +"<td>" + myObj['features'][x].attributes.CommTrnsmsn + "</td></tr>" +
+            "<tr><th>TravelRelated</th>" +"<td>" + myObj['features'][x].attributes.TravelRel + "</td></tr>" +
+            "<tr><th>UnderInvestigation</th>" +"<td>" + myObj['features'][x].attributes.UnderInves + "</td></tr>" +
+            "<tr><th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td></tr>"             
         ;
 
         text += "</table>"
@@ -238,39 +238,39 @@ function GetZoneSummary(){
     xmlhttp.onload = function() {
         const myObj = JSON.parse(this.responseText);
 
-        let text = "<table class=\"table table-hover table-bordered\" id='tblData'>";
+        let text = "";
 
         for (let x in myObj['features']) {
             reportDate = new Date(myObj['features'][x].attributes.LastUpdateText);
             displayReportDate = reportDate.toISOString();
             displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
 
+            text += "<table class=\"table table-hover table-bordered \" id='tblData" + x + "'>";
 
-            text += "<tr>" +
-                "<th>Date</th>" + "<td>" + displayReportDate + "</td>" +
-                "<th>TotalCases</th>" + "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
-                "<th>NewToday</th>" + "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
-                "<th>ActiveCases</th>" + "<td>" + myObj['features'][x].attributes.ActiveCases + "</td>" +
-                "<th>Recovered</th>" + "<td>" + myObj['features'][x].attributes.Recovered + "</td>" +
-                "</tr><tr>" +
-                "<th>Deaths</th>" + "<td>" + myObj['features'][x].attributes.Deaths + "</td>" +
-                "<th>TotalTests</th>" + "<td>" + myObj['features'][x].attributes.TotalTests + "</td>" +
-                "<th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td>" +
-                "<th>HealthZoneEng</th>" + "<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
-                "<th>HealthZoneFr</th>" + "<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
-                "</tr><tr>" + 
-                "<td colspan=5>&nbsp;</td></tr>"
+            text += "<tr><th width='30px'>HealthZoneEng</th>" + "<td>" + myObj['features'][x].attributes.HealthZnEng + "</td></tr>" +
+                "<tr><th>HealthZoneFr</th>" + "<td>" + myObj['features'][x].attributes.HealthZnFre + "</td></tr>" +
+                "<tr><th>Date</th>" + "<td>" + displayReportDate + "</td></tr>" +
+                "<tr><th>TotalCases</th>" + "<td>" + myObj['features'][x].attributes.TotalCases + "</td></tr>" +
+                "<tr><th>NewToday</th>" + "<td>" + myObj['features'][x].attributes.NewToday + "</td></tr>" +
+                "<tr><th>ActiveCases</th>" + "<td>" + myObj['features'][x].attributes.ActiveCases + "</td></tr>" +
+                "<tr><th>Recovered</th>" + "<td>" + myObj['features'][x].attributes.Recovered + "</td></tr>" +
+                "<tr><th>Deaths</th>" + "<td>" + myObj['features'][x].attributes.Deaths + "</td></tr>" +
+                "<tr><th>TotalTests</th>" + "<td>" + myObj['features'][x].attributes.TotalTests + "</td></tr>" +
+                "<tr><th>NonCovidDeaths</th>" + "<td>" + myObj['features'][x].attributes.NonCovidDeath + "</td></tr>"                 
             ;
 
+            text += "</table>" + 
+            "<button type=\"button\" id=\"export_button" + x + "\" onclick=\"html_table_to_excel('tblData" + x + "')\" class=\"btn btn-success btn-sm\">Export To Excel</button>" + 
+            "<br /><br />";
 
         }
-        text += "</table>";
+        
         document.getElementById("showData").innerHTML = text;
     }
     xmlhttp.open("GET", "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/HealthZones/FeatureServer/0/query?where=HealthZone%3C%3E%27Province%27+AND+HealthZone%3C%3E%27Outside+NB%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=standard&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=true&orderByFields=HealthZnEng+asc&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=");
     xmlhttp.send("x=" + dbParam);
 
-    showExportButton();
+    hideExportButton();
 }
 
 function GetCaseOrigin(){

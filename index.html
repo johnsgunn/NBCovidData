@@ -13,7 +13,7 @@
     <style>
         html { font-size: 80.5%; }
         .scroll {
-            max-height: 700px;
+            max-height: 500px;
             overflow-y: auto;
         }
     </style>
@@ -30,7 +30,7 @@
                     <button type="button" class="btn btn-outline-primary" onclick="GetZoneSummary()">Health Zone Summary</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetDailyTesting()">Daily Testing</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetCaseHistory()">Case History</button>
-                    <button type="button" class="btn btn-outline-primary" onclick="GetCaseOrigin()">Case Origin</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="GetCaseOrigin()">Case Origin</button><br /><br />
                     <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationSummary()">Vaccination Summary</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationByAgeGroup()">Vaccination Age Groups</button>
                     <button type="button" class="btn btn-outline-primary" onclick="GetVaccinationHistory()">Vaccination History</button>
@@ -46,7 +46,7 @@
             </div>
             <div class="row" id="export_row" style="display:none">
                 <div class="col col-md-12 text-right">
-                    <button type="button" id="export_button" class="btn btn-success btn-sm">Export To Excel</button>
+                    <button type="button" id="export_button" onclick="html_table_to_excel('tblData')" class="btn btn-success btn-sm">Export To Excel</button>
                 </div>
             </div>
         </div>
@@ -61,9 +61,11 @@
     </div>
     <!-- All your data are belong to us -->
 <script>
-    function html_table_to_excel(type)
+    function html_table_to_excel(tableName)
     {
-        var data = document.getElementById('tblData');
+        var type = 'xlsx';
+
+        var data = document.getElementById(tableName);
 
         var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
 
@@ -72,11 +74,11 @@
         XLSX.writeFile(file, 'NBCovidData.' + type);
     }
 
-    const export_button = document.getElementById('export_button');
+    //const export_button = document.getElementById('export_button');
 
-    export_button.addEventListener('click', () =>  {
-        html_table_to_excel('xlsx');
-    });
+    //export_button.addEventListener('click', () =>  {
+    //    html_table_to_excel('xlsx');
+    //});
 </script>
 </footer>
 </body>
