@@ -364,7 +364,7 @@ function GetHospitalStatusAll(){
     }
 }
 
-function GetHospitalStatusSingle(url,id,text){
+function GetHospitalStatusSingle(url,id){
     const dbParam = JSON.stringify({table:"features",limit:20});
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function() {
@@ -399,8 +399,8 @@ function GetHospitalStatusSingle(url,id,text){
             "<tr><th>OccupiedBed</th>" + "<td>" + OccupiedBed + "</td></tr>" +
             "<tr><th>TotICUBedCount</th>" + "<td>" + TotICUBedCount + "</td></tr>" +
             "<tr><th>TotICUBedOCC</th>" + "<td>" + TotICUBedOCC + "</td></tr>" +
-            "<tr><th>Occupied %</th>" + "<td>" + Math.round(PercentOccupied) + "</td></tr>" +
-            "<tr><th>ICU Occupied %</th>" + "<td>" + Math.round(PercentICUOccupied) + "</td></tr>" ;
+            "<tr><th>Occupied %</th>" + "<td>" + Math.round(PercentOccupied) + "%</td></tr>" +
+            "<tr><th>ICU Occupied %</th>" + "<td>" + Math.round(PercentICUOccupied) + "%</td></tr>" ;
 
         text += "</table>" + 
         "<button type=\"button\" id=\"export_button" + x + "\" onclick=\"html_table_to_excel('tblData" + id + "')\" class=\"btn btn-success btn-sm\">Export To Excel</button>" + 
