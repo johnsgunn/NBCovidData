@@ -25,7 +25,6 @@ function html_table_to_excel(tableName){
 }
 
 function GetVaccinationByAgeGroup() {
-    GetArcGisData("https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19VaccineAge/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=");
     const dbParam = JSON.stringify({table:"features",limit:20});
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = function() {
@@ -211,8 +210,7 @@ function GetProvincialSummary(){
 
         let text = "<table class=\"table table-hover table-striped table-bordered\" id='tblData'>"
         text += "<tr>" +
-            "<th>HealthZoneEng</th>" +
-            "<th>HealthZoneFr</th>" +
+            "<th>Zone</th>" +
             "<th>Date</th>" +
             "<th>TotalCases</th>" +
             "<th>NewToday</th>" +
@@ -236,8 +234,7 @@ function GetProvincialSummary(){
             displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
 
             text += "<tr>" +
-                "<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
-                "<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
+                "<td>" + myObj['features'][x].attributes.HealthZnEng + "<br />" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
                 "<td>" + displayReportDate + "</td>" +
                 "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
                 "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
@@ -276,8 +273,7 @@ function GetZoneSummary(){
 
         let text = "<table class=\"table table-hover table-striped table-bordered\" id='tblData'>"
         text += "<tr>" +
-            "<th>HealthZoneEng</th>" +
-            "<th>HealthZoneFr</th>" +
+            "<th>Zone</th>" +
             "<th>Date</th>" +
             "<th>TotalCases</th>" +
             "<th>NewToday</th>" +
@@ -293,8 +289,7 @@ function GetZoneSummary(){
             displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
 
             text += "<tr>" +
-                "<td>" + myObj['features'][x].attributes.HealthZnEng + "</td>" +
-                "<td>" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
+                "<td>" + myObj['features'][x].attributes.HealthZnEng + "<br />" + myObj['features'][x].attributes.HealthZnFre + "</td>" +
                 "<td>" + displayReportDate + "</td>" +
                 "<td>" + myObj['features'][x].attributes.TotalCases + "</td>" +
                 "<td>" + myObj['features'][x].attributes.NewToday + "</td>" +
