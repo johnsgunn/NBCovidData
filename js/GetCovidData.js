@@ -122,6 +122,11 @@ function showArcGis(reportName){
     showExportButton();
 }
 
+function showMore (pageName) {
+    pageName = pageName + ".html";
+    document.getElementById("dashboard").innerHTML='<object type="text/html" data="more/' + pageName + '" ></object>';
+}
+
 function createTableFromJSON(jsonData) {
     var arr = [];
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
