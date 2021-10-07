@@ -11,6 +11,9 @@ var VaccinationHistoryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgi
 var VaccineTimetableURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19DailyVaccineStats/FeatureServer/0/query?where=%28TotalReceivedENG+IS+NOT+NULL+OR+TotalExpectedENG+IS+NOT+NULL%29&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=Date+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
 var VaccinesByAgeGroupURL = 'https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19VaccineAge/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=';
 
+// URLs for Google Charts
+var CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
+var DashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=426336302&amp;format=interactive";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -36,6 +39,30 @@ function html_table_to_excel(tableName){
     XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
 
     XLSX.writeFile(file, 'NBCovidData.' + type);
+}
+
+function showCharts(chartName){
+    hideExportButton();
+    var chartURL = "";
+
+    switch(chartName){
+        case "Dashboard":
+            chartURL = DashboardURL;
+            break;
+        case "CaseRate_7DayAverage":
+            chartURL = CaseRate_7DayAverageURL;
+            break;
+        default: // invalid selection
+            exit;
+    }
+
+    var text = document.createElement("text");
+    
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe width=600 height=400 src='" + chartURL + "'></iframe></div>";
+
+    var dataDisplay = document.getElementById("dashboard");
+    dataDisplay.innerHTML = "";
+    dataDisplay.appendChild(text);
 }
 
 function createTableFromJSON(jsonData) {
@@ -98,9 +125,30 @@ function createTableFromJSON(jsonData) {
     }
 
     // Finally, add the dynamic table to a container.
-    var divContainer = document.getElementById("showData");
+    var divContainer = document.getElementById("dashboard");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
+}
+
+function GetDataFromUrlToTable(url){
+     // Create XMLHttpRequest object.
+     var oXHR = new XMLHttpRequest();
+     var retTable = document.createElement("table");
+
+     // Initiate request.
+     oXHR.onreadystatechange = reportStatus;
+     oXHR.open("GET", url, true);  // get json file.
+     oXHR.send();
+ 
+     function reportStatus() {
+         if (oXHR.readyState == 4) {		// Check if request is complete.
+ 
+             // Create an HTML table using response from server.
+             retTable = createObjectFromJSON(this.responseText);
+         }
+     }
+
+     return retTable;
 }
 
 function GetDataFromUrl(url){
