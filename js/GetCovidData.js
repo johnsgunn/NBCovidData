@@ -12,11 +12,11 @@ var VaccineTimetableURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/
 var VaccinesByAgeGroupURL = 'https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19VaccineAge/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=';
 
 // URLs for Google Charts
-var CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
-var DashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=426336302&amp;format=interactive";
-var CaseHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=393355124&amp;format=interactive";
-var VaccineHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=1065230157&amp;format=interactive";
-var SchoolClosuresURL = "https://www.google.com/maps/d/embed?mid=1GYup9WQs9XSAVMJCIMNOU7QSP-JeRZr1";
+var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
+var C_DashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=426336302&amp;format=interactive";
+var C_CaseHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=393355124&amp;format=interactive";
+var C_VaccineHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=1065230157&amp;format=interactive";
+var C_SchoolClosuresURL = "https://www.google.com/maps/d/embed?mid=1GYup9WQs9XSAVMJCIMNOU7QSP-JeRZr1";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -51,19 +51,19 @@ function showCharts(chartName){
 
     switch(chartName){
         case "Dashboard":
-            chartURL = DashboardURL;
+            chartURL = C_DashboardURL;
             break;
         case "CaseRate_7DayAverage":
-            chartURL = CaseRate_7DayAverageURL;
+            chartURL = C_CaseRate_7DayAverageURL;
             break;
         case "CaseHistory":
-            chartURL = CaseHistoryURL;
+            chartURL = C_CaseHistoryURL;
             break;
         case "VaccineHistory":
-            chartURL = VaccineHistoryURL;
+            chartURL = C_VaccineHistoryURL;
             break;
         case "SchoolClosures":
-            chartURL = SchoolClosuresURL;
+            chartURL = C_SchoolClosuresURL;
             citation.innerHTML = "<div class='.blockquote-footer col-xs-12 text-center'>Map provided by <a href='https://twitter.com/nb_covid_info'>NB citizen Covid Updates</a></div>";
             break;
         default: // invalid selection
@@ -78,6 +78,48 @@ function showCharts(chartName){
     dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
     dataDisplay.appendChild(citation);
+}
+
+function showArcGis(reportName){
+    var reportURL = "";
+    switch (reportName){
+        case "CaseHistory":
+            reportURL = CaseHistoryURL;
+            break;
+        case "ProvincialSummary":
+            reportURL = ProvincialSummaryURL;
+            break;
+        case "ZoneSummary":
+            reportURL = ZoneSummaryURL;
+            break;
+        case "CaseOrigin":
+            reportURL = CaseOriginURL;
+            break;
+        case "DailyTesting":
+            reportURL = DailyTestingURL;
+            break;
+        case "VaccinationSummary":
+            reportURL = VaccinationSummaryURL;
+            break;
+        case "HospitalStatusAll":
+            reportURL = HospitalStatusAllURL;
+            break;
+        case "VaccinationHistory":
+            reportURL = VaccinationHistoryURL;
+            break;
+        case "VaccinationTimetable":
+            reportURL = VaccineTimetableURL;
+            break;
+        case "VaccinationAgeGroups":
+            reportURL = VaccinesByAgeGroupURL;
+            break;
+        default: // invalid selection
+            exit;
+    }
+
+
+    GetDataFromUrl(reportURL);
+    showExportButton();
 }
 
 function createTableFromJSON(jsonData) {
@@ -185,58 +227,3 @@ function GetDataFromUrl(url){
     }
 }
 
-function GetVaccinationByAgeGroup() {
-    GetDataFromUrl(VaccinesByAgeGroupURL);    
-    showExportButton();
-}
-
-function GetVaccinationByAgeGroup() {
-    GetDataFromUrl(VaccinesByAgeGroupURL);    
-    showExportButton();
-}
-
-function GetDailyTesting() {
-    GetDataFromUrl(DailyTestingURL);    
-    showExportButton();
-}
-
-function GetVaccinationSummary() {
-    GetDataFromUrl(VaccinationSummaryURL);    
-    showExportButton();
-}
-
-function GetVaccinationHistory() {
-    GetDataFromUrl(VaccinationHistoryURL);    
-    showExportButton();
-}
-
-function GetCaseHistory(){
-    GetDataFromUrl(CaseHistoryURL);    
-    showExportButton();
-}
-
-function GetProvincialSummary(){
-    GetDataFromUrl(ProvincialSummaryURL);    
-    showExportButton();
-}
-
-function GetZoneSummary(){    
-    GetDataFromUrl(ZoneSummaryURL);    
-    showExportButton();
-}
-
-
-function GetCaseOrigin(){
-    GetDataFromUrl(CaseOriginURL);    
-    showExportButton();
-}
-
-function GetVaccineTimetable(){
-    GetDataFromUrl(VaccineTimetableURL);    
-    showExportButton();
-}
-
-function GetHospitalStatusAll(){
-    GetDataFromUrl(HospitalStatusAllURL);    
-    showExportButton();
-}

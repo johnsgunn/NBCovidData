@@ -39,11 +39,11 @@
                                 Case Details
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                              <li onclick="GetProvincialSummary()"><a class="dropdown-item" href="#">Provincial Summary</a></li>
-                              <li onclick="GetZoneSummary()"><a class="dropdown-item" href="#">Health Zone Summary</a></li>
-                              <li onclick="GetDailyTesting()"><a class="dropdown-item" href="#">Daily Testing</a></li>
-                              <li onclick="GetCaseHistory()"><a class="dropdown-item" href="#">Case History</a></li>
-                              <li onclick="GetCaseOrigin()"><a class="dropdown-item" href="#">Case Origin</a></li>
+                              <li onclick="showArcGis('ProvincialSummary')"><a class="dropdown-item" href="#">Provincial Summary</a></li>
+                              <li onclick="showArcGis('ZoneSummary')"><a class="dropdown-item" href="#">Health Zone Summary</a></li>
+                              <li onclick="showArcGis('DailyTesting')"><a class="dropdown-item" href="#">Daily Testing</a></li>
+                              <li onclick="showArcGis('CaseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
+                              <li onclick="showArcGis('CaseOrigin')"><a class="dropdown-item" href="#">Case Origin</a></li>
                             </ul>
                           </li>
                           <li class="nav-item dropdown">
@@ -51,7 +51,7 @@
                                 Hospital Details
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                              <li onclick="GetHospitalStatusAll()"><a class="dropdown-item" href="#">Hospital Status</a></li>
+                              <li onclick="showArcGis('HospitalStatusAll')"><a class="dropdown-item" href="#">Hospital Status</a></li>
                             </ul>
                           </li>
                           <li class="nav-item dropdown">
@@ -59,10 +59,10 @@
                                 Vaccination Details
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                              <li onclick="GetVaccinationSummary()"><a class="dropdown-item" href="#">Vaccination Summary</a></li>
-                              <li onclick="GetVaccinationByAgeGroup()"><a class="dropdown-item" href="#">Vaccination Age Groups</a></li>
-                              <li onclick="GetVaccinationHistory()"><a class="dropdown-item" href="#">Vaccination History</a></li>
-                              <li onclick="GetVaccineTimetable()"><a class="dropdown-item" href="#">Vaccine Timetable</a></li>
+                              <li onclick="showArcGis('VaccinationSummary')"><a class="dropdown-item" href="#">Vaccination Summary</a></li>
+                              <li onclick="showArcGis('VaccinationAgeGroups')"><a class="dropdown-item" href="#">Vaccination Age Groups</a></li>
+                              <li onclick="showArcGis('VaccinationHistory')"><a class="dropdown-item" href="#">Vaccination History</a></li>
+                              <li onclick="showArcGis('VaccinationTimetable')"><a class="dropdown-item" href="#">Vaccine Timetable</a></li>
                             </ul>
                           </li>
                           <li class="nav-item dropdown">
