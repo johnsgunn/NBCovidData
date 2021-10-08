@@ -14,11 +14,12 @@ var ExposuresURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/se
 
 // URLs for Google Charts
 var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
-var C_DashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=426336302&amp;format=interactive";
+var C_DashboardURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=F1:H22";
 var C_CaseHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=393355124&format=interactive";
 var C_VaccineHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=1018446867&format=interactive";
 var C_VaccineAgeGroupURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=906887683&format=interactive";
 var C_PediatricCasesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=705596724&format=interactive";
+var C_CurrentRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=F1:H22";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -46,14 +47,32 @@ function html_table_to_excel(tableName){
     XLSX.writeFile(file, 'NBCovidData.' + type);
 }
 
+function showDashboard(){
+    hideExportButton();
+
+    var currentRate = document.createElement("text");
+    var caseAvg = document.createElement("text");
+    var closeDiv = document.createElement("text");
+    closeDiv.innerHTML = "</div>";
+    
+    currentRate.innerHTML = "<div class='row'>"+
+                            "<div class='col col-5 text-center'><iframe id='iframe' width=400 height=550 src='" + C_CurrentRateURL + "'></iframe></div>"+
+                             "<div class='col col-6 .align-middle'><iframe id='iframe' width=600 height=400 src='" + C_CaseRate_7DayAverageURL + "'></iframe></div>" +
+                             "</div>";
+
+    var dataDisplay = document.getElementById("dashboard");
+    dataDisplay.innerHTML = "";
+    dataDisplay.appendChild(currentRate);
+}
+
 function showCharts(chartName){
     hideExportButton();
     var chartURL = "";
-    var citation = document.createElement("text");
 
     switch(chartName){
         case "Dashboard":
-            chartURL = C_DashboardURL;
+            showDashboard();
+            return 0;
             break;
         case "CaseRate_7DayAverage":
             chartURL = C_CaseRate_7DayAverageURL;
@@ -81,7 +100,6 @@ function showCharts(chartName){
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
-    dataDisplay.appendChild(citation);
 }
 
 function showArcGis(reportName){
