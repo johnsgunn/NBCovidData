@@ -21,7 +21,7 @@
         }
     </style>
 </head>
-<body onload="showCharts('Dashboard')">
+<body onload="showCharts('CaseRate_7DayAverage')">
 
 <div class="container">
     <div class="card">
@@ -30,7 +30,7 @@
             <div class="row">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                     <div class="container-fluid">
-                      <a class="navbar-brand" href="#" onclick="showCharts('Dashboard')">NB Daily Covid-19 Data</a>
+                      <a class="navbar-brand" href="#" onclick="showCharts('CaseRate_7DayAverage')">NB Daily Covid-19 Data</a>
                       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                       </button>
@@ -78,6 +78,7 @@
                                 <li onclick="showCharts('CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li>
                                 <li onclick="showCharts('VaccineHistory')"><a class="dropdown-item" href="#">Vaccine History (All Time)</a></li>
                                 <li onclick="showCharts('VaccineAgeGroup')"><a class="dropdown-item" href="#">Vaccine % By Age Group</a></li>
+                                <li onclick="showCharts('PediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
                             </ul>
                           </li>
                           <li class="nav-item dropdown">
