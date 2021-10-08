@@ -17,6 +17,7 @@ var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-
 var C_DashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=426336302&amp;format=interactive";
 var C_CaseHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=57044428&format=interactive";
 var C_VaccineHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=1018446867&format=interactive";
+var C_VaccineAgeGroupURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=906887683&format=interactive";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -61,6 +62,9 @@ function showCharts(chartName){
             break;
         case "VaccineHistory":
             chartURL = C_VaccineHistoryURL;
+            break;
+        case "VaccineAgeGroup":
+            chartURL = C_VaccineAgeGroupURL;
             break;
         default: // invalid selection
             exit;
