@@ -14,9 +14,8 @@ var VaccinesByAgeGroupURL = 'https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgi
 // URLs for Google Charts
 var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
 var C_DashboardURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=426336302&amp;format=interactive";
-var C_CaseHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=393355124&amp;format=interactive";
+var C_CaseHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=57044428&format=interactive";
 var C_VaccineHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=1065230157&amp;format=interactive";
-var C_SchoolClosuresURL = "https://www.google.com/maps/d/embed?mid=1GYup9WQs9XSAVMJCIMNOU7QSP-JeRZr1";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -62,17 +61,13 @@ function showCharts(chartName){
         case "VaccineHistory":
             chartURL = C_VaccineHistoryURL;
             break;
-        case "SchoolClosures":
-            chartURL = C_SchoolClosuresURL;
-            citation.innerHTML = "<div class='.blockquote-footer col-xs-12 text-center'>Map provided by <a href='https://twitter.com/nb_covid_info'>NB citizen Covid Updates</a></div>";
-            break;
         default: // invalid selection
             exit;
     }
 
     var text = document.createElement("text");
     
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe width=600 height=400 src='" + chartURL + "'></iframe></div>";
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe id='iframe' width=600 height=400 src='" + chartURL + "'></iframe></div>";
 
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
@@ -124,7 +119,12 @@ function showArcGis(reportName){
 
 function showMore (pageName) {
     pageName = pageName + ".html";
-    document.getElementById("dashboard").innerHTML='<object type="text/html" data="more/' + pageName + '" ></object>';
+    var text = document.createElement("text");
+    
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=490 data='more/" + pageName + "' ></object></div>";
+    var dataDisplay = document.getElementById("dashboard");
+    dataDisplay.innerHTML = "";
+    dataDisplay.appendChild(text);
 }
 
 function createTableFromJSON(jsonData) {
