@@ -10,6 +10,7 @@ var VaccinationSummaryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgi
 var VaccinationHistoryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19DailyVaccineStats/FeatureServer/0/query?where=SecondDose%3E0&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=Date+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
 var VaccineTimetableURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19DailyVaccineStats/FeatureServer/0/query?where=%28TotalReceivedENG+IS+NOT+NULL+OR+TotalExpectedENG+IS+NOT+NULL%29&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=Date+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
 var VaccinesByAgeGroupURL = 'https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19VaccineAge/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=';
+var ExposuresURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Exposures/FeatureServer/0/query?f=json&cacheHint=true&maxRecordCountFactor=4&resultOffset=0&resultRecordCount=8000&where=1%3D1&orderByFields=FID&outFields=*&outSR=102100&returnGeometry=false&spatialRel=esriSpatialRelIntersects";
 
 // URLs for Google Charts
 var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
@@ -108,6 +109,9 @@ function showArcGis(reportName){
         case "VaccinationAgeGroups":
             reportURL = VaccinesByAgeGroupURL;
             break;
+        case "Exposures":
+            reportURL = ExposuresURL;
+            break;
         default: // invalid selection
             exit;
     }
@@ -127,6 +131,8 @@ function showMore (pageName) {
     dataDisplay.appendChild(text);
 }
 
+
+
 function createTableFromJSON(jsonData) {
     var arr = [];
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
@@ -136,7 +142,8 @@ function createTableFromJSON(jsonData) {
         for (var key in arr['features'][i].attributes) {
             if (col.indexOf(key) === -1 
             && key.indexOf('OBJECTID') == -1
-            && key.indexOf('Shape') == -1) {
+            && key.indexOf('Shape') == -1
+            && key.indexOf('FID') == -1) {
                 col.push(key);
             }
         }
