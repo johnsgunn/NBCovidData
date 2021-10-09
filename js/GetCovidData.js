@@ -20,6 +20,7 @@ var C_VaccineHistoryURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y
 var C_VaccineAgeGroupURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ20y8noYktwJlkpyL0uMgM2QqWS_Kp2aZJVEYysI-pwTgjtouYR5GdPb51sT8fMeRDbhJpOu0PlVzp/pubchart?oid=906887683&format=interactive";
 var C_PediatricCasesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=705596724&format=interactive";
 var C_CurrentRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=F1:H22";
+var C_VaccinationTableURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2038645865&range=A1:J14";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -68,6 +69,7 @@ function showDashboard(){
 function showCharts(chartName){
     hideExportButton();
     var chartURL = "";
+    var width = "600";
 
     switch(chartName){
         case "Dashboard":
@@ -84,7 +86,8 @@ function showCharts(chartName){
             chartURL = C_VaccineHistoryURL;
             break;
         case "VaccineAgeGroup":
-            chartURL = C_VaccineAgeGroupURL;
+            chartURL = C_VaccinationTableURL;
+            width = "1050";
             break;
         case "PediatricCases":
             chartURL = C_PediatricCasesURL;
@@ -95,7 +98,7 @@ function showCharts(chartName){
 
     var text = document.createElement("text");
     
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe id='iframe' width=600 height=400 src='" + chartURL + "'></iframe></div>";
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe id='iframe' width=" + width  + " height=400 src='" + chartURL + "'></iframe></div>";
 
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
