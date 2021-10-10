@@ -22,6 +22,7 @@ var C_PediatricCasesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RV
 var C_CurrentRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=F1:L22";
 var C_VaccinationTableURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2038645865&range=A1:J14";
 var C_CurrentHospitalRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=J1:L13";
+var C_HospitalizationRateURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1743702753&format=interactive";
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -57,10 +58,19 @@ function showDashboard(){
     var closeDiv = document.createElement("text");
     closeDiv.innerHTML = "</div>";
     
-    currentRate.innerHTML = "<div class='row'>"+
-                            "<div class='col col-6 text-center'><iframe id='iframe' width=700 height=550 src='" + C_CurrentRateURL + "'></iframe></div>"+
-                             "<div class='col col-6 .align-middle'><iframe id='iframe' width=600 height=400 src='" + C_CaseRate_7DayAverageURL + "'></iframe></div>" +
-                             "</div>";
+    // currentRate.innerHTML = "<div class='row'>"+
+    //                         "<div class='col col-6 text-center'><iframe id='iframe' width=700 height=550 src='" + C_CurrentRateURL + "'></iframe></div>"+
+    //                          "<div class='col col-6 .align-middle'><iframe id='iframe' width=600 height=400 src='" + C_CaseRate_7DayAverageURL + "'></iframe></div>" +
+    //                          "</div>";
+
+    currentRate.innerHTML = "<div class='row justify-content-md-center'>"+
+                            "<div class='col col-md-auto .align-middle'><object data='"+C_CaseRate_7DayAverageURL+"' width='600px' height='400px'></object></div>"+
+                            "<div class='col col-md-auto .align-middle'><object data='"+C_CaseHistoryURL+"' width='600px' height='400px'></object></div>"+
+                            "</div>"+
+                            "<div class='row justify-content-md-center'>"+
+                            "<div class='col col-md-auto .align-middle'><object data='"+C_PediatricCasesURL+"' width='600px' height='400px'></object></div>"+
+                            "<div class='col col-md-auto .align-middle'><object data='"+C_HospitalizationRateURL+"' width='600px' height='400px'></object></div>"+
+                            "</div>";
 
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
@@ -71,6 +81,7 @@ function showCharts(chartName){
     hideExportButton();
     var chartURL = "";
     var width = "600";
+    var height = "400";
 
     switch(chartName){
         case "Dashboard":
@@ -93,13 +104,18 @@ function showCharts(chartName){
         case "PediatricCases":
             chartURL = C_PediatricCasesURL;
             break;
+        case "CaseRate_Table":
+            chartURL = C_CurrentRateURL;
+            width = "700";
+            height = "600";
+            break;
         default: // invalid selection
             exit;
     }
 
     var text = document.createElement("text");
     
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe id='iframe' width=" + width  + " height=400 src='" + chartURL + "'></iframe></div>";
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe id='iframe' width=" + width  + " height=" + height + " src='" + chartURL + "'></iframe></div>";
 
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
