@@ -115,7 +115,7 @@ function showCharts(chartName){
 
     var text = document.createElement("text");
     
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><iframe id='iframe' width=" + width  + " height=" + height + " src='" + chartURL + "'></iframe></div>";
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object data='"+chartURL+"' width='"+width+"px' height='"+height+"px'></object></div>";
 
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
