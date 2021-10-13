@@ -1,3 +1,4 @@
+
 // GLOBALS // 
 // URLs for GNB ArcGIS endpoints
 var CaseHistoryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19DailyCaseStats2/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=DATE+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
@@ -23,6 +24,9 @@ var C_CurrentRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIj
 var C_VaccinationTableURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2038645865&range=A1:J14";
 var C_CurrentHospitalRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=J1:L13";
 var C_HospitalizationRateURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1743702753&format=interactive";
+
+var jsonOutput;
+var currentReport;
 
 function showExportButton(){
     let x = document.getElementById("export_row");
@@ -58,11 +62,6 @@ function showDashboard(){
     var closeDiv = document.createElement("text");
     closeDiv.innerHTML = "</div>";
     
-    // currentRate.innerHTML = "<div class='row'>"+
-    //                         "<div class='col col-6 text-center'><iframe id='iframe' width=700 height=550 src='" + C_CurrentRateURL + "'></iframe></div>"+
-    //                          "<div class='col col-6 .align-middle'><iframe id='iframe' width=600 height=400 src='" + C_CaseRate_7DayAverageURL + "'></iframe></div>" +
-    //                          "</div>";
-
     currentRate.innerHTML = "<div class='row justify-content-md-center'>"+
                             "<div class='col col-md-auto .align-middle'><object data='"+C_CaseRate_7DayAverageURL+"' width='600px' height='400px'></object></div>"+
                             "<div class='col col-md-auto .align-middle'><object data='"+C_CaseHistoryURL+"' width='600px' height='400px'></object></div>"+
@@ -124,6 +123,7 @@ function showCharts(chartName){
 
 function showArcGis(reportName){
     var reportURL = "";
+    currentReport = reportName;
     switch (reportName){
         case "CaseHistory":
             reportURL = CaseHistoryURL;
@@ -164,6 +164,7 @@ function showArcGis(reportName){
 
 
     GetDataFromUrl(reportURL);
+    StoreArcGisData(reportURL,reportName);
     showExportButton();
 }
 
@@ -177,13 +178,12 @@ function showMore (pageName) {
     dataDisplay.appendChild(text);
 }
 
-
-
 function createTableFromJSON(jsonData) {
     var arr = [];
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
 
-    var col = [];
+    var col = []; // Contains our headers 
+
     for (var i = 0; i < arr['features'].length; i++) {
         for (var key in arr['features'][i].attributes) {
             if (col.indexOf(key) === -1 
@@ -193,7 +193,7 @@ function createTableFromJSON(jsonData) {
                 col.push(key);
             }
         }
-    }
+    }    
 
     // Create a dynamic table.
     var table = document.createElement("table");
@@ -219,7 +219,7 @@ function createTableFromJSON(jsonData) {
         tr = table.insertRow(-1);
 
         for (var j = 0; j < col.length; j++) {
-            var tabCell = tr.insertCell(-1);
+            var tabCell = tr.insertCell(-1);        
 
             if (col[j] == 'Date' 
             || col[j] == 'DATE' 
@@ -235,7 +235,7 @@ function createTableFromJSON(jsonData) {
             }
             else {
                 tabCell.innerHTML = arr['features'][i].attributes[col[j]];
-            }            
+            }
         }
     }
 
@@ -285,3 +285,94 @@ function GetDataFromUrl(url){
     }
 }
 
+
+// STORING ARCGIS DATA TO JSON FILES //
+
+function ArcGIStoJSON(ArgGISdata,jsonName){
+    var arr = [];
+    arr = JSON.parse(ArgGISdata); 	// Convert JSON to array.
+
+    // Create new json collection
+    var jsonText = '{ "' + jsonName + '" : [';
+
+    var col = []; // Contains our headers 
+
+    for (var i = 0; i < arr['features'].length; i++) {
+        for (var key in arr['features'][i].attributes) {
+            if (col.indexOf(key) === -1 
+            && key.indexOf('OBJECTID') == -1
+            && key.indexOf('Shape') == -1
+            && key.indexOf('FID') == -1) {
+                col.push(key);
+            }
+        }
+    }    
+    // Add JSON to the table rows.
+    for (var i = 0; i < arr['features'].length; i++) {
+
+        // Open new row
+        var jsonRow = '{ ';
+
+        for (var j = 0; j < col.length; j++) { 
+
+            if (col[j] == 'Date' 
+            || col[j] == 'DATE' 
+            || col[j] == 'LastUpdateText'
+            || col[j] == 'UpdateRecord'
+            )// Fixing inconsistent date formats
+            { 
+                reportDate = new Date(arr['features'][i].attributes[col[j]]);
+                displayReportDate = reportDate.toISOString();
+                displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
+
+                jsonRow +=  '"' + col[j] + '":"' + displayReportDate + '"';
+            }
+            else {
+                jsonRow +=  '"' + col[j] + '":"' + arr['features'][i].attributes[col[j]] + '"';
+            }
+            if (j < col.length -1) {jsonRow += ',';}  
+        }
+
+        // Close new row
+        jsonRow += '}';        
+        if (i < arr['features'].length -1) {jsonRow += ',';} 
+        
+        // Append row to collection
+        jsonText += jsonRow;
+    }
+
+    // Close json collection
+    jsonText += ']}';
+
+    jsonOutput = JSON.parse(jsonText);
+    console.log(jsonOutput);
+}
+
+function StoreArcGisData(url,name){
+
+    // Create XMLHttpRequest object.
+    var oXHR = new XMLHttpRequest();
+
+    // Initiate request.
+    oXHR.onreadystatechange = reportStatus;
+    oXHR.open("GET", url, true);  // get json file.
+    oXHR.send();
+
+    function reportStatus() {
+        if (oXHR.readyState == 4) {		// Check if request is complete.
+
+            // Create an HTML table using response from server.
+            ArcGIStoJSON(this.responseText,name);
+        }
+    }
+}
+
+function downloadJSON(){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonOutput,null,2));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", currentReport + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
