@@ -197,25 +197,11 @@ function showMore (pageName) {
 }
 
 function createTableFromJSON(jsonData,name) {
-    console.log("Got JSON ");
-    console.log(jsonData);
     var arr = [];
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
 
     var col = []; // Contains our headers 
 
-    // for (var i = 0; i < arr['features'].length; i++) {
-    //     for (var key in arr['features'][i].attributes) {
-    //         if (col.indexOf(key) === -1 
-    //         && key.indexOf('OBJECTID') == -1
-    //         && key.indexOf('Shape') == -1
-    //         && key.indexOf('FID') == -1) {
-    //             col.push(key);
-    //         }
-    //     }
-    // }    
-
-    console.log(arr[name].length);
     for (var i = 0; i < arr[name].length; i++) {
         for (var key in arr[name][i]) {
             if (col.indexOf(key) === -1 
@@ -226,8 +212,6 @@ function createTableFromJSON(jsonData,name) {
             }
         }
     }  
-
-    console.log(col[0]);
 
     // Create a dynamic table.
     var table = document.createElement("table");
@@ -248,7 +232,6 @@ function createTableFromJSON(jsonData,name) {
     }
 
     // Add JSON to the table rows.
-    // for (var i = 0; i < arr['features'].length; i++) {
         for (var i = 0; i < arr[name].length; i++) {
 
         tr = table.insertRow(-1);
@@ -262,7 +245,6 @@ function createTableFromJSON(jsonData,name) {
             || col[j] == 'UpdateRecord'
             )// Fixing inconsistent date formats
             { 
-                // reportDate = new Date(arr['features'][i].attributes[col[j]]);
                 reportDate = new Date(arr[name][i][col[j]]);
                 displayReportDate = reportDate.toISOString();
                 displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
@@ -270,7 +252,6 @@ function createTableFromJSON(jsonData,name) {
                 tabCell.innerHTML = displayReportDate;
             }
             else {
-                // tabCell.innerHTML = arr['features'][i].attributes[col[j]];
                 tabCell.innerHTML = arr[name][i][col[j]];
             }
         }
@@ -278,7 +259,7 @@ function createTableFromJSON(jsonData,name) {
 
     // Finally, add the dynamic table to a container.
     var divContainer = document.getElementById("dashboard");
-    divContainer.innerHTML = "";
+    divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
     divContainer.appendChild(table);
 }
 
