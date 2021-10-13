@@ -310,9 +310,10 @@ function GetDataFromUrl(url){
 
 // STORING ARCGIS DATA TO JSON FILES //
 
-function ArcGIStoJSON(ArgGISdata,jsonName){
+function ArcGIStoJSON(ArcGISData,jsonName){
     var arr = [];
-    arr = JSON.parse(ArgGISdata); 	// Convert JSON to array.
+    arr = JSON.parse(ArcGISData); 	// Convert JSON to array.
+
 
     // Create new json collection
     var jsonText = '{ "' + jsonName + '" : [';
@@ -350,7 +351,9 @@ function ArcGIStoJSON(ArgGISdata,jsonName){
                 jsonRow +=  '"' + col[j] + '":"' + displayReportDate + '"';
             }
             else {
-                jsonRow +=  '"' + col[j] + '":"' + arr['features'][i].attributes[col[j]] + '"';
+                var value = arr['features'][i].attributes[col[j]];
+                value = replaceAll(value,"\"","'"); // Sanitize quotes from JSON data
+                jsonRow +=  '"' + col[j] + '":"' + value + '"';
             }
             if (j < col.length -1) {jsonRow += ',';}  
         }
@@ -365,6 +368,8 @@ function ArcGIStoJSON(ArgGISdata,jsonName){
 
     // Close json collection
     jsonText += ']}';
+
+    console.log(jsonText);
 
     jsonOutput = JSON.parse(jsonText);
     createTableFromJSON(JSON.stringify(jsonOutput,null,2),jsonName);
@@ -397,4 +402,12 @@ function downloadJSON(){
     document.body.appendChild(downloadAnchorNode); // required for firefox
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
+}
+
+function escapeRegExp(string) {
+return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
