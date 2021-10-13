@@ -369,8 +369,6 @@ function ArcGIStoJSON(ArcGISData,jsonName){
     // Close json collection
     jsonText += ']}';
 
-    console.log(jsonText);
-
     jsonOutput = JSON.parse(jsonText);
     createTableFromJSON(JSON.stringify(jsonOutput,null,2),jsonName);
 }
@@ -409,5 +407,5 @@ return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole ma
 }
 
 function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    return str.toString().replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
