@@ -7,11 +7,21 @@ var ZoneSummaryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/
 var CaseOriginURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/HealthZones/FeatureServer/0/query?where=HealthZnEng%3D%27New+Brunswick%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=standard&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=%5B%7B%22onStatisticField%22%3A%22TravelRel%22%2C%22outStatisticFieldName%22%3A%22TravelRel%22%2C%22statisticType%22%3A%22avg%22%7D%2C%7B%22onStatisticField%22%3A%22ClsContct%22%2C%22outStatisticFieldName%22%3A%22ClsContct%22%2C%22statisticType%22%3A%22avg%22%7D%2C%7B%22onStatisticField%22%3A%22CommTrnsmsn%22%2C%22outStatisticFieldName%22%3A%22CommTrnsmsn%22%2C%22statisticType%22%3A%22avg%22%7D%2C%7B%22onStatisticField%22%3A%22UnderInves%22%2C%22outStatisticFieldName%22%3A%22UnderInves%22%2C%22statisticType%22%3A%22avg%22%7D%5D&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=";
 var DailyTestingURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19TestStatistics/FeatureServer/0/query?where=Category%3D%27Age%27&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
 var HospitalStatusAllURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Hospitals/FeatureServer/0/query?where=1%3D1&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=102100&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=true&returnM=true&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&objectIds=";
+
 var VaccinationSummaryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19VaccineData/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=50&sqlFormat=none&f=pjson&token=";
-var VaccinationHistoryURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19DailyVaccineStats/FeatureServer/0/query?where=SecondDose%3E0&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=Date+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
 var VaccineTimetableURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19DailyVaccineStats/FeatureServer/0/query?where=%28TotalReceivedENG+IS+NOT+NULL+OR+TotalExpectedENG+IS+NOT+NULL%29&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=Date+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=";
+var VaccinationHistoryURL = VaccineTimetableURL;
+
 var VaccinesByAgeGroupURL = 'https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19VaccineAge/FeatureServer/0/query?where=1%3D1&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=true&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=32000&sqlFormat=none&f=pjson&token=';
-var ExposuresURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Exposures/FeatureServer/0/query?f=json&cacheHint=true&maxRecordCountFactor=4&resultOffset=0&resultRecordCount=8000&where=1%3D1&orderByFields=FID&outFields=*&outSR=102100&returnGeometry=false&spatialRel=esriSpatialRelIntersects";
+
+// List of Exposures 
+var ExposuresURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19_Exposures/FeatureServer/0/query?f=json&cacheHint=true&maxRecordCountFactor=4&resultOffset=0&resultRecordCount=8000&where=1%3D1&orderByFields=OBJECTID&outFields=*&outSR=102100&returnGeometry=false&spatialRel=esriSpatialRelIntersects";
+
+// List of Adult Residental Facilities
+var AdultResidentialFacilitiesListURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/AdultResidentialFacilities/FeatureServer/1/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
+var GEO_AdultResidentialFacilitiesListURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/AdultResidentialFacilities/FeatureServer/1/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=";
+
+
 
 // URLs for Google Charts
 var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
@@ -158,13 +168,21 @@ function showArcGis(reportName){
         case "Exposures":
             reportURL = ExposuresURL;
             break;
+        case "AdultResidentialFacilities":
+            reportURL = AdultResidentialFacilitiesListURL;
+            break;
+        case "AdultResidentialFacilitiesGEO":
+            reportURL = GEO_AdultResidentialFacilitiesListURL;
+                break;
         default: // invalid selection
             exit;
     }
 
-
-    GetDataFromUrl(reportURL);
     StoreArcGisData(reportURL,reportName);
+    //GetDataFromUrl(reportURL);
+
+    
+    
     showExportButton();
 }
 
@@ -172,20 +190,34 @@ function showMore (pageName) {
     pageName = pageName + ".html";
     var text = document.createElement("text");
     
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=490 data='more/" + pageName + "' ></object></div>";
+    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=800 data='more/" + pageName + "' ></object></div>";
     var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
 }
 
-function createTableFromJSON(jsonData) {
+function createTableFromJSON(jsonData,name) {
+    console.log("Got JSON ");
+    console.log(jsonData);
     var arr = [];
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
 
     var col = []; // Contains our headers 
 
-    for (var i = 0; i < arr['features'].length; i++) {
-        for (var key in arr['features'][i].attributes) {
+    // for (var i = 0; i < arr['features'].length; i++) {
+    //     for (var key in arr['features'][i].attributes) {
+    //         if (col.indexOf(key) === -1 
+    //         && key.indexOf('OBJECTID') == -1
+    //         && key.indexOf('Shape') == -1
+    //         && key.indexOf('FID') == -1) {
+    //             col.push(key);
+    //         }
+    //     }
+    // }    
+
+    console.log(arr[name].length);
+    for (var i = 0; i < arr[name].length; i++) {
+        for (var key in arr[name][i]) {
             if (col.indexOf(key) === -1 
             && key.indexOf('OBJECTID') == -1
             && key.indexOf('Shape') == -1
@@ -193,7 +225,9 @@ function createTableFromJSON(jsonData) {
                 col.push(key);
             }
         }
-    }    
+    }  
+
+    console.log(col[0]);
 
     // Create a dynamic table.
     var table = document.createElement("table");
@@ -214,7 +248,8 @@ function createTableFromJSON(jsonData) {
     }
 
     // Add JSON to the table rows.
-    for (var i = 0; i < arr['features'].length; i++) {
+    // for (var i = 0; i < arr['features'].length; i++) {
+        for (var i = 0; i < arr[name].length; i++) {
 
         tr = table.insertRow(-1);
 
@@ -227,14 +262,16 @@ function createTableFromJSON(jsonData) {
             || col[j] == 'UpdateRecord'
             )// Fixing inconsistent date formats
             { 
-                reportDate = new Date(arr['features'][i].attributes[col[j]]);
+                // reportDate = new Date(arr['features'][i].attributes[col[j]]);
+                reportDate = new Date(arr[name][i][col[j]]);
                 displayReportDate = reportDate.toISOString();
                 displayReportDate = displayReportDate.substring(0, displayReportDate.indexOf('T'));
 
                 tabCell.innerHTML = displayReportDate;
             }
             else {
-                tabCell.innerHTML = arr['features'][i].attributes[col[j]];
+                // tabCell.innerHTML = arr['features'][i].attributes[col[j]];
+                tabCell.innerHTML = arr[name][i][col[j]];
             }
         }
     }
@@ -345,7 +382,7 @@ function ArcGIStoJSON(ArgGISdata,jsonName){
     jsonText += ']}';
 
     jsonOutput = JSON.parse(jsonText);
-    console.log(jsonOutput);
+    createTableFromJSON(JSON.stringify(jsonOutput,null,2),jsonName);
 }
 
 function StoreArcGisData(url,name){

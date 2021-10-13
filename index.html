@@ -55,9 +55,11 @@
                               </li>
 
                               <li> 
-                                <a class="dropdown-item" href="#"> Hospital Details &raquo; </a>
+                                <a class="dropdown-item" href="#"> Healthcare Details &raquo; </a>
                                   <ul class="submenu dropdown-menu-dark">
                                     <li onclick="showArcGis('HospitalStatusAll')"><a class="dropdown-item" href="#">Hospital Status</a></li>
+                                    <li onclick="showArcGis('AdultResidentialFacilities')"><a class="dropdown-item" href="#">Adult Residential Facilities</a></li>
+                                    <!-- <li onclick="showArcGis('AdultResidentialFacilitiesGEO')"><a class="dropdown-item" href="#">Adult Residential Facilities (Geo Locations)</a></li> -->
                                   </ul>
                               </li>
 
@@ -93,6 +95,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li onclick="showMore('about')"><a class="dropdown-item" href="#">About</a></li>
+                                <li onclick="showMore('api_features')"><a class="dropdown-item" href="#">GNB API Features</a></li>
                                 <li onclick="showMore('nbcreators')"><a class="dropdown-item" href="#">NB Data Creators</a></li>
                                 <li onclick="showMore('moresources')"><a class="dropdown-item" href="#">Sources</a></li>
                                 <li onclick="showMore('tipjar')"><a class="dropdown-item" href="#">Tip Jar</a></li>
@@ -105,6 +108,14 @@
 
             </div>
 
+            <!-- Button display -->
+            <div class="row" id="export_row" style="display:none">
+              <div class="col col-md-12 text-right">
+                  <button type="button" id="export_button" onclick="html_table_to_excel('tblData')" class="btn btn-success btn-sm">Download as Excel</button>
+                  <button type="button" id="json_button" onclick="downloadJSON()" class="btn btn-primary btn-sm">Download as JSON</button>
+              </div>
+          </div>   
+
             <!-- Main Body -->
             <div class="row">
                 <div id="dashboard" class="col col-md-12 scroll">
@@ -112,13 +123,7 @@
                 </div>
             </div>
 
-            <!-- Button display -->
-            <div class="row" id="export_row" style="display:none">
-                <div class="col col-md-12 text-right">
-                    <button type="button" id="export_button" onclick="html_table_to_excel('tblData')" class="btn btn-success btn-sm">Download as Excel</button>
-                    <button type="button" id="json_button" onclick="downloadJSON()" class="btn btn-primary btn-sm">Download as JSON</button>
-                </div>
-            </div>    
+             
 </div>
 
 <!-- FOOTER -->
