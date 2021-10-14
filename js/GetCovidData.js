@@ -53,6 +53,19 @@ function hideExportButton(){
     }
 }
 
+function hideSummaryBoard(){
+    var bodyHeader = document.getElementById("bodyHeader");
+    bodyHeader.innerHTML = "";
+    var board = document.getElementById("board1");
+    board.innerHTML = "";
+    board = document.getElementById("board2");
+    board.innerHTML = "";
+    board = document.getElementById("board3");
+    board.innerHTML = "";
+    board = document.getElementById("board4");
+    board.innerHTML = "";
+}
+
 function html_table_to_excel(tableName){
     var type = 'xlsx';
 
@@ -66,29 +79,219 @@ function html_table_to_excel(tableName){
 }
 
 function showDashboard(){
+    hideSummaryBoard(); // clear previous data
     hideExportButton();
 
-    var currentRate = document.createElement("text");
-    var caseAvg = document.createElement("text");
-    var closeDiv = document.createElement("text");
-    closeDiv.innerHTML = "</div>";
+    var dataDisplay = document.getElementById("dashboard");
+    dataDisplay.innerHTML = ""; // clear text area
+
+    GetDataFromUrl(ProvincialSummaryURL, "showCaseSummary", "ProvincialSummary");
+    GetDataFromUrl(VaccinationSummaryURL, "showVaccineSummary", "VaccinationSummary");
+
+    var currentRate = document.createElement("p");
     
     currentRate.innerHTML = "<div class='row justify-content-md-center'>"+
                             "<div class='col col-md-auto .align-middle'><object data='"+C_CaseRate_7DayAverageURL+"' width='600px' height='400px'></object></div>"+
-                            "<div class='col col-md-auto .align-middle'><object data='"+C_CaseHistoryURL+"' width='600px' height='400px'></object></div>"+
-                            "</div>"+
-                            "<div class='row justify-content-md-center'>"+
-                            "<div class='col col-md-auto .align-middle'><object data='"+C_PediatricCasesURL+"' width='600px' height='400px'></object></div>"+
                             "<div class='col col-md-auto .align-middle'><object data='"+C_HospitalizationRateURL+"' width='600px' height='400px'></object></div>"+
                             "</div>";
 
-    var dataDisplay = document.getElementById("dashboard");
     dataDisplay.innerHTML = "";
     dataDisplay.appendChild(currentRate);
 }
 
+
+function showCaseSummaryBoard(arcgis,name){
+    json = ArcGIStoJSON(arcgis,name,false);
+    var arr = [];
+    sessionStorage.setItem(name,json);
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var col = []; // Contains our headers 
+
+    for (var i = 0; i < arr[name].length; i++) {
+        for (var key in arr[name][i]) {
+            if (col.indexOf(key) === -1 
+            && key.indexOf('OBJECTID') == -1
+            && key.indexOf('Shape') == -1
+            && key.indexOf('FID') == -1) {
+                col.push(key);
+            }
+        }
+    }
+    
+    var bodyHeader = document.getElementById("bodyHeader");
+    bodyHeader.innerHTML = "";
+    var board1 = document.getElementById("board1");
+    var board2 = document.getElementById("board2");
+    //var board3 = document.getElementById("board3");
+
+    var header = document.createElement("col");
+    header.setAttribute("class","col-md-auto");
+    header.innerHTML = "<h1>New Brunswick Covid-19 Dashboard (Updated " + arr[name][0]['LastUpdateText'] + ")</h1>";
+
+    var cases = document.createElement("p");
+    cases.innerHTML =    
+        "<table class='table table-hover table-bordered'>"+
+            "<thead>"+
+                "<tr class='table-primary'>"+
+                    "<td colspan=2><h2>Cases</h2></td>"+
+                "</tr>"+
+            "</thead>"+
+            "<tbody>"+
+                "<tr>"+
+                    "<td><h3>New Cases</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewToday']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Active Cases</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['ActiveCases']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>New Recoveries</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewRecoveries']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Tot. Recoveries</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['Recovered']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Tot. Cases</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TotalCases']+"</span></h3></td>"+
+                "</tr>"+
+            "</tbody>"+
+        "</table>";
+        
+    
+    var hospitalizations = document.createElement("p");
+    hospitalizations.innerHTML =  
+    "<table class='table table-hover table-bordered'>"+
+            "<thead>"+
+                "<tr class='table-primary'>"+
+                    "<td colspan=2><h2>Hospitalizations</h2></td>"+
+                "</tr>"+
+            "</thead>"+
+            "<tbody>"+
+                "<tr>"+
+                    "<td><h3>In Hospital</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['Hospitalised']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>In ICU</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['ICU']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Tot. Deaths</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['Deaths']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Tot. Hospitalized</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TtlHospitald']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Tot. Discharged</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['DischHosp']+"</span></h3></td>"+
+                "</tr>"+
+            "</tbody>"+
+        "</table>";
+
+    var caseSources = document.createElement("p");
+    caseSources.innerHTML =  
+    "<table class='table table-hover table-bordered'>"+
+            "<thead>"+
+                "<tr class='table-primary'>"+
+                    "<td colspan=2><h2>Case Sources</h2></td>"+
+                "</tr>"+
+            "</thead>"+
+            "<tbody>"+
+                "<tr>"+
+                    "<td><h3>Close Contact</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['ClsContct']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Travel Related</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TravelRel']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Community Transmission</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['CommTrnsmsn']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Under Investigation</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['UnderInves']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Tot. Discharged</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['DischHosp']+"</span></h3></td>"+
+                "</tr>"+
+            "</tbody>"+
+        "</table>";
+
+    bodyHeader.appendChild(header);
+    board1.appendChild(cases);
+    board2.appendChild(hospitalizations);
+    //board3.appendChild(caseSources);
+}
+
+function showVaccineSummaryBoard(arcgis,name){
+
+    json = ArcGIStoJSON(arcgis,name,false);
+    sessionStorage.setItem(name,json);
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var col = []; // Contains our headers 
+
+    for (var i = 0; i < arr[name].length; i++) {
+        for (var key in arr[name][i]) {
+            if (col.indexOf(key) === -1 
+            && key.indexOf('OBJECTID') == -1
+            && key.indexOf('Shape') == -1
+            && key.indexOf('FID') == -1) {
+                col.push(key);
+            }
+        }
+    }
+
+    var board3 = document.getElementById("board3");
+
+    var vaccinations = document.createElement("p");
+    vaccinations.innerHTML =  
+    "<table class='table table-hover table-bordered'>"+
+            "<thead>"+
+                "<tr class='table-primary'>"+
+                    "<td colspan=2><h2>Vaccinations</h2></td>"+
+                "</tr>"+
+            "</thead>"+
+            "<tbody>"+
+                "<tr>"+
+                    "<td><h3>One Dose</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['PopOneDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentOneDose'] + "%)</td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Two Doses</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentSecondDose'] + "%)</td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>Total Administered</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TotalAdmin']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>New First Dose</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewFirstDose']+"</span></h3></td>"+
+                "</tr>"+
+                "<tr>"+
+                    "<td><h3>New Second Dose</h3></td>"+
+                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewSecondDose']+"</span></h3></td>"+
+                "</tr>"+
+            "</tbody>"+
+        "</table>";
+
+    board3.appendChild(vaccinations);
+}
+
 function showCharts(chartName){
     hideExportButton();
+    hideSummaryBoard();
     var chartURL = "";
     var width = "600";
     var height = "400";
@@ -136,6 +339,7 @@ function showCharts(chartName){
 }
 
 function showArcGis(reportName){
+    hideSummaryBoard();
     var reportURL = "";
     currentReport = reportName;
     switch (reportName){
@@ -182,15 +386,15 @@ function showArcGis(reportName){
             exit;
     }
 
-    StoreArcGisData(reportURL,reportName);
-    //GetDataFromUrl(reportURL);
-
-    
+    StoreArcGisData(reportURL,reportName, true);  
     
     showExportButton();
 }
 
 function showMore (pageName) {
+    hideSummaryBoard(); // clear previous data
+    hideExportButton();
+    
     pageName = pageName + ".html";
     var text = document.createElement("text");
     
@@ -288,7 +492,7 @@ function GetDataFromUrlToTable(url){
      return retTable;
 }
 
-function GetDataFromUrl(url){
+function GetDataFromUrl(url,opt,name){
 
     // Create XMLHttpRequest object.
     var oXHR = new XMLHttpRequest();
@@ -302,7 +506,20 @@ function GetDataFromUrl(url){
         if (oXHR.readyState == 4) {		// Check if request is complete.
 
             // Create an HTML table using response from server.
-            createTableFromJSON(this.responseText);
+            switch (opt){
+                case "showTable":
+                    createTableFromJSON(this.responseText);
+                    break;
+                case "showCaseSummary":
+                    showCaseSummaryBoard(this.responseText,name); // case summary 
+                    break;
+                case "showVaccineSummary":
+                    showVaccineSummaryBoard(this.responseText,name); // vaccine summary
+                    break;
+                default:
+                    createTableFromJSON(this.responseText);
+                    break;
+            }            
         }
     }
 }
@@ -310,7 +527,7 @@ function GetDataFromUrl(url){
 
 // STORING ARCGIS DATA TO JSON FILES //
 
-function ArcGIStoJSON(ArcGISData,jsonName){
+function ArcGIStoJSON(ArcGISData,jsonName,displayData){
     var arr = [];
     arr = JSON.parse(ArcGISData); 	// Convert JSON to array.
 
@@ -370,13 +587,22 @@ function ArcGIStoJSON(ArcGISData,jsonName){
     jsonText += ']}';
 
     jsonOutput = JSON.parse(jsonText);
-    createTableFromJSON(JSON.stringify(jsonOutput,null,2),jsonName);
+
+    if (displayData){
+        createTableFromJSON(JSON.stringify(jsonOutput,null,2),jsonName);
+        return null;
+    }
+    else{
+        return JSON.stringify(jsonOutput,null,2);
+    }
+    
 }
 
-function StoreArcGisData(url,name){
+function StoreArcGisData(url,name,displayData){
 
     // Create XMLHttpRequest object.
     var oXHR = new XMLHttpRequest();
+    var json;
 
     // Initiate request.
     oXHR.onreadystatechange = reportStatus;
@@ -387,7 +613,7 @@ function StoreArcGisData(url,name){
         if (oXHR.readyState == 4) {		// Check if request is complete.
 
             // Create an HTML table using response from server.
-            ArcGIStoJSON(this.responseText,name);
+            ArcGIStoJSON(this.responseText,name,displayData);
         }
     }
 }
