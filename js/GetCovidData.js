@@ -394,7 +394,7 @@ function showArcGis(reportName){
 function showMore (pageName) {
     hideSummaryBoard(); // clear previous data
     hideExportButton();
-    
+
     pageName = pageName + ".html";
     var text = document.createElement("text");
     
@@ -633,5 +633,11 @@ return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole ma
 }
 
 function replaceAll(str, find, replace) {
-    return str.toString().replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    if (str != null){
+        return str.toString().replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+    else {
+        return str;
+    }
+    
 }
