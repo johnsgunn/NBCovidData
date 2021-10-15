@@ -72,6 +72,7 @@ function hideSummaryBoard(){
     if (caseHistoryChart != null && vaccineHistoryChart != null){
         caseHistoryChart.destroy();
         vaccineHistoryChart.destroy();
+        healthZoneChart.destroy();
     }
     
 }
