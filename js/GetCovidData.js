@@ -101,7 +101,7 @@ function showDashboard(){
     hideLargeChart();
 
     var dataDisplay = document.getElementById("dashboard");
-    dataDisplay.innerHTML = "<canvas id='largeChart' width='800' height='500'></canvas>"; // clear text area
+    dataDisplay.innerHTML = ""; // clear text area
 
     GetDataFromUrl(ProvincialSummaryURL, "showCaseSummary", "ProvincialSummary");
     GetDataFromUrl(VaccinationSummaryURL, "showVaccineSummary", "VaccinationSummary");
@@ -258,7 +258,7 @@ function showCharts(chartName){
     text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object data='"+chartURL+"' width='"+width+"px' height='"+height+"px'></object></div>";
 
     var dataDisplay = document.getElementById("dashboard");
-    // dataDisplay.innerHTML = "";
+    dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
 }
 
@@ -326,7 +326,7 @@ function showMore (pageName) {
     
     text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=800 data='more/" + pageName + "' ></object></div>";
     var dataDisplay = document.getElementById("dashboard");
-    // dataDisplay.innerHTML = "";
+    dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
 }
 
@@ -393,7 +393,7 @@ function createTableFromJSON(jsonData,name) {
 
     // Finally, add the dynamic table to a container.
     var divContainer = document.getElementById("dashboard");
-    // divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
+    divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
     divContainer.appendChild(table);
 }
 
