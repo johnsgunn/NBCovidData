@@ -58,8 +58,7 @@ function hideExportButton(){
 }
 
 function hideSummaryBoard(){
-    var bodyHeader = document.getElementById("bodyHeader");
-    bodyHeader.innerHTML = "";
+
     var board = document.getElementById("board1");
     board.innerHTML = "";
     board = document.getElementById("board2");
@@ -77,8 +76,11 @@ function hideSummaryBoard(){
     
 }
 
-function showCaseHistoryChart(){
-
+function hideLargeChart(){
+    let x = document.getElementById("chart_lg_row");
+    if (x.style.display === "block") {
+        x.style.display = "none";
+    }
 }
 
 function html_table_to_excel(tableName){
@@ -96,9 +98,10 @@ function html_table_to_excel(tableName){
 function showDashboard(){
     hideSummaryBoard(); // clear previous data
     hideExportButton();
+    hideLargeChart();
 
     var dataDisplay = document.getElementById("dashboard");
-    dataDisplay.innerHTML = ""; // clear text area
+    dataDisplay.innerHTML = "<canvas id='largeChart' width='800' height='500'></canvas>"; // clear text area
 
     GetDataFromUrl(ProvincialSummaryURL, "showCaseSummary", "ProvincialSummary");
     GetDataFromUrl(VaccinationSummaryURL, "showVaccineSummary", "VaccinationSummary");
@@ -108,13 +111,33 @@ function showDashboard(){
 
     var currentRate = document.createElement("p");
     
-    // currentRate.innerHTML = "<div class='row justify-content-md-center'>"+
-    //                         "<div class='col col-md-auto .align-middle'><object data='"+C_CaseRate_7DayAverageURL+"' width='600px' height='400px'></object></div>"+
-    //                         "<div class='col col-md-auto .align-middle'><object data='"+C_HospitalizationRateURL+"' width='600px' height='400px'></object></div>"+
-    //                         "</div>";
-
     dataDisplay.innerHTML = "";
     dataDisplay.appendChild(currentRate);
+}
+
+function buildBoardTable(header,body){
+    var table = 
+    "<table class='table table-hover table-bordered'>"+
+    "<thead>"+
+        "<tr class='table-primary'>"+
+            "<td colspan=2><h2>"+header+"</h2></td>"+
+            "</tr>"+
+        "</thead>"+
+        "<tbody>";
+
+
+    for (var i = 0; i < body.length ; i++){
+        table += 
+        "<tr>"+
+            "<td><h3>"+body[i]["title"]+"</h3></td>"+
+            "<td><h3><span class='badge bg-secondary'>"+body[i]["value"]+"</span></h3></td>"+
+        "</tr>"
+    }
+    table += 
+        "</tbody>"+
+        "</table>";
+
+    return table;
 }
 
 
@@ -124,21 +147,8 @@ function showCaseSummaryBoard(arcgis,name){
     sessionStorage.setItem(name,json);
     arr = JSON.parse(json); 	// Convert JSON to array.
 
-    var col = []; // Contains our headers 
-
-    for (var i = 0; i < arr[name].length; i++) {
-        for (var key in arr[name][i]) {
-            if (col.indexOf(key) === -1 
-            && key.indexOf('OBJECTID') == -1
-            && key.indexOf('Shape') == -1
-            && key.indexOf('FID') == -1) {
-                col.push(key);
-            }
-        }
-    }
-    
-    var bodyHeader = document.getElementById("bodyHeader");
-    bodyHeader.innerHTML = "";
+    var menuHeader = document.getElementById("menuHeader");
+    menuHeader.innerHTML = "Last Updated: " + arr[name][0]['LastUpdateText'];
     var board1 = document.getElementById("board1");
     var board2 = document.getElementById("board2");
     //var board3 = document.getElementById("board3");
@@ -147,107 +157,35 @@ function showCaseSummaryBoard(arcgis,name){
     header.setAttribute("class","col-md-auto");
     header.innerHTML = "<h1>New Brunswick Covid-19 Dashboard (Updated " + arr[name][0]['LastUpdateText'] + ")</h1>";
 
+    var tableHeader = "Cases";
+    var tableBody = [];
+
+    tableBody.push({title: "New Cases", value: arr[name][0]['NewToday']},
+                    {title: "Active Cases", value: arr[name][0]['ActiveCases']},
+                    {title: "New Recoveries", value: arr[name][0]['NewRecoveries']},
+                    {title: "Tot. Recoveries", value: arr[name][0]['Recovered']},
+                    {title: "Tot. Cases", value: arr[name][0]['TotalCases']},
+                    );
+
     var cases = document.createElement("p");
-    cases.innerHTML =    
-        "<table class='table table-hover table-bordered'>"+
-            "<thead>"+
-                "<tr class='table-primary'>"+
-                    "<td colspan=2><h2>Cases</h2></td>"+
-                "</tr>"+
-            "</thead>"+
-            "<tbody>"+
-                "<tr>"+
-                    "<td><h3>New Cases</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewToday']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Active Cases</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['ActiveCases']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>New Recoveries</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewRecoveries']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Tot. Recoveries</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['Recovered']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Tot. Cases</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TotalCases']+"</span></h3></td>"+
-                "</tr>"+
-            "</tbody>"+
-        "</table>";
+    cases.innerHTML = buildBoardTable(tableHeader,tableBody);
+
+    tableHeader = "Hospitalizations";
+    tableBody = [];
+
+    tableBody.push({title: "In Hospital", value: arr[name][0]['Hospitalised']},
+                    {title: "In ICU", value: arr[name][0]['ICU']},
+                    {title: "Tot. Deaths", value: arr[name][0]['Deaths']},
+                    {title: "Tot. Hospitalized", value: arr[name][0]['TtlHospitald']},
+                    {title: "Tot. Discharged", value: arr[name][0]['DischHosp']},
+                    );
         
     
     var hospitalizations = document.createElement("p");
-    hospitalizations.innerHTML =  
-    "<table class='table table-hover table-bordered'>"+
-            "<thead>"+
-                "<tr class='table-primary'>"+
-                    "<td colspan=2><h2>Hospitalizations</h2></td>"+
-                "</tr>"+
-            "</thead>"+
-            "<tbody>"+
-                "<tr>"+
-                    "<td><h3>In Hospital</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['Hospitalised']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>In ICU</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['ICU']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Tot. Deaths</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['Deaths']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Tot. Hospitalized</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TtlHospitald']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Tot. Discharged</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['DischHosp']+"</span></h3></td>"+
-                "</tr>"+
-            "</tbody>"+
-        "</table>";
+    hospitalizations.innerHTML = buildBoardTable(tableHeader,tableBody);
 
-    var caseSources = document.createElement("p");
-    caseSources.innerHTML =  
-    "<table class='table table-hover table-bordered'>"+
-            "<thead>"+
-                "<tr class='table-primary'>"+
-                    "<td colspan=2><h2>Case Sources</h2></td>"+
-                "</tr>"+
-            "</thead>"+
-            "<tbody>"+
-                "<tr>"+
-                    "<td><h3>Close Contact</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['ClsContct']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Travel Related</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TravelRel']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Community Transmission</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['CommTrnsmsn']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Under Investigation</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['UnderInves']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Tot. Discharged</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['DischHosp']+"</span></h3></td>"+
-                "</tr>"+
-            "</tbody>"+
-        "</table>";
-
-    bodyHeader.appendChild(header);
     board1.appendChild(cases);
     board2.appendChild(hospitalizations);
-    //board3.appendChild(caseSources);
 }
 
 function showVaccineSummaryBoard(arcgis,name){
@@ -257,57 +195,25 @@ function showVaccineSummaryBoard(arcgis,name){
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
-    var col = []; // Contains our headers 
-
-    for (var i = 0; i < arr[name].length; i++) {
-        for (var key in arr[name][i]) {
-            if (col.indexOf(key) === -1 
-            && key.indexOf('OBJECTID') == -1
-            && key.indexOf('Shape') == -1
-            && key.indexOf('FID') == -1) {
-                col.push(key);
-            }
-        }
-    }
-
     var board3 = document.getElementById("board3");
+    var tableHeader = "Vaccinations";
+    var tableBody = [];
+
+    tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentOneDose'] + "%)"},
+                    {title: "Two Doses", value: arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentSecondDose'] + "%)"},
+                    {title: "Total. Administered", value: arr[name][0]['TotalAdmin']},
+                    {title: "New First Dose", value: arr[name][0]['NewFirstDose']},
+                    {title: "New Second", value: arr[name][0]['NewSecondDose']},
+                    );
 
     var vaccinations = document.createElement("p");
-    vaccinations.innerHTML =  
-    "<table class='table table-hover table-bordered'>"+
-            "<thead>"+
-                "<tr class='table-primary'>"+
-                    "<td colspan=2><h2>Vaccinations</h2></td>"+
-                "</tr>"+
-            "</thead>"+
-            "<tbody>"+
-                "<tr>"+
-                    "<td><h3>One Dose</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['PopOneDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentOneDose'] + "%)</td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Two Doses</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentSecondDose'] + "%)</td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>Total Administered</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['TotalAdmin']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>New First Dose</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewFirstDose']+"</span></h3></td>"+
-                "</tr>"+
-                "<tr>"+
-                    "<td><h3>New Second Dose</h3></td>"+
-                    "<td><h3><span class='badge bg-secondary'>"+arr[name][0]['NewSecondDose']+"</span></h3></td>"+
-                "</tr>"+
-            "</tbody>"+
-        "</table>";
+    vaccinations.innerHTML = buildBoardTable(tableHeader,tableBody);
 
     board3.appendChild(vaccinations);
 }
 
 function showCharts(chartName){
+    hideLargeChart();
     hideExportButton();
     hideSummaryBoard();
     var chartURL = "";
@@ -352,11 +258,12 @@ function showCharts(chartName){
     text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object data='"+chartURL+"' width='"+width+"px' height='"+height+"px'></object></div>";
 
     var dataDisplay = document.getElementById("dashboard");
-    dataDisplay.innerHTML = "";
+    // dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
 }
 
 function showArcGis(reportName){
+    hideLargeChart();
     hideSummaryBoard();
     var reportURL = "";
     currentReport = reportName;
@@ -412,13 +319,14 @@ function showArcGis(reportName){
 function showMore (pageName) {
     hideSummaryBoard(); // clear previous data
     hideExportButton();
+    hideLargeChart();
 
     pageName = pageName + ".html";
     var text = document.createElement("text");
     
     text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=800 data='more/" + pageName + "' ></object></div>";
     var dataDisplay = document.getElementById("dashboard");
-    dataDisplay.innerHTML = "";
+    // dataDisplay.innerHTML = "";
     dataDisplay.appendChild(text);
 }
 
@@ -485,36 +393,109 @@ function createTableFromJSON(jsonData,name) {
 
     // Finally, add the dynamic table to a container.
     var divContainer = document.getElementById("dashboard");
-    divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
+    // divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
     divContainer.appendChild(table);
 }
 
-function showCaseHistoryChart(jsonData,name) {
+function showCaseHistoryChart(jsonData,name,loc) {
+    console.log(jsonData);
     json = ArcGIStoJSON(jsonData,name,false);
     var arr = [];
     sessionStorage.setItem(name,json);
     arr = JSON.parse(json); 	// Convert JSON to array.
 
-    var dps = [];
+    var dps1 = [];
+    var dps2 = [];
     for (var i=arr[name].length-1 ; i > -1  ; i--){
-        dps.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
+        console.log(arr[name][i]['ActiveCases']);
+        dps1.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
+        dps2.push({ x: arr[name][i]['DATE'], y: arr[name][i]['Active']});
     }
 
-    var ctx = document.getElementById('chart1');
+    var ctx = document.getElementById(loc);
+    console.log(ctx);
     caseHistoryChart = new Chart(ctx, {
         type: "line",
         data: {
-            datasets: [{
+            datasets: [
+                {
+                    label: "New Cases",
+                    data:dps1,
+                    borderWidth: 0,
+                    pointRadius: 0,
+                    fill: true,
+                    backgroundColor: "#ff6347"
+                },
+                {
+                    label: "Active Cases",
+                    data:dps2,
+                    borderWidth: 0,
+                    pointRadius: 0,
+                    fill: true,
+                    backgroundColor: "#0099ff" 
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Daily Case History'
+                }
+            }
+        }
+    });
+    caseHistoryChart.render();
+}
+
+function showCaseHistoryChart_lg(jsonData,name,loc) {
+    hideSummaryBoard(); // clear previous data
+    hideExportButton();
+    json = ArcGIStoJSON(jsonData,name,false);
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var dps1 = [];
+    var dps2 = [];
+    for (var i=arr[name].length-1 ; i > -1  ; i--){
+        console.log(arr[name][i]['ActiveCases']);
+        dps1.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
+        dps2.push({ x: arr[name][i]['DATE'], y: arr[name][i]['Active']});
+    }
+
+    var ctx = document.getElementById(loc);
+    console.log(dps2);
+    caseHistoryChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            datasets: [
+            {
                 label: "New Cases",
-                data:dps,
+                data:dps1,
                 borderWidth: 0,
                 pointRadius: 0,
                 fill: true,
                 backgroundColor: "#ff6347"
-            }]
+            },
+            {
+                label: "Active Cases",
+                data:dps2,
+                borderWidth: 0,
+                pointRadius: 0,
+                fill: true,
+                backgroundColor: "#0099ff" 
+            }
+        ]
         },
         options: {
             scales: {
+                maintainAspectRatio: false,
+                responsive:true,
                 y: {
                     beginAtZero: true
                 }
@@ -701,7 +682,14 @@ function GetDataFromUrl(url,opt,name){
                     showVaccineSummaryBoard(this.responseText,name); // vaccine summary
                     break;
                 case "showCaseHistoryChart":
-                    showCaseHistoryChart(this.responseText,name); 
+                    showCaseHistoryChart(this.responseText,name,"chart1"); 
+                    break;
+                case "showCaseHistoryChart-lg":
+                    showCaseHistoryChart_lg(this.responseText,name,"largeChart"); 
+                    let x = document.getElementById("chart_lg_row");
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                    }
                     break;
                 case "showVaccineHistoryChart":
                     showVaccineHistoryChart(this.responseText,name);

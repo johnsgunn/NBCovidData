@@ -97,6 +97,7 @@
                                 <li onclick="showCharts('CaseRate_7DayAverage')"><a class="dropdown-item" href="#">Case Rate (7-Day Rolling Average)</a></li>
                                 <li onclick="showCharts('CaseRate_Table')"><a class="dropdown-item" href="#">Case Rate Table</a></li>
                                 <li onclick="showCharts('CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li>
+                                <!-- <li onclick="GetDataFromUrl(CaseHistoryURL,'showCaseHistoryChart-lg','CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li> -->
                                 <li onclick="showCharts('VaccineHistory')"><a class="dropdown-item" href="#">Vaccine History (All Time)</a></li>
                                 <li onclick="showCharts('VaccineAgeGroup')"><a class="dropdown-item" href="#">Vaccination By Age Group</a></li>
                                 <li onclick="showCharts('PediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
@@ -117,7 +118,9 @@
                           </li>
                         </ul>
                       </div>
+                      <div class="text-light" id="menuHeader"></div>
                     </div>
+                    
                   </nav>
 
             </div>
@@ -131,9 +134,7 @@
           </div>   
 
             <!-- Main Body -->
-            <div class="row justify-content-md-center" id="bodyHeader">
-              
-            </div>
+            <div class="row justify-content-md-center" id="bodyRow"></div>
             <div class="row justify-content-md-center" id="summary">
               <div class="col-md-auto" id="board1"></div>
               <div class="col-md-auto" id="board2"></div>
@@ -141,13 +142,22 @@
               <div class="col-md-auto" id="board4"></div>
             </div>
 
+            <div class="row justify-content-md-center" id="chart_lg_row" style="display:none">
+              <div class="col-md-auto" >
+                <canvas id="largeChart" width="800px" height="500px"></canvas>
+              </div>
+            </div>
+
             <div class="row justify-content-md-center" id="dashboard">
+              <div class="col-md-auto">
+              </div>              
             </div>
             <div class="row justify-content-sm-center">
               <div class="col-md-auto">
                 <div class="row justify-content-md-center">
                   <div class="col-md-auto" id="chart1_col">
                     <canvas id="chart1" width="500" height="250"></canvas>
+                    
                   </div>
                 </div>
                 <div class="row justify-content-md-center">
