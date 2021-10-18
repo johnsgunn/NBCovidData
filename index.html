@@ -40,153 +40,166 @@
 <body onload="showDashboard()">
  
 <div class="container-fluid" >
-            <!-- Navbar -->
-            <div class="row"> 
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <div class="container-fluid">
-                      <a class="navbar-brand" href="#" onclick="showDashboard()">NB Daily Covid-19 Data</a>
-                      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                      </button>
-                      <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                        <ul class="navbar-nav">
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Raw Data
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                              <li> 
-                                <a class="dropdown-item" href="#"> Case Details &raquo; </a>
-                                  <ul class="submenu dropdown-menu-dark">
-                                    <li onclick="showArcGis('ProvincialSummary')"><a class="dropdown-item" href="#">Provincial Summary</a></li>
-                                    <li onclick="showArcGis('ZoneSummary')"><a class="dropdown-item" href="#">Health Zone Summary</a></li>
-                                    <li onclick="showArcGis('DailyTesting')"><a class="dropdown-item" href="#">Daily Testing</a></li>
-                                    <li onclick="showArcGis('CaseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
-                                    <li onclick="showArcGis('CaseOrigin')"><a class="dropdown-item" href="#">Case Origin</a></li>
-                                    <li onclick="showArcGis('Exposures')"><a class="dropdown-item" href="#">Exposures</a></li>
-                                  </ul>
-                              </li>
+  <!-- Navbar -->
+  <div class="row" id="navbar"> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" onclick="showDashboard()">NB Daily Covid-19 Data</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Raw Data
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                <li> 
+                  <a class="dropdown-item" href="#"> Case Details &raquo; </a>
+                    <ul class="submenu dropdown-menu-dark">
+                      <li onclick="showArcGis('ProvincialSummary')"><a class="dropdown-item" href="#">Provincial Summary</a></li>
+                      <li onclick="showArcGis('HealthZoneSummary')"><a class="dropdown-item" href="#">Health Zone Summary</a></li>
+                      <li onclick="showArcGis('DailyTesting')"><a class="dropdown-item" href="#">Daily Testing</a></li>
+                      <li onclick="showArcGis('CaseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
+                      <li onclick="showArcGis('CaseOrigin')"><a class="dropdown-item" href="#">Case Origin</a></li>
+                      <li onclick="showArcGis('Exposures')"><a class="dropdown-item" href="#">Exposures</a></li>
+                    </ul>
+                </li>
 
-                              <li> 
-                                <a class="dropdown-item" href="#"> Healthcare Details &raquo; </a>
-                                  <ul class="submenu dropdown-menu-dark">
-                                    <li onclick="showArcGis('HospitalStatusAll')"><a class="dropdown-item" href="#">Hospital Status</a></li>
-                                    <li onclick="showArcGis('AdultResidentialFacilities')"><a class="dropdown-item" href="#">Adult Residential Facilities</a></li>
-                                    <!-- <li onclick="showArcGis('AdultResidentialFacilitiesGEO')"><a class="dropdown-item" href="#">Adult Residential Facilities (Geo Locations)</a></li> -->
-                                  </ul>
-                              </li>
+                <li> 
+                  <a class="dropdown-item" href="#"> Healthcare Details &raquo; </a>
+                    <ul class="submenu dropdown-menu-dark">
+                      <li onclick="showArcGis('HospitalStatusAll')"><a class="dropdown-item" href="#">Hospital Status</a></li>
+                      <li onclick="showArcGis('AdultResidentialFacilities')"><a class="dropdown-item" href="#">Adult Residential Facilities</a></li>
+                      <!-- <li onclick="showArcGis('AdultResidentialFacilitiesGEO')"><a class="dropdown-item" href="#">Adult Residential Facilities (Geo Locations)</a></li> -->
+                    </ul>
+                </li>
 
-                              <li> 
-                                <a class="dropdown-item" href="#"> Vaccination Details &raquo; </a>
-                                  <ul class="submenu dropdown-menu-dark">
-                                    <li onclick="showArcGis('VaccinationSummary')"><a class="dropdown-item" href="#">Vaccination Summary</a></li>
-                                    <li onclick="showArcGis('VaccinationAgeGroups')"><a class="dropdown-item" href="#">Vaccination Age Groups</a></li>
-                                    <li onclick="showArcGis('VaccinationHistory')"><a class="dropdown-item" href="#">Vaccination History</a></li>
-                                    <li onclick="showArcGis('VaccinationTimetable')"><a class="dropdown-item" href="#">Vaccine Timetable</a></li>
-                                  </ul>
-                              </li>
-                            </ul>
-                          </li>                          
-        
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Charts and Graphs
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li onclick="showDashboard()"><a class="dropdown-item" href="#">Case Dashboard</a></li>
-                                <li onclick="showCharts('CaseRate_7DayAverage')"><a class="dropdown-item" href="#">Case Rate (7-Day Rolling Average)</a></li>
-                                <li onclick="showCharts('CaseRate_Table')"><a class="dropdown-item" href="#">Case Rate Table</a></li>
-                                <li onclick="showCharts('CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li>
-                                <!-- <li onclick="GetDataFromUrl(CaseHistoryURL,'showCaseHistoryChart-lg','CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li> -->
-                                <li onclick="showCharts('VaccineHistory')"><a class="dropdown-item" href="#">Vaccine History (All Time)</a></li>
-                                <li onclick="showCharts('VaccineAgeGroup')"><a class="dropdown-item" href="#">Vaccination By Age Group</a></li>
-                                <li onclick="showCharts('PediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
-                                <li onclick="showCharts('Hospitalizations')"><a class="dropdown-item" href="#">Hospitalization Rate</a></li>
-                            </ul>
-                          </li>
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                More Info
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li onclick="showMore('about')"><a class="dropdown-item" href="#">About</a></li>
-                                <li onclick="showMore('api_features')"><a class="dropdown-item" href="#">GNB API Features</a></li>
-                                <li onclick="showMore('nbcreators')"><a class="dropdown-item" href="#">NB Data Creators</a></li>
-                                <li onclick="showMore('moresources')"><a class="dropdown-item" href="#">Sources</a></li>
-                                <li onclick="showMore('tipjar')"><a class="dropdown-item" href="#">Tip Jar</a></li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="text-light" id="menuHeader"></div>
-                    </div>
-                    
-                  </nav>
+                <li> 
+                  <a class="dropdown-item" href="#"> Vaccination Details &raquo; </a>
+                    <ul class="submenu dropdown-menu-dark">
+                      <li onclick="showArcGis('VaccinationSummary')"><a class="dropdown-item" href="#">Vaccination Summary</a></li>
+                      <li onclick="showArcGis('VaccinationAgeGroups')"><a class="dropdown-item" href="#">Vaccination Age Groups</a></li>
+                      <li onclick="showArcGis('VaccinationHistory')"><a class="dropdown-item" href="#">Vaccination History</a></li>
+                      <li onclick="showArcGis('VaccinationTimetable')"><a class="dropdown-item" href="#">Vaccine Timetable</a></li>
+                    </ul>
+                </li>
+              </ul>
+            </li>                          
 
-            </div>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Charts and Graphs
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li onclick="showDashboard()"><a class="dropdown-item" href="#">Case Dashboard</a></li>
+                  <li onclick="showCharts('CaseRate_7DayAverage')"><a class="dropdown-item" href="#">Case Rate (7-Day Rolling Average)</a></li>
+                  <li onclick="showCharts('CaseRate_Table')"><a class="dropdown-item" href="#">Case Rate Table</a></li>
+                  <li onclick="showFullSizeChart('CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li>
+                  <li onclick="showFullSizeChart('VaccineHistory')"><a class="dropdown-item" href="#">Vaccine History (All Time)</a></li>
+                  <li onclick="showFullSizeChart('HealthZoneSummary')"><a class="dropdown-item" href="#">Current Health Zone Breakdown</a></li>
+                  <li onclick="showCharts('VaccineAgeGroup')"><a class="dropdown-item" href="#">Vaccination By Age Group</a></li>
+                  <li onclick="showCharts('PediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
+                  <li onclick="showCharts('Hospitalizations')"><a class="dropdown-item" href="#">Hospitalization Rate</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  More Info
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li onclick="showMore('about')"><a class="dropdown-item" href="#">About</a></li>
+                  <li onclick="showMore('api_features')"><a class="dropdown-item" href="#">GNB API Features</a></li>
+                  <li onclick="showMore('nbcreators')"><a class="dropdown-item" href="#">NB Data Creators</a></li>
+                  <li onclick="showMore('moresources')"><a class="dropdown-item" href="#">Sources</a></li>
+                  <li onclick="showMore('tipjar')"><a class="dropdown-item" href="#">Tip Jar</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="text-light" id="menuHeader"></div>
+      </div>
+    </nav>  
 
-            <!-- Button display -->
-            <div class="row" id="export_row" style="display:none">
-              <div class="col col-md-12 text-right">
-                  <button type="button" id="export_button" onclick="html_table_to_excel('tblData')" class="btn btn-success btn-sm">Download as Excel</button>
-                  <button type="button" id="json_button" onclick="downloadJSON()" class="btn btn-primary btn-sm">Download as JSON</button>
-              </div>
-          </div>   
+  </div>
 
-            <!-- Main Body -->
-            <div class="row justify-content-md-center" id="bodyRow"></div>
-            <div class="row justify-content-md-center" id="summary">
-              <div class="col-md-auto" id="board1"></div>
-              <div class="col-md-auto" id="board2"></div>
-              <div class="col-md-auto" id="board3"></div>
-              <div class="col-md-auto" id="board4"></div>
-            </div>
+  <!-- Button display -->
+  <div class="row hidden" id="export_row">
+    <div class="col col-md-12 text-right">
+        <button type="button" id="export_button" onclick="html_table_to_excel('tblData')" class="btn btn-success btn-sm">Download as Excel</button>
+        <button type="button" id="json_button" onclick="downloadJSON()" class="btn btn-primary btn-sm">Download as JSON</button>
+    </div>
+  </div>   
 
-            <div class="row justify-content-md-center" id="chart_lg_row" style="display:none">
-              <div class="col-md-auto" >
-                <canvas id="largeChart" width="800px" height="500px"></canvas>
-              </div>
-            </div>
+  <!-- Main Body -->
+  <div id="bodyRow">
+    <div class="row justify-content-md-center"></div>
+  </div>
 
-            <div class="row justify-content-md-center" id="dashboard">
-              <div class="col-md-auto">
-              </div>              
-            </div>
-            <div class="row justify-content-sm-center">
-              <div class="col-md-auto">
-                <div class="row justify-content-md-center">
-                  <div class="col-md-auto" id="chart1_col">
-                    <canvas id="chart1" width="500" height="250"></canvas>
-                    
-                  </div>
-                </div>
-                <div class="row justify-content-md-center">
-                  <div class="col-md-auto" id="chart3_col">
-                    <canvas id="chart3" width="500" height="250"></canvas>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-md-auto" id="chart2_col">
-                <canvas id="chart2" width="500" height="600"></canvas>
-              </div>
-            </div>
-            <div class="row justify-content-md-center">
-              
-            </div>
+  <!-- Summary Dashboard (landing) -->
+  <div id="summaryDashboard">
+    <!-- Sumamry Table Boards (Top Half) -->
+    <div class="row justify-content-md-center">
+      
+      <div class="col-md-auto" id="board1"></div>
+      <div class="col-md-auto" id="board2"></div>
+      <div class="col-md-auto" id="board3"></div>
+      <div class="col-md-auto" id="board4"></div>
+    </div>
+    <!-- Charts (Lower Half) -->
+    <div class="row justify-content-sm-center">
+      <!-- Left Column  -->
+      <div class="col-md-auto">
+        <!-- Row 1 -->
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto" id="chart1_col">
+            <!-- Active Case History Chart -->
+            <canvas id="chart1" width="500" height="250"></canvas>                    
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto" id="chart3_col">
+            <!-- Vaccination History Chart -->
+            <canvas id="chart3" width="500" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- Right Column -->
+      <div class="col-md-auto" id="chart2_col">
+        <!-- Health Zone Case Chart -->
+        <canvas id="chart2" width="500" height="600"></canvas>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Large Chart Display (for single chart) -->
+  <div id="large_chart"> 
+    <div class="row justify-content-md-center" id="chart_lg_row">
+      <div class="col-md-auto" >
+        <canvas id="largeChart" width="800px" height="500px"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-md-center" id="dashboard">
+    <div class="col-md-auto">
+    </div>              
+  </div>
             
              
 </div>
 
 <!-- FOOTER -->
-<footer class="container-fluid text-center fixed-bottom">
-  <div class="byline">
+<footer class="page-footer font-small blue pt-4">
+  <div class="byline container-fluid text-center text-md-left">
     Witten By: <a rel="author" href="https://twitter.com/johnsgunn" target="_blank">John Gunn</a> | 
     Data Source: <a href="#" onclick="showMore('moresources')">View Sources</a> |
     Source Code (GPLv3): <a href="https://github.com/johnsgunn/NBCovidData" target="_blank">NBCovidData</a> | 
     Bugs or Requests: <a href="https://github.com/johnsgunn/NBCovidData/issues" target="_blank">Open An Issue</a> | 
     Tip Jar: <a href="#" onclick="showMore('tipjar')">Buy Me A Coffee</a>      
-
 </div>
     <!-- All your data are belong to us -->
 </footer>

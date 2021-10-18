@@ -36,51 +36,43 @@ var C_CurrentHospitalRateURL = "https://docs.google.com/spreadsheets/u/1/d/1GyeP
 var C_HospitalizationRateURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1743702753&format=interactive";
 var C_HospitalizationRate_7DayAverageURL = "https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=916870618&format=interactive";
 
+// URLs for Google CSVs
+var CSV_PedData = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pub?gid=913983582&single=true&output=csv";
+
+
 var jsonOutput;
 var currentReport;
 
 var caseHistoryChart = null;
 var vaccineHistoryChart = null;
 var healthZoneChart = null;
+var largeChart = null;
 
-function showExportButton(){
-    let x = document.getElementById("export_row");
-    if (x.style.display === "none") {
-        x.style.display = "block";
+function hideAll(){
+    let elementList = [
+        'export_row',
+        'bodyRow',
+        'summaryDashboard',
+        'large_chart',
+        'dashboard'
+    ];
+
+    // Reset divs
+    for (var i = 0; i < elementList.length ; i++){
+        let x = document.getElementById(elementList[i]);
+        x.classList.add('hidden');
     }
+
+    // Destroy charts 
+    if (caseHistoryChart) caseHistoryChart.destroy();
+    if (vaccineHistoryChart) vaccineHistoryChart.destroy();
+    if (healthZoneChart) healthZoneChart.destroy();
+    if (largeChart) largeChart.destroy();
 }
 
-function hideExportButton(){
-    let x = document.getElementById("export_row");
-    if (x.style.display === "block") {
-        x.style.display = "none";
-    }
-}
-
-function hideSummaryBoard(){
-
-    var board = document.getElementById("board1");
-    board.innerHTML = "";
-    board = document.getElementById("board2");
-    board.innerHTML = "";
-    board = document.getElementById("board3");
-    board.innerHTML = "";
-    board = document.getElementById("board4");
-    board.innerHTML = "";
-
-    if (caseHistoryChart != null && vaccineHistoryChart != null){
-        caseHistoryChart.destroy();
-        vaccineHistoryChart.destroy();
-        healthZoneChart.destroy();
-    }
-    
-}
-
-function hideLargeChart(){
-    let x = document.getElementById("chart_lg_row");
-    if (x.style.display === "block") {
-        x.style.display = "none";
-    }
+function showElement(elementName){
+    let x = document.getElementById(elementName);
+    x.classList.remove('hidden');
 }
 
 function html_table_to_excel(tableName){
@@ -96,23 +88,14 @@ function html_table_to_excel(tableName){
 }
 
 function showDashboard(){
-    hideSummaryBoard(); // clear previous data
-    hideExportButton();
-    hideLargeChart();
+    hideAll();
+    showElement("summaryDashboard");
 
-    var dataDisplay = document.getElementById("dashboard");
-    dataDisplay.innerHTML = ""; // clear text area
-
-    GetDataFromUrl(ProvincialSummaryURL, "showCaseSummary", "ProvincialSummary");
-    GetDataFromUrl(VaccinationSummaryURL, "showVaccineSummary", "VaccinationSummary");
-    GetDataFromUrl(CaseHistoryURL,"showCaseHistoryChart","CaseHistory");
-    GetDataFromUrl(VaccinationHistoryURL,"showVaccineHistoryChart","VaccineHistory");
-    GetDataFromUrl(ZoneSummaryURL,"showHealthZoneChart","ZoneSummary");
-
-    var currentRate = document.createElement("p");
-    
-    dataDisplay.innerHTML = "";
-    dataDisplay.appendChild(currentRate);
+    showCaseSummaryBoard(checkGetDataJSON('CaseSummary',ProvincialSummaryURL),'CaseSummary');
+    showVaccineSummaryBoard(checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL), "VaccinationSummary");
+    showCaseHistoryChart(checkGetDataJSON('CaseHistory',CaseHistoryURL),'CaseHistory',"chart1");  
+    showVaccineHistoryChart(checkGetDataJSON('VaccineHistory',VaccinationHistoryURL),'VaccineHistory',"chart3");  
+    showHealthZoneChart(checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL),'HealthZoneSummary',"chart2");  
 }
 
 function buildBoardTable(header,body){
@@ -141,17 +124,18 @@ function buildBoardTable(header,body){
 }
 
 
-function showCaseSummaryBoard(arcgis,name){
-    json = ArcGIStoJSON(arcgis,name,false);
+// Displays dashboard tables for Case Summary and Hospitalization Summary
+// Data source: GNB API 
+function showCaseSummaryBoard(json,name){
     var arr = [];
-    sessionStorage.setItem(name,json);
     arr = JSON.parse(json); 	// Convert JSON to array.
 
     var menuHeader = document.getElementById("menuHeader");
     menuHeader.innerHTML = "Last Updated: " + arr[name][0]['LastUpdateText'];
     var board1 = document.getElementById("board1");
+    board1.innerHTML = "";
     var board2 = document.getElementById("board2");
-    //var board3 = document.getElementById("board3");
+    board2.innerHTML = "";
 
     var header = document.createElement("col");
     header.setAttribute("class","col-md-auto");
@@ -188,14 +172,14 @@ function showCaseSummaryBoard(arcgis,name){
     board2.appendChild(hospitalizations);
 }
 
-function showVaccineSummaryBoard(arcgis,name){
-
-    json = ArcGIStoJSON(arcgis,name,false);
-    sessionStorage.setItem(name,json);
+// Display dashboard table for Vaccination Summary
+// Data source: GNB API
+function showVaccineSummaryBoard(json,name){
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
     var board3 = document.getElementById("board3");
+    board3.innerHTML = "";
     var tableHeader = "Vaccinations";
     var tableBody = [];
 
@@ -213,9 +197,7 @@ function showVaccineSummaryBoard(arcgis,name){
 }
 
 function showCharts(chartName){
-    hideLargeChart();
-    hideExportButton();
-    hideSummaryBoard();
+    hideAll();
     var chartURL = "";
     var width = "600";
     var height = "400";
@@ -240,6 +222,7 @@ function showCharts(chartName){
             break;
         case "PediatricCases":
             chartURL = C_PediatricCasesURL;
+            checkGetDataCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pub?gid=913983582&single=true&output=csv",chartName);
             break;
         case "CaseRate_Table":
             chartURL = C_CurrentRateURL;
@@ -253,83 +236,82 @@ function showCharts(chartName){
             exit;
     }
 
-    var text = document.createElement("text");
-    
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object data='"+chartURL+"' width='"+width+"px' height='"+height+"px'></object></div>";
+    showElement("bodyRow");
 
-    var dataDisplay = document.getElementById("dashboard");
+    var embeddedChart = document.createElement("p");
+    
+    embeddedChart.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object data='"+chartURL+"' width='"+width+"px' height='"+height+"px'></object></div>";
+
+    var dataDisplay = document.getElementById("bodyRow");
     dataDisplay.innerHTML = "";
-    dataDisplay.appendChild(text);
+    dataDisplay.appendChild(embeddedChart);
 }
 
-function showArcGis(reportName){
-    hideLargeChart();
-    hideSummaryBoard();
-    var reportURL = "";
-    currentReport = reportName;
-    switch (reportName){
+function showArcGis(name){
+    hideAll();
+    var url = "";
+    currentReport = name;
+    switch (name){
         case "CaseHistory":
-            reportURL = CaseHistoryURL;
+            url = CaseHistoryURL;
             break;
         case "ProvincialSummary":
-            reportURL = ProvincialSummaryURL;
+            url = ProvincialSummaryURL;
             break;
-        case "ZoneSummary":
-            reportURL = ZoneSummaryURL;
+        case "HealthZoneSummary":
+            url = ZoneSummaryURL;
             break;
         case "CaseOrigin":
-            reportURL = CaseOriginURL;
+            url = CaseOriginURL;
             break;
         case "DailyTesting":
-            reportURL = DailyTestingURL;
+            url = DailyTestingURL;
             break;
         case "VaccinationSummary":
-            reportURL = VaccinationSummaryURL;
+            url = VaccinationSummaryURL;
             break;
         case "HospitalStatusAll":
-            reportURL = HospitalStatusAllURL;
+            url = HospitalStatusAllURL;
             break;
         case "VaccinationHistory":
-            reportURL = VaccinationHistoryURL;
+            url = VaccinationHistoryURL;
             break;
         case "VaccinationTimetable":
-            reportURL = VaccineTimetableURL;
+            url = VaccineTimetableURL;
             break;
         case "VaccinationAgeGroups":
-            reportURL = VaccinesByAgeGroupURL;
+            url = VaccinesByAgeGroupURL;
             break;
         case "Exposures":
-            reportURL = ExposuresURL;
+            url = ExposuresURL;
             break;
         case "AdultResidentialFacilities":
-            reportURL = AdultResidentialFacilitiesListURL;
+            url = AdultResidentialFacilitiesListURL;
             break;
         case "AdultResidentialFacilitiesGEO":
-            reportURL = GEO_AdultResidentialFacilitiesListURL;
+            url = GEO_AdultResidentialFacilitiesListURL;
                 break;
         default: // invalid selection
             exit;
     }
 
-    StoreArcGisData(reportURL,reportName, true);  
-    
-    showExportButton();
+    createTableFromJSON(checkGetDataJSON(name,url),name);
 }
 
 function showMore (pageName) {
-    hideSummaryBoard(); // clear previous data
-    hideExportButton();
-    hideLargeChart();
+    hideAll();
+    showElement("bodyRow");    
 
     pageName = pageName + ".html";
-    var text = document.createElement("text");
+    var displayPage = document.createElement("p");
     
-    text.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=800 data='more/" + pageName + "' ></object></div>";
-    var dataDisplay = document.getElementById("dashboard");
+    displayPage.innerHTML = "<div class='.embed-responsive col-xs-12 text-center'><object type='text/html' width=900 height=800 data='more/" + pageName + "' ></object></div>";
+    var dataDisplay = document.getElementById("bodyRow");
     dataDisplay.innerHTML = "";
-    dataDisplay.appendChild(text);
+    dataDisplay.appendChild(displayPage);
 }
 
+// Converts json object to a table
 function createTableFromJSON(jsonData,name) {
     var arr = [];
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
@@ -392,29 +374,45 @@ function createTableFromJSON(jsonData,name) {
     }
 
     // Finally, add the dynamic table to a container.
-    var divContainer = document.getElementById("dashboard");
+    var divContainer = document.getElementById("bodyRow");
     divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
     divContainer.appendChild(table);
+    showElement("bodyRow");
+    showElement("export_row");
 }
 
-function showCaseHistoryChart(jsonData,name,loc) {
-    console.log(jsonData);
-    json = ArcGIStoJSON(jsonData,name,false);
+// Render case history chart to specified location on page
+// Data source: GNB API
+function showCaseHistoryChart(json,name,loc) {
     var arr = [];
-    sessionStorage.setItem(name,json);
     arr = JSON.parse(json); 	// Convert JSON to array.
 
     var dps1 = [];
     var dps2 = [];
     for (var i=arr[name].length-1 ; i > -1  ; i--){
-        console.log(arr[name][i]['ActiveCases']);
         dps1.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
         dps2.push({ x: arr[name][i]['DATE'], y: arr[name][i]['Active']});
     }
 
-    var ctx = document.getElementById(loc);
-    console.log(ctx);
+    var ctx = document.getElementById(loc);    
+    if (caseHistoryChart) caseHistoryChart.destroy();
+
     caseHistoryChart = new Chart(ctx, {
+        options: {
+            scales: {
+                responsive:true,
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: [ 
+                {
+                title: {
+                    display: true,
+                    text: 'Daily Case History'
+                },                
+            }]
+        },
         type: "line",
         data: {
             datasets: [
@@ -435,86 +433,16 @@ function showCaseHistoryChart(jsonData,name,loc) {
                     backgroundColor: "#0099ff" 
                 }
             ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Daily Case History'
-                }
-            }
-        }
+        }        
     });
+
     caseHistoryChart.render();
 }
 
-function showCaseHistoryChart_lg(jsonData,name,loc) {
-    hideSummaryBoard(); // clear previous data
-    hideExportButton();
-    json = ArcGIStoJSON(jsonData,name,false);
+// Render vaccine history chart to specified location on page
+// Data source: GNB API
+function showVaccineHistoryChart(json,name,loc) {
     var arr = [];
-    arr = JSON.parse(json); 	// Convert JSON to array.
-
-    var dps1 = [];
-    var dps2 = [];
-    for (var i=arr[name].length-1 ; i > -1  ; i--){
-        console.log(arr[name][i]['ActiveCases']);
-        dps1.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
-        dps2.push({ x: arr[name][i]['DATE'], y: arr[name][i]['Active']});
-    }
-
-    var ctx = document.getElementById(loc);
-    console.log(dps2);
-    caseHistoryChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            datasets: [
-            {
-                label: "New Cases",
-                data:dps1,
-                borderWidth: 0,
-                pointRadius: 0,
-                fill: true,
-                backgroundColor: "#ff6347"
-            },
-            {
-                label: "Active Cases",
-                data:dps2,
-                borderWidth: 0,
-                pointRadius: 0,
-                fill: true,
-                backgroundColor: "#0099ff" 
-            }
-        ]
-        },
-        options: {
-            scales: {
-                maintainAspectRatio: false,
-                responsive:true,
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Daily Case History'
-                }
-            }
-        }
-    });
-    caseHistoryChart.render();
-}
-
-function showVaccineHistoryChart(jsonData,name) {
-    json = ArcGIStoJSON(jsonData,name,false);
-    var arr = [];
-    sessionStorage.setItem(name,json);
     arr = JSON.parse(json); 	// Convert JSON to array.
 
     var dps1 = [];
@@ -526,7 +454,8 @@ function showVaccineHistoryChart(jsonData,name) {
         dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['SecondDose']});
     }
 
-    var ctx = document.getElementById('chart3');
+    var ctx = document.getElementById(loc);
+    if (vaccineHistoryChart) vaccineHistoryChart.destroy();
     vaccineHistoryChart = new Chart(ctx, {
         
         data: {
@@ -577,10 +506,10 @@ function showVaccineHistoryChart(jsonData,name) {
     vaccineHistoryChart.render();
 }
 
-function showHealthZoneChart(jsonData,name) {
-    json = ArcGIStoJSON(jsonData,name,false);
+// Render health zone chart to specified location on page
+// Data source: GNB API
+function showHealthZoneChart(json,name,loc) {
     var arr = [];
-    sessionStorage.setItem(name,json);
     arr = JSON.parse(json); 	// Convert JSON to array.
 
     var chartLabels = [];
@@ -590,7 +519,7 @@ function showHealthZoneChart(jsonData,name) {
         cases.push(arr[name][i]['ActiveCases']);
     }
 
-    var ctx = document.getElementById('chart2');
+    var ctx = document.getElementById(loc);
     var data = {
         labels: [
             chartLabels[0],
@@ -615,6 +544,7 @@ function showHealthZoneChart(jsonData,name) {
             ]
         }]
     }
+    if (healthZoneChart) healthZoneChart.destroy();
     healthZoneChart = new Chart(ctx, {
         type: "doughnut",
         data: data,
@@ -636,88 +566,54 @@ function showHealthZoneChart(jsonData,name) {
     healthZoneChart.render();
 }
 
-function GetDataFromUrlToTable(url){
-     // Create XMLHttpRequest object.
-     var oXHR = new XMLHttpRequest();
-     var retTable = document.createElement("table");
-
-     // Initiate request.
-     oXHR.onreadystatechange = reportStatus;
-     oXHR.open("GET", url, true);  // get json file.
-     oXHR.send();
- 
-     function reportStatus() {
-         if (oXHR.readyState == 4) {		// Check if request is complete.
- 
-             // Create an HTML table using response from server.
-             retTable = createObjectFromJSON(this.responseText);
-         }
-     }
-
-     return retTable;
+function Get(url){
+    var Httpreq = new XMLHttpRequest(); 
+    Httpreq.open("GET",url,false);
+    Httpreq.send(null);
+    return Httpreq.responseText;          
 }
 
-function GetDataFromUrl(url,opt,name){
-
-    // Create XMLHttpRequest object.
-    var oXHR = new XMLHttpRequest();
-
-    // Initiate request.
-    oXHR.onreadystatechange = reportStatus;
-    oXHR.open("GET", url, true);  // get json file.
-    oXHR.send();
-
-    function reportStatus() {
-        if (oXHR.readyState == 4) {		// Check if request is complete.
-
-            // Create an HTML table using response from server.
-            switch (opt){
-                case "showTable":
-                    createTableFromJSON(this.responseText);
-                    break;
-                case "showCaseSummary":
-                    showCaseSummaryBoard(this.responseText,name); // case summary 
-                    break;
-                case "showVaccineSummary":
-                    showVaccineSummaryBoard(this.responseText,name); // vaccine summary
-                    break;
-                case "showCaseHistoryChart":
-                    showCaseHistoryChart(this.responseText,name,"chart1"); 
-                    break;
-                case "showCaseHistoryChart-lg":
-                    showCaseHistoryChart_lg(this.responseText,name,"largeChart"); 
-                    let x = document.getElementById("chart_lg_row");
-                    if (x.style.display === "none") {
-                        x.style.display = "block";
-                    }
-                    break;
-                case "showVaccineHistoryChart":
-                    showVaccineHistoryChart(this.responseText,name);
-                    break;
-                case "showHealthZoneChart":
-                    showHealthZoneChart(this.responseText,name);
-                    break;
-                default:
-                    createTableFromJSON(this.responseText);
-                    break;
-            }            
-        }
-    }
+function checkGetDataJSON(name,url){
+    if (!sessionStorage.getItem(name)){ // not yet stored
+        var newData = Get(url);
+        var json = convertArcGIStoJSON(newData,name); // returns stringified data
+        sessionStorage.setItem(name,json);
+    }            
+    return sessionStorage.getItem(name);
 }
 
+// Display full sized chart on page
+function showFullSizeChart (chartName){
+    // Clear and prep area
+    hideAll();
+    showElement("large_chart");
 
-// STORING ARCGIS DATA TO JSON FILES //
+    switch (chartName){
+        case "CaseHistory":
+            showCaseHistoryChart(checkGetDataJSON('CaseHistory',CaseHistoryURL),'CaseHistory',"largeChart");         
+            break;
+        case "VaccineHistory":
+            showVaccineHistoryChart(checkGetDataJSON('VaccineHistory',VaccinationHistoryURL),'VaccineHistory',"largeChart");  
+            break;
+        case "HealthZoneSummary":
+            showHealthZoneChart(checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL),'HealthZoneSummary',"largeChart")
+            break;
+        default:
+            // bad selection
+            break;
+    }                
+}
 
-function ArcGIStoJSON(ArcGISData,jsonName,displayData){
+function convertArcGIStoJSON(ArcGISData,jsonName){
     var arr = [];
     arr = JSON.parse(ArcGISData); 	// Convert JSON to array.
-
 
     // Create new json collection
     var jsonText = '{ "' + jsonName + '" : [';
 
     var col = []; // Contains our headers 
 
+    // ID columns not needed, so discarding 
     for (var i = 0; i < arr['features'].length; i++) {
         for (var key in arr['features'][i].attributes) {
             if (col.indexOf(key) === -1 
@@ -768,35 +664,8 @@ function ArcGIStoJSON(ArcGISData,jsonName,displayData){
     jsonText += ']}';
 
     jsonOutput = JSON.parse(jsonText);
-
-    if (displayData){
-        createTableFromJSON(JSON.stringify(jsonOutput,null,2),jsonName);
-        return null;
-    }
-    else{
-        return JSON.stringify(jsonOutput,null,2);
-    }
     
-}
-
-function StoreArcGisData(url,name,displayData){
-
-    // Create XMLHttpRequest object.
-    var oXHR = new XMLHttpRequest();
-    var json;
-
-    // Initiate request.
-    oXHR.onreadystatechange = reportStatus;
-    oXHR.open("GET", url, true);  // get json file.
-    oXHR.send();
-
-    function reportStatus() {
-        if (oXHR.readyState == 4) {		// Check if request is complete.
-
-            // Create an HTML table using response from server.
-            ArcGIStoJSON(this.responseText,name,displayData);
-        }
-    }
+    return JSON.stringify(jsonOutput,null,2);
 }
 
 function downloadJSON(){
