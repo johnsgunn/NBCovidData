@@ -48,6 +48,15 @@ var vaccineHistoryChart = null;
 var healthZoneChart = null;
 var largeChart = null;
 
+async function preloadData(){
+    // Load out endpoints into session on refresh
+    var caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
+    var vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
+    var caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
+    var vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
+    var healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
+}
+
 function hideAll(){
     let elementList = [
         'export_row',
@@ -87,15 +96,21 @@ function html_table_to_excel(tableName){
     XLSX.writeFile(file, 'NBCovidData.' + type);
 }
 
-function showDashboard(){
+async function showDashboard(){
     hideAll();
     showElement("summaryDashboard");
 
-    showCaseSummaryBoard(checkGetDataJSON('CaseSummary',ProvincialSummaryURL),'CaseSummary');
-    showVaccineSummaryBoard(checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL), "VaccinationSummary");
-    showCaseHistoryChart(checkGetDataJSON('CaseHistory',CaseHistoryURL),'CaseHistory',"chart1");  
-    showVaccineHistoryChart(checkGetDataJSON('VaccineHistory',VaccinationHistoryURL),'VaccineHistory',"chart3");  
-    showHealthZoneChart(checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL),'HealthZoneSummary',"chart2");  
+    var caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL);
+    var vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL);
+    var caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL);
+    var vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL);
+    var healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL);
+
+    showCaseSummaryBoard(caseSummaryJSON,'CaseSummary');
+    showVaccineSummaryBoard(vaccinationSummaryJSON, "VaccinationSummary");
+    showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");  
+    showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");  
+    showHealthZoneChart(healthZoneJSON,'HealthZoneSummary',"chart2");  
 }
 
 function buildBoardTable(header,body){
@@ -222,7 +237,6 @@ function showCharts(chartName){
             break;
         case "PediatricCases":
             chartURL = C_PediatricCasesURL;
-            checkGetDataCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pub?gid=913983582&single=true&output=csv",chartName);
             break;
         case "CaseRate_Table":
             chartURL = C_CurrentRateURL;
@@ -247,7 +261,7 @@ function showCharts(chartName){
     dataDisplay.appendChild(embeddedChart);
 }
 
-function showArcGis(name){
+async function showArcGis(name){
     hideAll();
     var url = "";
     currentReport = name;
@@ -295,7 +309,8 @@ function showArcGis(name){
             exit;
     }
 
-    createTableFromJSON(checkGetDataJSON(name,url),name);
+    var tableData = await checkGetDataJSON(name,url);
+    createTableFromJSON(tableData,name);
 }
 
 function showMore (pageName) {
@@ -570,33 +585,40 @@ function Get(url){
     var Httpreq = new XMLHttpRequest(); 
     Httpreq.open("GET",url,false);
     Httpreq.send(null);
-    return Httpreq.responseText;          
+    return Httpreq.responseText;           
 }
 
-function checkGetDataJSON(name,url){
-    if (!sessionStorage.getItem(name)){ // not yet stored
-        var newData = Get(url);
-        var json = convertArcGIStoJSON(newData,name); // returns stringified data
-        sessionStorage.setItem(name,json);
-    }            
-    return sessionStorage.getItem(name);
+async function checkGetDataJSON(name,url,forceReload){
+    return new Promise((resolve,reject)=>{
+        if (!sessionStorage.getItem(name) || forceReload){ // not yet stored
+            var newData = Get(url);
+            var json = convertArcGIStoJSON(newData,name); // returns stringified data
+            sessionStorage.setItem(name,json);
+        }   
+        resolve(sessionStorage.getItem(name));
+    })
 }
 
 // Display full sized chart on page
-function showFullSizeChart (chartName){
+async function showFullSizeChart (chartName){
     // Clear and prep area
     hideAll();
     showElement("large_chart");
 
+    var chartJSON;
+
     switch (chartName){
         case "CaseHistory":
-            showCaseHistoryChart(checkGetDataJSON('CaseHistory',CaseHistoryURL),'CaseHistory',"largeChart");         
+            chartJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL);
+            showCaseHistoryChart(chartJSON,'CaseHistory',"largeChart");         
             break;
         case "VaccineHistory":
-            showVaccineHistoryChart(checkGetDataJSON('VaccineHistory',VaccinationHistoryURL),'VaccineHistory',"largeChart");  
+            chartJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL);
+            showVaccineHistoryChart(chartJSON,'VaccineHistory',"largeChart");  
             break;
         case "HealthZoneSummary":
-            showHealthZoneChart(checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL),'HealthZoneSummary',"largeChart")
+            chartJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL);
+            showHealthZoneChart(chartJSON,'HealthZoneSummary',"largeChart")
             break;
         default:
             // bad selection
