@@ -30,3 +30,18 @@
 .hidden {
 	display: none;
 }
+
+body {
+	background-color: white;
+	
+}
+
+.displayCharts,.summaryCharts {
+	background-color:#3f3f3f;
+}
+
+html { font-size: 80.5%; }
+.scroll {
+	max-height: 100%;
+	overflow-y: auto;
+}

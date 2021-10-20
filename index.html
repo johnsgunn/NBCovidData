@@ -7,23 +7,24 @@
 
     <title>NB Covid-19 Data Viewer</title>
 
+    <!-- Includes: bootstrap, jQuery, xlsx, ChartJS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./css/style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 
+    <!-- Compiled data as JSON -->
+    <script type="text/javascript" src="./data/NBPediatricCaseHistory.js"></script>
+    <script type="text/javascript" src="./data/NBCaseTrends.js"></script>
+
+    <!-- Styles and Utils -->
+    <link href="./css/style.css" rel="stylesheet">
     <script src="./js/GetCovidData.js"></script>
     <script src="./js/uiTools.js"></script>
     
     <style>
-        html { font-size: 80.5%; }
-        .scroll {
-            max-height: 100%;
-            overflow-y: auto;
-        }
+        
     </style>
 
     
@@ -39,10 +40,10 @@
 </head>
 <body onload="preloadData(); showDashboard()">
  
-<div class="container-fluid" >
+<div class="container-fluid main" >
   <!-- Navbar -->
   <div class="row" id="navbar"> 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='nav'>
       <div class="container-fluid">
         <a class="navbar-brand" href="#" onclick="showDashboard()">NB Daily Covid-19 Data</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,13 +86,23 @@
                       <li onclick="showArcGis('VaccinationTimetable')"><a class="dropdown-item" href="#">Vaccine Timetable</a></li>
                     </ul>
                 </li>
+
+                <li> 
+                  <a class="dropdown-item" href="#"> Compiled Data &raquo; </a>
+                    <ul class="submenu dropdown-menu-dark">
+                      <li onclick="showCompiledData('pediatricCases')"><a class="dropdown-item" href="#">Pediactric Cases</a></li>
+                      <li onclick="showCompiledData('caseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
+                    </ul>
+                </li>
               </ul>
             </li>                          
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="showChartsDisplay()" id="showCharts" role="button" aria-expanded="false">
+                Charts and Graphs
+              <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Charts and Graphs
-              </a>
+              </a> -->
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                   <li onclick="showDashboard()"><a class="dropdown-item" href="#">Case Dashboard</a></li>
                   <li onclick="showCharts('CaseRate_7DayAverage')"><a class="dropdown-item" href="#">Case Rate (7-Day Rolling Average)</a></li>
@@ -99,8 +110,9 @@
                   <li onclick="showFullSizeChart('CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li>
                   <li onclick="showFullSizeChart('VaccineHistory')"><a class="dropdown-item" href="#">Vaccine History (All Time)</a></li>
                   <li onclick="showFullSizeChart('HealthZoneSummary')"><a class="dropdown-item" href="#">Current Health Zone Breakdown</a></li>
+                  <li onclick="showFullSizeChart('pediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
+                  <li onclick="showFullSizeChart('caseTrends')"><a class="dropdown-item" href="#">Case Rate Trends</a></li>
                   <li onclick="showCharts('VaccineAgeGroup')"><a class="dropdown-item" href="#">Vaccination By Age Group</a></li>
-                  <li onclick="showCharts('PediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
                   <li onclick="showCharts('Hospitalizations')"><a class="dropdown-item" href="#">Hospitalization Rate</a></li>
               </ul>
             </li>
@@ -118,7 +130,13 @@
             </li>
           </ul>
         </div>
-        <div class="text-light" id="menuHeader"></div>
+        
+        <div class="text-light" id="menuHeader"></div>&nbsp;&nbsp;&nbsp;
+
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="darkModeSwitch" onclick="toggleDarkMode()" />
+          <label class="form-check-label text-light" for="darkModeSwitch">Dark Mode</label>
+        </div>
       </div>
     </nav>  
 
@@ -138,7 +156,8 @@
   </div>
 
   <!-- Summary Dashboard (landing) -->
-  <div id="summaryDashboard">
+  <div id="summaryDashboard" class="row justify-content-md-center">
+  <div class='col-md-auto'>
     <!-- Sumamry Table Boards (Top Half) -->
     <div class="row justify-content-md-center">
       
@@ -148,7 +167,7 @@
       <div class="col-md-auto" id="board4"></div>
     </div>
     <!-- Charts (Lower Half) -->
-    <div class="row justify-content-sm-center">
+    <div class="row justify-content-sm-center" id="summaryCharts">
       <!-- Left Column  -->
       <div class="col-md-auto">
         <!-- Row 1 -->
@@ -175,26 +194,35 @@
   </div>
 
 
-  <!-- Large Chart Display (for single chart) -->
-  <div id="large_chart"> 
-    <div class="row justify-content-md-center" id="chart_lg_row">
-      <div class="col-md-auto" >
-        <canvas id="largeChart" width="800px" height="500px"></canvas>
-      </div>
-    </div>
-  </div>
+  
 
   <div class="row justify-content-md-center" id="dashboard">
     <div class="col-md-auto">
     </div>              
   </div>
             
-             
+</div>  
+<!-- Large Chart Display (for single chart) -->
+<div id="large_chart" class="hidden"> 
+  <div class="row justify-content-md-center mt-3 mb-3">
+    <div class="col-md-auto">
+      <button type="button" class="btn btn-charts btn-outline-primary" id="caseTrends" onclick="showFullSizeChart('caseTrends')">Case Rate Trends</button>
+      <button type="button" class="btn btn-charts btn-outline-primary" id="pediatricCases" onclick="showFullSizeChart('pediatricCases')">Pediatric Cases</button>
+      <button type="button" class="btn btn-charts btn-outline-primary" id="HealthZoneSummary" onclick="showFullSizeChart('HealthZoneSummary')">Health Zone Summary</button>
+      <button type="button" class="btn btn-charts btn-outline-primary" id="caseHistory" onclick="showFullSizeChart('caseHistory')">Case History</button>     
+      <button type="button" class="btn btn-charts btn-outline-primary" id="VaccineHistory" onclick="showFullSizeChart('VaccineHistory')">Vaccination History</button>
+    </div>
+  </div>
+  <div class="row justify-content-md-center" id="chart_lg_row">
+    <div class="col-md-auto" id="chart_lg_col" >
+      <canvas id="largeChart" width="800px" height="500px"></canvas>
+    </div>
+  </div>
+</div>        
 </div>
 
 <!-- FOOTER -->
-<footer class="page-footer font-small blue pt-4">
-  <div class="byline container-fluid text-center text-md-left">
+  <div id='footer' class="byline text-center font-dark text-md-left footer fixed-bottom">
     Witten By: <a rel="author" href="https://twitter.com/johnsgunn" target="_blank">John Gunn</a> | 
     Data Source: <a href="#" onclick="showMore('moresources')">View Sources</a> |
     Source Code (GPLv3): <a href="https://github.com/johnsgunn/NBCovidData" target="_blank">NBCovidData</a> | 
@@ -202,6 +230,6 @@
     Tip Jar: <a href="#" onclick="showMore('tipjar')">Buy Me A Coffee</a>      
 </div>
     <!-- All your data are belong to us -->
-</footer>
+
 </body>
 </html>

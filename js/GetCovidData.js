@@ -47,14 +47,38 @@ var caseHistoryChart = null;
 var vaccineHistoryChart = null;
 var healthZoneChart = null;
 var largeChart = null;
+var pedCasesChart = null;
+var caseTrendsChart = null;
+
+var darkMode = false;
+
+const chartTextColor = "#f2f2f2";
+const chartGridColor = "#999999";
+const canvasBG = {
+    id: 'custom_canvas_background_color',
+    beforeDraw: (chart) => {
+      const ctx = chart.canvas.getContext('2d');
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.fillStyle = 'dimgray';
+      ctx.fillRect(0, 0, chart.width, chart.height);
+      ctx.restore();
+    }
+  };
+
+  var caseSummaryJSON = null;
+  var healthZoneJSON = null;
+  var vaccinationSummaryJSON = null;
+  var caseHistoryJSON = null;
+  var vaccineHistoryJSON = null;
 
 async function preloadData(){
     // Load out endpoints into session on refresh
-    var caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
-    var vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
-    var caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
-    var vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
-    var healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
+    caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
+    vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
+    caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
+    vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
+    healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
 }
 
 function hideAll(){
@@ -76,12 +100,61 @@ function hideAll(){
     if (caseHistoryChart) caseHistoryChart.destroy();
     if (vaccineHistoryChart) vaccineHistoryChart.destroy();
     if (healthZoneChart) healthZoneChart.destroy();
+    if (pedCasesChart) pedCasesChart.destroy();
     if (largeChart) largeChart.destroy();
 }
 
 function showElement(elementName){
     let x = document.getElementById(elementName);
     x.classList.remove('hidden');
+}
+
+function toggleDarkMode(){
+    var body = document.querySelector('body');
+    var navbar = document.getElementById('nav');
+    var tableBody = document.getElementsByTagName("tbody");
+    var footer = document.getElementById('footer');
+    var h4 = document.getElementsByTagName("h4");
+
+    if (darkMode){
+        darkMode = false;
+        body.style.backgroundColor = 'white';
+        navbar.classList.remove('bg-secondary');
+        navbar.classList.add('bg-dark');
+        footer.classList.remove('text-light');
+        footer.classList.add('text-dark');
+
+        for (let i = 0 ; i < tableBody.length ; i++){
+            tableBody[i].classList.remove('text-light');
+            tableBody[i].classList.add('text-dark');
+        }
+
+        for (let i = 0 ; i < h4.length ; i++){
+            h4[i].classList.remove('text-light');
+            h4[i].classList.add('text-dark');
+        }  
+        
+    }
+    else {
+        
+        darkMode = true;
+        body.style.backgroundColor = '#292b2c';
+        navbar.classList.remove('bg-dark');
+        navbar.classList.add('bg-secondary');
+        footer.classList.remove('text-dark');
+        footer.classList.add('text-light');
+
+        for (let i = 0 ; i < tableBody.length ; i++){
+            tableBody[i].classList.remove('text-dark');
+            tableBody[i].classList.add('text-light');
+        } 
+        
+        for (let i = 0 ; i < h4.length ; i++){
+            h4[i].classList.remove('text-dark');
+            h4[i].classList.add('text-light');
+        }   
+         
+    }
 }
 
 function html_table_to_excel(tableName){
@@ -100,22 +173,36 @@ async function showDashboard(){
     hideAll();
     showElement("summaryDashboard");
 
-    var caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL);
-    var vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL);
-    var caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL);
-    var vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL);
-    var healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL);
+    caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,false);
+    vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,false);
+    caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,false);
+    vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,false);
+    healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,false);
 
     showCaseSummaryBoard(caseSummaryJSON,'CaseSummary');
     showVaccineSummaryBoard(vaccinationSummaryJSON, "VaccinationSummary");
     showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");  
     showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");  
     showHealthZoneChart(healthZoneJSON,'HealthZoneSummary',"chart2");  
+    
+    var tableBody = document.getElementsByTagName("tbody");
+    if (darkMode){
+        for (let i = 0 ; i < tableBody.length ; i++){
+            tableBody[i].classList.remove('text-dark');
+            tableBody[i].classList.add('text-light');
+        } 
+    }
+    else{
+        for (let i = 0 ; i < tableBody.length ; i++){            
+            tableBody[i].classList.add('text-dark');
+            tableBody[i].classList.remove('text-light');
+        } 
+    }
 }
 
 function buildBoardTable(header,body){
     var table = 
-    "<table class='table table-hover table-bordered'>"+
+    "<table class='table table-bordered'>"+
     "<thead>"+
         "<tr class='table-primary'>"+
             "<td colspan=2><h2>"+header+"</h2></td>"+
@@ -127,8 +214,8 @@ function buildBoardTable(header,body){
     for (var i = 0; i < body.length ; i++){
         table += 
         "<tr>"+
-            "<td><h3>"+body[i]["title"]+"</h3></td>"+
-            "<td><h3><span class='badge bg-secondary'>"+body[i]["value"]+"</span></h3></td>"+
+            "<td><h3>"+body[i]["title"]+"</span></h3></td>"+
+            "<td><h3><span class='badge bg-info'>"+body[i]["value"]+"</span></h3></td>"+
         "</tr>"
     }
     table += 
@@ -198,8 +285,8 @@ function showVaccineSummaryBoard(json,name){
     var tableHeader = "Vaccinations";
     var tableBody = [];
 
-    tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentOneDose'] + "%)"},
-                    {title: "Two Doses", value: arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-secondary'>(" + arr[name][0]['PercentSecondDose'] + "%)"},
+    tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentOneDose'] + "%)"},
+                    {title: "Two Doses", value: arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentSecondDose'] + "%)"},
                     {title: "Total. Administered", value: arr[name][0]['TotalAdmin']},
                     {title: "New First Dose", value: arr[name][0]['NewFirstDose']},
                     {title: "New Second", value: arr[name][0]['NewSecondDose']},
@@ -261,6 +348,12 @@ function showCharts(chartName){
     dataDisplay.appendChild(embeddedChart);
 }
 
+function showChartsDisplay(){
+    hideAll();
+    showElement("large_chart");
+    showFullSizeChart('caseTrends');
+}
+
 async function showArcGis(name){
     hideAll();
     var url = "";
@@ -313,6 +406,21 @@ async function showArcGis(name){
     createTableFromJSON(tableData,name);
 }
 
+function showCompiledData(name){
+    hideAll();
+    currentReport = name;
+
+    switch (name){
+        case "pediatricCases":
+            createTableFromJSON(JSON.stringify(pediatricCases,null,2),name);
+            break;
+        case "caseHistory":
+            createTableFromJSON(JSON.stringify(caseHistory,null,2),name);
+        default: 
+            break;
+    }
+}
+
 function showMore (pageName) {
     hideAll();
     showElement("bodyRow");    
@@ -344,11 +452,15 @@ function createTableFromJSON(jsonData,name) {
         }
     }  
 
+    var tableTextColor = "text-dark";
+    if (darkMode){
+        tableTextColor = "text-light";
+    }
+
     // Create a dynamic table.
     var table = document.createElement("table");
     table.classList.add('table');
-    table.classList.add('table-striped');
-    table.classList.add('table-hover');
+    // table.classList.add('table-striped');
     table.classList.add('table-bordered');
 
     table.id = 'tblData';
@@ -388,9 +500,11 @@ function createTableFromJSON(jsonData,name) {
         }
     }
 
+    table.classList.add(tableTextColor);
+
     // Finally, add the dynamic table to a container.
     var divContainer = document.getElementById("bodyRow");
-    divContainer.innerHTML = "<h4>Report from GNB API: " + name + "</h4>";
+    divContainer.innerHTML = "<h4 class='" + tableTextColor + "'>Report from GNB Data: " + name + "</h4>";
     divContainer.appendChild(table);
     showElement("bodyRow");
     showElement("export_row");
@@ -413,22 +527,7 @@ function showCaseHistoryChart(json,name,loc) {
     if (caseHistoryChart) caseHistoryChart.destroy();
 
     caseHistoryChart = new Chart(ctx, {
-        options: {
-            scales: {
-                responsive:true,
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: [ 
-                {
-                title: {
-                    display: true,
-                    text: 'Daily Case History'
-                },                
-            }]
-        },
-        type: "line",
+        plugins: [canvasBG],
         data: {
             datasets: [
                 {
@@ -448,15 +547,70 @@ function showCaseHistoryChart(json,name,loc) {
                     backgroundColor: "#0099ff" 
                 }
             ]
-        }        
+        },
+        options: {                        
+            scales: {
+                yAxes: {
+                    grid: {                        
+                        color: chartGridColor
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cases',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        },                        
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                },
+                xAxes: {
+                    grid: {
+                        drawOnChartArea: false,
+                        color: chartGridColor
+                    },
+                    title: {
+                        display: false,
+                        text: 'Date',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        }
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Daily Case History',
+                    color: chartTextColor
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        color: chartTextColor
+                    }
+                },
+                filler: {
+                    propagate: true
+                }
+            }
+        },
+        type: "line"        
     });
-
     caseHistoryChart.render();
 }
 
 // Render vaccine history chart to specified location on page
 // Data source: GNB API
-function showVaccineHistoryChart(json,name,loc) {
+function showVaccineHistoryChart(json,name,loc) {    
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
@@ -468,18 +622,20 @@ function showVaccineHistoryChart(json,name,loc) {
         dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['FirstDose']});
         dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['SecondDose']});
     }
+    
+
 
     var ctx = document.getElementById(loc);
     if (vaccineHistoryChart) vaccineHistoryChart.destroy();
     vaccineHistoryChart = new Chart(ctx, {
-        
+        plugins: [canvasBG],
         data: {
             datasets: [
             {
                 type: "line",
                 label: "Second Doses",
                 data:dps3,
-                borderWidth: 0,
+                borderWidth: 1,
                 pointRadius: 1,
                 fill: true,
                 backgroundColor: "#9966ff"
@@ -504,16 +660,58 @@ function showVaccineHistoryChart(json,name,loc) {
         ]
         },
 
-        options: {
+        options: {                        
             scales: {
-                y: {
-                    beginAtZero: true
+                yAxes: {
+                    grid: {
+                        color: chartGridColor
+                    },
+                    title: {
+                        display: true,
+                        text: 'Doses',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        },                        
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                },
+                xAxes: {
+                    grid: {
+                        drawOnChartArea: false,
+                        color: chartGridColor
+                    },
+                    title: {
+                        display: false,
+                        text: 'Date',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        }
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
                 }
             },
             plugins: {
                 title: {
                     display: true,
-                    text: 'Vaccination History'
+                    text: 'Vaccination History',
+                    color: chartTextColor
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        color: chartTextColor
+                    }
+                },
+                filler: {
+                    propagate: true
                 }
             }
         }
@@ -527,6 +725,8 @@ function showHealthZoneChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
+    console.log(arr);
+
     var chartLabels = [];
     var cases = [];
     for (var i=0 ; i < arr[name].length ; i++){
@@ -535,50 +735,336 @@ function showHealthZoneChart(json,name,loc) {
     }
 
     var ctx = document.getElementById(loc);
-    var data = {
-        labels: [
-            chartLabels[0],
-            chartLabels[1],
-            chartLabels[2],
-            chartLabels[3],
-            chartLabels[4],
-            chartLabels[5],
-            chartLabels[6]
-        ],
-        datasets: [{
-            label: "Cases by Health Zone",
-            data: cases,
-            backgroundColor: [
-                 '#9966ff',
-                 '#99ffcc',
-                 '#ff9966',
-                 '#00ccff',
-                 '#ff3399',
-                 '#ffff99',
-                 '#003300'
-            ]
-        }]
-    }
-    if (healthZoneChart) healthZoneChart.destroy();
+    if (healthZoneChart) healthZoneChart.destroy();    
+
     healthZoneChart = new Chart(ctx, {
         type: "doughnut",
-        data: data,
-        options: {
+        data: {
+            labels: [
+                chartLabels[0],
+                chartLabels[1],
+                chartLabels[2],
+                chartLabels[3],
+                chartLabels[4],
+                chartLabels[5],
+                chartLabels[6]
+            ],
+            datasets: [{
+                label: "Cases by Health Zone",
+                data: cases,
+                backgroundColor: [
+                     '#9966ff',
+                     '#99ffcc',
+                     '#ff9966',
+                     '#00ccff',
+                     '#ff3399',
+                     '#ffff99',
+                     '#003300'
+                ]
+            }]
+        },
+        plugins: [canvasBG],
+        options: {    
             plugins: {
                 title: {
                     display: true,
-                    text: 'Active Cases By Health Zone'
+                    text: 'Active Cases By Health Zone',
+                    color: chartTextColor
                 },
-                
                 legend: {
                     display: true,
                     position:'top',
-                    fullWidth: true
+                    fullWidth: false,
+                    labels: {
+                        color: chartTextColor
+                    }
+                },
+                filler: {
+                    propagate: true
                 }
             }
-        }
+        },
     });
     healthZoneChart.render();
+}
+
+// Render health zone chart to specified location on page
+// Data source: GNB API
+function showCaseTrendsChart(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var dps1 = [];
+    var dps2 = [];
+    var dps3 = [];
+    var dps4 = [];
+    for (var i=0 ; i < arr[name].length  ; i++){
+        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['V 7 Day Avg']});
+        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['PV 7 Day Avg']});        
+        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['UV 7 Day Avg']});
+        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['New Cases']});
+    }
+
+    var ctx = document.getElementById(loc);
+    if (largeChart) largeChart.destroy();
+    const data = {
+        datasets: [
+        {
+            type: "line",
+            label: "Vaccinated Average",
+            data:dps1,
+            borderWidth: 4,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#00ffff",
+            tension: 0.1,
+            backgroundColor: "#00ffff",
+            yAxisID: 'y'
+        },
+        {
+            type: "line",
+            label: "Partially Vaccinated Average",
+            data:dps2,
+            borderWidth: 4,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#00cc00",
+            tension: 0.1,
+            backgroundColor: "#00cc00",
+            yAxisID: 'y' 
+        },
+        {
+            type: "line",
+            label: "Unvaccinated Average",
+            data:dps3,
+            borderWidth: 4,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#ff9900",
+            tension: 0.1,
+            backgroundColor: "#ff9900",
+            yAxisID: 'y'
+        },            
+        {
+            type: "bar",
+            label: "New Cases",
+            data:dps4,
+            borderWidth: 1,
+            pointRadius: 1,
+            fill: false,
+            backgroundColor: "#000066",
+            yAxisID: 'y1'
+        }]
+    };
+
+    const options = {
+        responsive: true,
+        interaction: {
+            mode: 'index',
+            intersect: false, 
+        },
+        scales: {
+            y: {
+                grid: {
+                    color: chartGridColor
+                },
+                display: true,
+                type: 'linear',
+                position: 'left',
+                color: chartTextColor,
+                title: {
+                    display: true,
+                    text: 'Case Average',
+                    color: chartTextColor,
+                    font: {
+                        size: 15
+                    },                        
+                },
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+            }, 
+            y1: {
+                grid: {
+                    drawOnChartArea: false,
+                    color: chartGridColor
+                },
+                title: {
+                    display: true,
+                    text: 'New Cases',
+                    color: chartTextColor,
+                    font: {
+                        size: 15
+                    },                        
+                },
+                display: true,
+                type: 'linear',
+                position: 'right',
+                color: chartTextColor,
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+                
+            },   
+            x: {
+                grid: {
+                    drawOnChartArea: false,
+                    color: chartGridColor
+                },
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+            }             
+        },   
+        plugins: {
+            title: {
+                display: true,
+                text: 'NB Covid-19 Case Rate, 7-day Average',
+                color: chartTextColor
+            },
+            legend: {
+                display: true,
+                position:'top',
+                fullWidth: false,
+                labels: {
+                    color: chartTextColor
+                }
+            },
+            filler: {
+                propagate: true
+            }
+        }
+    };
+
+    largeChart = new Chart(ctx, {
+        stacked: false, 
+        data: data,
+        options: options,
+        plugins: [canvasBG]
+    });
+    largeChart.render();
+}
+
+function showPedCasesChart(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var dps1 = [];
+    var dps2 = [];
+    var dps3 = [];
+    var dps4 = [];
+    for (var i=0 ; i < arr[name].length  ; i++){
+        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['Cases Age < 10']});
+        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['7 Day Trend (Age < 10)']});
+        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Cases Age 10-19']});
+        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['7 Day Trend (Age 10-19)']});
+    }
+
+    var ctx = document.getElementById(loc);
+    if (pedCasesChart) pedCasesChart.destroy();
+    pedCasesChart = new Chart(ctx, {
+        plugins: [canvasBG],
+        data: {
+            datasets: [
+            {
+                type: "line",
+                label: "7 Day Trend (Age < 10)",
+                data:dps2,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#ff0000",
+                tension: 0.1,
+                backgroundColor: "#ff0000" 
+            },
+            {
+                type: "line",
+                label: "7 Day Trend (Age 10-19)",
+                data:dps4,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#00cc00",
+                backgroundColor: "#00cc00" 
+            },
+            {
+                type: "bar",
+                label: "Cases Age < 10",
+                data:dps1,
+                borderWidth: 1,
+                pointRadius: 1,
+                fill: false,
+                backgroundColor: "#ffbbbb"
+            },            
+            {
+                type: "bar",
+                label: "Cases Age 10-19",
+                data:dps3,
+                borderWidth: 1,
+                pointRadius: 1,
+                fill: false,
+                backgroundColor: "#b3ffb3"
+            }
+            
+        ]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    grid: {
+                        color: chartGridColor
+                    },
+                    display: true,
+                    type: 'linear',
+                    position: 'left',
+                    color: chartTextColor,
+                    title: {
+                        display: true,
+                        text: 'Cases',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        },                        
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    },
+                    beginAtZero: true
+                },
+                x: {
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Pediatric Case Trends',
+                    color: chartTextColor
+                },
+                legend: {
+                    display: true,
+                    position:'top',
+                    fullWidth: false,
+                    labels: {
+                        color: chartTextColor
+                    }
+                }
+            }
+            
+        }
+    });
+    pedCasesChart.render();
 }
 
 function Get(url){
@@ -588,7 +1074,7 @@ function Get(url){
     return Httpreq.responseText;           
 }
 
-async function checkGetDataJSON(name,url,forceReload){
+async function checkGetDataJSON(name,url,forceReload=false){
     return new Promise((resolve,reject)=>{
         if (!sessionStorage.getItem(name) || forceReload){ // not yet stored
             var newData = Get(url);
@@ -599,26 +1085,59 @@ async function checkGetDataJSON(name,url,forceReload){
     })
 }
 
+function selectedFullSizeChart (chartName){
+    // var charts = [
+    //     'caseHistory',
+    //     'VaccineHistory',
+    //     'HealthZoneSummary',
+    //     'pediatricCases',
+    //     'caseTrends'
+    // ];
+
+    var charts = document.getElementsByClassName('btn-charts');
+
+    for (let i = 0 ; i < charts.length ; i++){
+        // var chartButton = document.getElementById(charts[i]);
+        charts[i].classList.remove("btn-primary");
+        charts[i].classList.add("btn-outline-primary");
+    }
+
+
+    var selectedButton = document.getElementById(chartName);
+    selectedButton.classList.remove("btn-outline-primary");
+    selectedButton.classList.add("btn-primary");
+}
+
 // Display full sized chart on page
 async function showFullSizeChart (chartName){
     // Clear and prep area
     hideAll();
     showElement("large_chart");
 
+    selectedFullSizeChart(chartName);
+
+    console.log(chartName);
+
     var chartJSON;
 
     switch (chartName){
-        case "CaseHistory":
-            chartJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL);
-            showCaseHistoryChart(chartJSON,'CaseHistory',"largeChart");         
+        case "caseHistory":
+            chartJSON = await checkGetDataJSON('caseHistory',CaseHistoryURL);
+            showCaseHistoryChart(chartJSON,'caseHistory',"largeChart");         
             break;
         case "VaccineHistory":
             chartJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL);
             showVaccineHistoryChart(chartJSON,'VaccineHistory',"largeChart");  
             break;
         case "HealthZoneSummary":
-            chartJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL);
-            showHealthZoneChart(chartJSON,'HealthZoneSummary',"largeChart")
+            chartJSON = healthZoneJSON;
+            showHealthZoneChart(chartJSON,chartName,"largeChart");
+            break;
+        case "pediatricCases":
+            showPedCasesChart(JSON.stringify(pediatricCases,null,2),'pediatricCases',"largeChart");
+            break;
+        case "caseTrends":
+            showCaseTrendsChart(JSON.stringify(caseTrends,null,2),'caseTrends',"largeChart");
             break;
         default:
             // bad selection
@@ -711,5 +1230,4 @@ function replaceAll(str, find, replace) {
     else {
         return str;
     }
-    
 }
