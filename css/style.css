@@ -31,13 +31,14 @@
 	display: none;
 }
 
-body {
-	background-color: white;
-	
-}
 
 .displayCharts,.summaryCharts {
 	background-color:#3f3f3f;
+}
+
+body {
+	background-color: white;
+	
 }
 
 html { font-size: 80.5%; }
@@ -45,3 +46,30 @@ html { font-size: 80.5%; }
 	max-height: 100%;
 	overflow-y: auto;
 }
+
+/* Loading Ring */
+.lds-dual-ring {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+  }
+.lds-dual-ring:after {
+	content: "";
+	display: block;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border-radius: 50%;
+	border: 6px solid rgb(0, 0, 0);
+	border-color: rgb(0, 0, 0) transparent #fff transparent;
+	animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+0% {
+	transform: rotate(0deg);
+}
+100% {
+	transform: rotate(360deg);
+}
+}
+  

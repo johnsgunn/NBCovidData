@@ -17,6 +17,13 @@ var VaccinesByAgeGroupURL = 'https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgi
 // List of Exposures 
 var ExposuresURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19_Exposures/FeatureServer/0/query?f=json&cacheHint=true&maxRecordCountFactor=4&resultOffset=0&resultRecordCount=8000&where=1%3D1&orderByFields=OBJECTID&outFields=*&outSR=102100&returnGeometry=false&spatialRel=esriSpatialRelIntersects";
 
+// List of School Data
+var SchoolsDataURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19SchoolsData/FeatureServer/0/query?f=json&cacheHint=true&resultOffset=0&resultRecordCount=50&where=1%3D1&outFields=*&resultType=standard&returnGeometry=false&spatialRel=esriSpatialRelIntersects";
+var SchoolsCountURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19NBSchools/FeatureServer/0/query?f=html&returnIdsOnly=true&returnCountOnly=true&spatialRel=esriSpatialRelIntersects&where=1%3D1";
+var SchoolsImpactedURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19NBSchools/FeatureServer/0/query?f=html&returnIdsOnly=true&returnCountOnly=true&spatialRel=esriSpatialRelIntersects&where=TotalSchoolsImpacted%20%3D%20%27Yes%27";
+var SchoolsListURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19NBSchools/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=standard&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=true&orderByFields=strnm+ASC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=0&resultRecordCount=4000&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
+var SchoolsListXYURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19NBSchools/FeatureServer/0/query?f=json&cacheHint=true&maxRecordCountFactor=4&resultOffset=0&resultRecordCount=8000&where=TotalSchoolsImpacted%20%3D%20%27Yes%27&orderByFields=OBJECTID&outFields=OBJECTID%2CTotalSchoolsImpacted&outSR=102100&spatialRel=esriSpatialRelIntersects";
+
 // List of Adult Residental Facilities
 var AdultResidentialFacilitiesListURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/AdultResidentialFacilities/FeatureServer/1/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=json&token=";
 var GEO_AdultResidentialFacilitiesListURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/AdultResidentialFacilities/FeatureServer/1/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=";
@@ -71,14 +78,22 @@ const canvasBG = {
   var vaccinationSummaryJSON = null;
   var caseHistoryJSON = null;
   var vaccineHistoryJSON = null;
+  var schoolsSummaryJSON = null;
+  var schoolsListJSON = null;
 
 async function preloadData(){
+    showElement('loadingSpinner');
+
     // Load out endpoints into session on refresh
     caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
     vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
     caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
     vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
     healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
+    schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
+    schoolsListJSON = await checkGetDataJSON('SchoolsList',SchoolsListURL,true);
+
+    hideElement('loadingSpinner');
 }
 
 function hideAll(){
@@ -87,7 +102,9 @@ function hideAll(){
         'bodyRow',
         'summaryDashboard',
         'large_chart',
-        'dashboard'
+        'dashboard',
+        'loadingSpinner',
+        'dataTableContainer'
     ];
 
     // Reset divs
@@ -109,12 +126,18 @@ function showElement(elementName){
     x.classList.remove('hidden');
 }
 
+function hideElement(elementName){
+    let x = document.getElementById(elementName);
+    x.classList.add('hidden');
+}
+
 function toggleDarkMode(){
     var body = document.querySelector('body');
     var navbar = document.getElementById('nav');
     var tableBody = document.getElementsByTagName("tbody");
     var footer = document.getElementById('footer');
     var h4 = document.getElementsByTagName("h4");
+    var tableHead = document.getElementsByTagName("thead");
 
     if (darkMode){
         darkMode = false;
@@ -128,6 +151,10 @@ function toggleDarkMode(){
             tableBody[i].classList.remove('text-light');
             tableBody[i].classList.add('text-dark');
         }
+        for (let i = 0 ; i < tableHead.length ; i++){            
+            tableHead[i].classList.add('text-dark');
+            tableHead[i].classList.remove('text-light');
+        } 
 
         for (let i = 0 ; i < h4.length ; i++){
             h4[i].classList.remove('text-light');
@@ -147,6 +174,10 @@ function toggleDarkMode(){
         for (let i = 0 ; i < tableBody.length ; i++){
             tableBody[i].classList.remove('text-dark');
             tableBody[i].classList.add('text-light');
+        } 
+        for (let i = 0 ; i < tableHead.length ; i++){
+            tableHead[i].classList.remove('text-dark');
+            tableHead[i].classList.add('text-light');
         } 
         
         for (let i = 0 ; i < h4.length ; i++){
@@ -169,27 +200,32 @@ function html_table_to_excel(tableName){
     XLSX.writeFile(file, 'NBCovidData.' + type);
 }
 
-async function showDashboard(){
-    hideAll();
-    showElement("summaryDashboard");
+async function showDashboard(firstLoad=false){
+    if (firstLoad){
+        await preloadData();
+    }
 
-    caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,false);
-    vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,false);
-    caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,false);
-    vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,false);
-    healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,false);
+    hideAll();
+    
+    showElement("summaryDashboard");
 
     showCaseSummaryBoard(caseSummaryJSON,'CaseSummary');
     showVaccineSummaryBoard(vaccinationSummaryJSON, "VaccinationSummary");
+    showSchoolSummaryBoard(schoolsSummaryJSON,'SchoolsSummary');
+    // showSchoolListBoard(schoolsListJSON,"SchoolsList");
     showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");  
-    showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");  
-    showHealthZoneChart(healthZoneJSON,'HealthZoneSummary',"chart2");  
+    showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");   
     
     var tableBody = document.getElementsByTagName("tbody");
+    var tableHead = document.getElementsByTagName("thead");
     if (darkMode){
         for (let i = 0 ; i < tableBody.length ; i++){
             tableBody[i].classList.remove('text-dark');
             tableBody[i].classList.add('text-light');
+        } 
+        for (let i = 0 ; i < tableHead.length ; i++){
+            tableHead[i].classList.remove('text-dark');
+            tableHead[i].classList.add('text-light');
         } 
     }
     else{
@@ -197,7 +233,11 @@ async function showDashboard(){
             tableBody[i].classList.add('text-dark');
             tableBody[i].classList.remove('text-light');
         } 
-    }
+        for (let i = 0 ; i < tableHead.length ; i++){            
+            tableHead[i].classList.add('text-dark');
+            tableHead[i].classList.remove('text-light');
+        } 
+    }    
 }
 
 function buildBoardTable(header,body){
@@ -298,6 +338,89 @@ function showVaccineSummaryBoard(json,name){
     board3.appendChild(vaccinations);
 }
 
+function showSchoolSummaryBoard(json,name){
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var board4 = document.getElementById("board4");
+    board4.innerHTML = "";
+    var tableHeader = "<div class='d-flex justify-content-between'>Schools";
+    tableHeader += "<button type='button' class='btn btn-charts btn-outline-primary' id='schoolList' onclick='showFullSizeChart(\"schoolList\")'>View Exposures</button></div>";
+    var tableBody = [];
+
+    tableBody.push({title: "New Cases", value: arr[name][0]['NewCases']},
+                    {title: "Total Cases <small>since 9/7/2021</small>", value: arr[name][0]['TotalCasesSince7Sept2021']},
+                    {title: "New Schools Impacted", value: arr[name][0]['NewSchoolsImpacted']},
+                    {title: "Active Schools Impacted", value: arr[name][0]['SchoolsActiveImpact']},
+                    {title: "Schools with New Cases", value: arr[name][0]['SchoolswithNewCases']},
+                    {title: "Total Schools Impacted", value: arr[name][0]['TotalSchoolsSince7Sept2021']},
+                    );
+
+    var schoolSummary = document.createElement("p");
+    schoolSummary.innerHTML = buildBoardTable(tableHeader,tableBody);
+
+    board4.appendChild(schoolSummary);
+}
+
+function showSchoolListBoard(json,name){
+    var arr = [];
+    arr = JSON.parse(json);
+    // arr = JSON.parse(json); 	// Convert JSON to array.
+
+    console.log(arr[name].length);
+
+    var tableHeader = ["School","District","City","Status","New Cases","Prev. Impacted"];
+    var tableIndexes = ['strnm','strdst','strcm','SchoolStatus','NewCases','TotalSchoolsImpacted'];
+
+    // Create a dynamic table.
+    var table = document.createElement("table");
+    table.classList.add('table');
+    // table.classList.add('table-bordered');
+    table.classList.add('display');
+
+    table.id = 'schoolListTable';
+
+    // Create table header.
+    var header = table.createTHead();    
+    var tr = header.insertRow(-1);                   // Table row.
+
+    console.log(tableHeader.length);
+    for (var i = 0; i < tableHeader.length; i++) {
+        var th = document.createElement("th");      // Table header.
+        th.innerHTML = tableHeader[i];
+        tr.appendChild(th);
+    }
+
+    var body = table.createTBody();
+
+    // Add JSON to the table rows.
+    for (var i = 0; i < arr[name].length; i++) {
+        tr = body.insertRow(-1);      
+
+        for (var j = 0; j < tableHeader.length; j++) {
+            var tabCell = tr.insertCell(-1);
+            if (arr[name][i][tableIndexes[j]] == ""){
+                tabCell.innerHTML = "No";
+            }
+            else {
+                tabCell.innerHTML = arr[name][i][tableIndexes[j]];
+            }
+            
+        }          
+    }
+
+    var divContainer = document.getElementById("dataTableContainer");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
+
+    $(document).ready(function() {
+        $('#schoolListTable').DataTable();
+    } );    
+
+    showElement("dataTableContainer");
+}
+
+
 function showCharts(chartName){
     hideAll();
     var chartURL = "";
@@ -356,6 +479,7 @@ function showChartsDisplay(){
 
 async function showArcGis(name){
     hideAll();
+    showElement("loadingSpinner");
     var url = "";
     currentReport = name;
     switch (name){
@@ -397,13 +521,20 @@ async function showArcGis(name){
             break;
         case "AdultResidentialFacilitiesGEO":
             url = GEO_AdultResidentialFacilitiesListURL;
-                break;
+            break;
+        case "SchoolsSummary":
+            url = SchoolsDataURL;
+            break;
+        case "SchoolsList":
+            url = SchoolsListURL;
+            break;
         default: // invalid selection
             exit;
     }
 
-    var tableData = await checkGetDataJSON(name,url);
+    var tableData = await checkGetDataJSON(name,url,true);
     createTableFromJSON(tableData,name);
+    hideElement("loadingSpinner");
 }
 
 function showCompiledData(name){
@@ -460,7 +591,6 @@ function createTableFromJSON(jsonData,name) {
     // Create a dynamic table.
     var table = document.createElement("table");
     table.classList.add('table');
-    // table.classList.add('table-striped');
     table.classList.add('table-bordered');
 
     table.id = 'tblData';
@@ -475,7 +605,7 @@ function createTableFromJSON(jsonData,name) {
     }
 
     // Add JSON to the table rows.
-        for (var i = 0; i < arr[name].length; i++) {
+    for (var i = 0; i < arr[name].length; i++) {
 
         tr = table.insertRow(-1);
 
@@ -1086,18 +1216,9 @@ async function checkGetDataJSON(name,url,forceReload=false){
 }
 
 function selectedFullSizeChart (chartName){
-    // var charts = [
-    //     'caseHistory',
-    //     'VaccineHistory',
-    //     'HealthZoneSummary',
-    //     'pediatricCases',
-    //     'caseTrends'
-    // ];
-
     var charts = document.getElementsByClassName('btn-charts');
 
     for (let i = 0 ; i < charts.length ; i++){
-        // var chartButton = document.getElementById(charts[i]);
         charts[i].classList.remove("btn-primary");
         charts[i].classList.add("btn-outline-primary");
     }
@@ -1114,9 +1235,8 @@ async function showFullSizeChart (chartName){
     hideAll();
     showElement("large_chart");
 
-    selectedFullSizeChart(chartName);
-
     console.log(chartName);
+    selectedFullSizeChart(chartName);
 
     var chartJSON;
 
@@ -1138,6 +1258,10 @@ async function showFullSizeChart (chartName){
             break;
         case "caseTrends":
             showCaseTrendsChart(JSON.stringify(caseTrends,null,2),'caseTrends',"largeChart");
+            break;
+        case "schoolList":
+            // showSchoolListBoard(JSON.stringify(schoolsListJSON,null,2),"SchoolsList");
+            showSchoolListBoard(schoolsListJSON,"SchoolsList");
             break;
         default:
             // bad selection
@@ -1187,7 +1311,7 @@ function convertArcGIStoJSON(ArcGISData,jsonName){
             }
             else {
                 var value = arr['features'][i].attributes[col[j]];
-                value = replaceAll(value,"\"","'"); // Sanitize quotes from JSON data
+                if (jsonName == "SchoolsList"){value = sanitizeJSON(value);}                
                 jsonRow +=  '"' + col[j] + '":"' + value + '"';
             }
             if (j < col.length -1) {jsonRow += ',';}  
@@ -1219,15 +1343,21 @@ function downloadJSON(){
     downloadAnchorNode.remove();
 }
 
-function escapeRegExp(string) {
-return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-function replaceAll(str, find, replace) {
-    if (str != null){
-        return str.toString().replace(new RegExp(escapeRegExp(find), 'g'), replace);
+function sanitizeJSON(unsanitized){	
+    if (unsanitized != null){
+        var string = unsanitized.toString();
+        // return string.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t").replace(/\f/g, "\\f").replace(/"/g,"\\\"").replace(/'/g,"\\\'").replace(/\&/g, "\\&"); 
+        return string.replace(/\\n/g, "\\n")  
+               .replace(/\\'/g, "\\'")
+               .replace(/\\"/g, '\\"')
+               .replace(/\\&/g, "\\&")
+               .replace(/\\r/g, "\\r")
+               .replace(/\\t/g, "\\t")
+               .replace(/\\b/g, "\\b")
+               .replace(/\\f/g, "\\f")
+               .replace(/[\u0000-\u0019]+/g,"");
     }
     else {
-        return str;
+        return "";
     }
 }

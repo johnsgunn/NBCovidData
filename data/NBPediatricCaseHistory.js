@@ -413,5 +413,32 @@ pediatricCases= {
    "Total Cases 10-19": 711,
    "Cases Age 10-19": 8,
    "7 Day Trend (Age 10-19)": 12
- }
+ },
+ {
+  "Date": "2021-10-18",
+  "Total Cases < 10": 673,
+  "Cases Age < 10": 6,
+  "7 Day Trend (Age < 10)": 14,
+  "Total Cases 10-19": 715,
+  "Cases Age 10-19": 4,
+  "7 Day Trend (Age 10-19)": 11
+},
+{
+  "Date": "2021-10-19",
+  "Total Cases < 10": 680,
+  "Cases Age < 10": 7,
+  "7 Day Trend (Age < 10)": 12,
+  "Total Cases 10-19": 718,
+  "Cases Age 10-19": 3,
+  "7 Day Trend (Age 10-19)": 9
+},
+{
+  "Date": "2021-10-20",
+  "Total Cases < 10": 692,
+  "Cases Age < 10": 12,
+  "7 Day Trend (Age < 10)": 12,
+  "Total Cases 10-19": 724,
+  "Cases Age 10-19": 6,
+  "7 Day Trend (Age 10-19)": 8
+}
 ]};
