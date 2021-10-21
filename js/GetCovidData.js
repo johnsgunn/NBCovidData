@@ -113,6 +113,10 @@ function hideAll(){
         x.classList.add('hidden');
     }
 
+    destroyCharts();
+}
+
+function destroyCharts(){
     // Destroy charts 
     if (caseHistoryChart) caseHistoryChart.destroy();
     if (vaccineHistoryChart) vaccineHistoryChart.destroy();
@@ -214,7 +218,7 @@ async function showDashboard(firstLoad=false){
     showSchoolSummaryBoard(schoolsSummaryJSON,'SchoolsSummary');
     // showSchoolListBoard(schoolsListJSON,"SchoolsList");
     showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");  
-    showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");   
+    // showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");   
     
     var tableBody = document.getElementsByTagName("tbody");
     var tableHead = document.getElementsByTagName("thead");
@@ -283,7 +287,10 @@ function showCaseSummaryBoard(json,name){
     header.setAttribute("class","col-md-auto");
     header.innerHTML = "<h1>New Brunswick Covid-19 Dashboard (Updated " + arr[name][0]['LastUpdateText'] + ")</h1>";
 
-    var tableHeader = "Cases";
+    var tableHeader = "<div class='d-flex  justify-content-between'>Cases" +
+    "<div class='d-flex justify-content-end'>" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseTrends' onclick='showDashboardChart(\"caseTrends\")'>View Trends</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>View History</button></div></div>";
     var tableBody = [];
 
     tableBody.push({title: "New Cases", value: arr[name][0]['NewToday']},
@@ -322,7 +329,8 @@ function showVaccineSummaryBoard(json,name){
 
     var board3 = document.getElementById("board3");
     board3.innerHTML = "";
-    var tableHeader = "Vaccinations";
+    var tableHeader = "<div class='d-flex justify-content-between'>Vaccinations" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
     var tableBody = [];
 
     tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentOneDose'] + "%)"},
@@ -344,8 +352,10 @@ function showSchoolSummaryBoard(json,name){
 
     var board4 = document.getElementById("board4");
     board4.innerHTML = "";
-    var tableHeader = "<div class='d-flex justify-content-between'>Schools";
-    tableHeader += "<button type='button' class='btn btn-charts btn-outline-primary' id='schoolList' onclick='showFullSizeChart(\"schoolList\")'>View Exposures</button></div>";
+    var tableHeader = "<div class='d-flex justify-content-between'>Schools" +
+    "<div class='d-flex justify-content-end'>" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='schoolList' onclick='showDashboardChart(\"schoolList\")'>View Exposures</button></div>";
     var tableBody = [];
 
     tableBody.push({title: "New Cases", value: arr[name][0]['NewCases']},
@@ -362,12 +372,9 @@ function showSchoolSummaryBoard(json,name){
     board4.appendChild(schoolSummary);
 }
 
-function showSchoolListBoard(json,name){
+function showSchoolListBoard(json,name,loc){
     var arr = [];
     arr = JSON.parse(json);
-    // arr = JSON.parse(json); 	// Convert JSON to array.
-
-    console.log(arr[name].length);
 
     var tableHeader = ["School","District","City","Status","New Cases","Prev. Impacted"];
     var tableIndexes = ['strnm','strdst','strcm','SchoolStatus','NewCases','TotalSchoolsImpacted'];
@@ -375,8 +382,8 @@ function showSchoolListBoard(json,name){
     // Create a dynamic table.
     var table = document.createElement("table");
     table.classList.add('table');
-    // table.classList.add('table-bordered');
     table.classList.add('display');
+    table.classList.add('nowrap');
 
     table.id = 'schoolListTable';
 
@@ -409,15 +416,26 @@ function showSchoolListBoard(json,name){
         }          
     }
 
-    var divContainer = document.getElementById("dataTableContainer");
+    var divContainer = document.getElementById(loc);
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
 
     $(document).ready(function() {
-        $('#schoolListTable').DataTable();
+        $('#schoolListTable').DataTable({
+            scrollX:        true,
+            scrollCollapse: true,
+            autoWidth:         true,  
+             paging:         true, 
+             columnDefs: [
+                { "width": "150", "targets": [2] },
+                { "width": "100", "targets": [3] },
+                { "width": "75", "targets": [1,4,5] },
+                { "width": "300", "targets": [0] }
+              ]
+    });
     } );    
 
-    showElement("dataTableContainer");
+    showElement(loc);
 }
 
 
@@ -1229,13 +1247,45 @@ function selectedFullSizeChart (chartName){
     selectedButton.classList.add("btn-primary");
 }
 
+async function showDashboardChart(chartName){
+    destroyCharts();
+    hideElement('dataTableSmall');
+    var chartJSON;
+
+    switch (chartName){
+        case "caseHistory":
+            chartJSON = await checkGetDataJSON('caseHistory',CaseHistoryURL);
+            showCaseHistoryChart(chartJSON,'caseHistory',"chart1");         
+            break;
+        case "VaccineHistory":
+            chartJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL);
+            showVaccineHistoryChart(chartJSON,'VaccineHistory',"chart1");  
+            break;
+        case "HealthZoneSummary":
+            chartJSON = healthZoneJSON;
+            showHealthZoneChart(chartJSON,chartName,"chart1");
+            break;
+        case "pediatricCases":
+            showPedCasesChart(JSON.stringify(pediatricCases,null,2),'pediatricCases',"chart1");
+            break;
+        case "caseTrends":
+            showCaseTrendsChart(JSON.stringify(caseTrends,null,2),'caseTrends',"chart1");
+            break;
+        case "schoolList":
+            showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableSmall');
+            break;
+        default:
+            // bad selection
+            break;
+    }   
+}
+
 // Display full sized chart on page
 async function showFullSizeChart (chartName){
     // Clear and prep area
     hideAll();
     showElement("large_chart");
 
-    console.log(chartName);
     selectedFullSizeChart(chartName);
 
     var chartJSON;
@@ -1261,7 +1311,7 @@ async function showFullSizeChart (chartName){
             break;
         case "schoolList":
             // showSchoolListBoard(JSON.stringify(schoolsListJSON,null,2),"SchoolsList");
-            showSchoolListBoard(schoolsListJSON,"SchoolsList");
+            showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableContainer');
             break;
         default:
             // bad selection
