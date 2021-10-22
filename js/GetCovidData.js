@@ -89,11 +89,17 @@ async function preloadData(){
     vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
     caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
     vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
-    healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
+    // healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
     schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
-    schoolsListJSON = await checkGetDataJSON('SchoolsList',SchoolsListURL,true);
+    // schoolsListJSON = await checkGetDataJSON('SchoolsList',SchoolsListURL,true);
 
     hideElement('loadingSpinner');
+}
+
+// Load in the background into session
+async function backgroundLoadData(){
+    schoolsListJSON = await checkGetDataJSON('SchoolsList',SchoolsListURL,true);
+    healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
 }
 
 function hideAll(){
@@ -104,13 +110,14 @@ function hideAll(){
         'large_chart',
         'dashboard',
         'loadingSpinner',
-        'dataTableContainer'
+        'dataTableContainer',
+        'dataTableSmall'
     ];
 
     // Reset divs
     for (var i = 0; i < elementList.length ; i++){
         let x = document.getElementById(elementList[i]);
-        x.classList.add('hidden');
+        if (x) {x.classList.add('hidden')};
     }
 
     destroyCharts();
@@ -206,6 +213,7 @@ function html_table_to_excel(tableName){
 
 async function showDashboard(firstLoad=false){
     if (firstLoad){
+        // Preload data needed for dashboard
         await preloadData();
     }
 
@@ -216,9 +224,7 @@ async function showDashboard(firstLoad=false){
     showCaseSummaryBoard(caseSummaryJSON,'CaseSummary');
     showVaccineSummaryBoard(vaccinationSummaryJSON, "VaccinationSummary");
     showSchoolSummaryBoard(schoolsSummaryJSON,'SchoolsSummary');
-    // showSchoolListBoard(schoolsListJSON,"SchoolsList");
-    showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");  
-    // showVaccineHistoryChart(vaccineHistoryJSON,'VaccineHistory',"chart3");   
+    showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");   
     
     var tableBody = document.getElementsByTagName("tbody");
     var tableHead = document.getElementsByTagName("thead");
@@ -242,6 +248,7 @@ async function showDashboard(firstLoad=false){
             tableHead[i].classList.remove('text-light');
         } 
     }    
+    backgroundLoadData();
 }
 
 function buildBoardTable(header,body){
@@ -289,8 +296,9 @@ function showCaseSummaryBoard(json,name){
 
     var tableHeader = "<div class='d-flex  justify-content-between'>Cases" +
     "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseTrends' onclick='showDashboardChart(\"caseTrends\")'>View Trends</button>&nbsp;" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>View History</button></div></div>";
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseTrends' onclick='showDashboardChart(\"caseTrends\")'>Case Trends</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>Case History</button></div></div>";
     var tableBody = [];
 
     tableBody.push({title: "New Cases", value: arr[name][0]['NewToday']},
@@ -354,7 +362,6 @@ function showSchoolSummaryBoard(json,name){
     board4.innerHTML = "";
     var tableHeader = "<div class='d-flex justify-content-between'>Schools" +
     "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
     "<button type='button' class='btn btn-charts btn-outline-primary' id='schoolList' onclick='showDashboardChart(\"schoolList\")'>View Exposures</button></div>";
     var tableBody = [];
 
@@ -384,6 +391,10 @@ function showSchoolListBoard(json,name,loc){
     table.classList.add('table');
     table.classList.add('display');
     table.classList.add('nowrap');
+
+    // Remove previously rendered table
+    var checkTable = document.getElementById('schoolListTable');
+    if (checkTable) checkTable.parentNode.removeChild(checkTable);
 
     table.id = 'schoolListTable';
 
