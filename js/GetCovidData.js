@@ -296,9 +296,9 @@ function showCaseSummaryBoard(json,name){
 
     var tableHeader = "<div class='d-flex  justify-content-between'>Cases" +
     "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseTrends' onclick='showDashboardChart(\"caseTrends\")'>Case Trends</button>&nbsp;" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>Case History</button></div></div>";
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"caseTrends\")'>Case Trends</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>Case History</button></div></div>";
     var tableBody = [];
 
     tableBody.push({title: "New Cases", value: arr[name][0]['NewToday']},
@@ -338,7 +338,7 @@ function showVaccineSummaryBoard(json,name){
     var board3 = document.getElementById("board3");
     board3.innerHTML = "";
     var tableHeader = "<div class='d-flex justify-content-between'>Vaccinations" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
     var tableBody = [];
 
     tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentOneDose'] + "%)"},
@@ -362,7 +362,7 @@ function showSchoolSummaryBoard(json,name){
     board4.innerHTML = "";
     var tableHeader = "<div class='d-flex justify-content-between'>Schools" +
     "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary' id='schoolList' onclick='showDashboardChart(\"schoolList\")'>View Exposures</button></div>";
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='schoolList' onclick='showDashboardChart(\"schoolList\")'>View Exposures</button></div>";
     var tableBody = [];
 
     tableBody.push({title: "New Cases", value: arr[name][0]['NewCases']},

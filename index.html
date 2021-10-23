@@ -76,7 +76,6 @@
                     <ul class="submenu dropdown-menu-dark">
                       <li onclick="showArcGis('HospitalStatusAll')"><a class="dropdown-item" href="#">Hospital Status</a></li>
                       <li onclick="showArcGis('AdultResidentialFacilities')"><a class="dropdown-item" href="#">Adult Residential Facilities</a></li>
-                      <!-- <li onclick="showArcGis('AdultResidentialFacilitiesGEO')"><a class="dropdown-item" href="#">Adult Residential Facilities (Geo Locations)</a></li> -->
                     </ul>
                 </li>
 
@@ -187,24 +186,16 @@
     <!-- Charts (Lower Half) -->
     <div class="row justify-content-sm-center" id="summaryCharts">
       <!-- Left Column  -->
-      <div class="col-md-4">
-        <div class="col-md-auto" id="board4"></div>
+      <div class="col-md-4" id="board4">
       </div>
       <!-- Right Column -->
-      <div class="col-xl-8" id="chart2_col">
-        <div class="row justify-content-md-center ">
-          <div class="col w-100 d-flex align-items-center text-center" id="chart1_col">
+      <div class="col-xl-8 d-none d-lg-block" id="chart1_col">
             <div id='dataTableSmall' class='hidden'></div>
             <!-- Active Case History Chart -->
-            <canvas id="chart1" width="700" height="340"></canvas>                    
-          </div>
-        </div>
+            <canvas id="chart1" width="700" height="340"></canvas>         
       </div>
     </div>
-  </div>
-
-
-  
+  </div>  
 
   <div class="row justify-content-md-center" id="dashboard">
     <div class="col-md-auto">
