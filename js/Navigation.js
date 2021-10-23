@@ -140,10 +140,22 @@ function showCompiledData(name){
 
     switch (name){
         case "pediatricCases":
-            createTableFromJSON(JSON.stringify(pediatricCases,null,2),name);
+            createTableFromJSON(JSON.stringify(pediatricCases,null,2),name,"desc");
             break;
-        case "caseHistory":
-            createTableFromJSON(JSON.stringify(caseHistory,null,2),name);
+        case "caseTrends":
+            createTableFromJSON(JSON.stringify(caseTrends,null,2),name,"desc");
+            break;
+        case "hospitalCases":
+            createTableFromJSON(JSON.stringify(hospitalCases,null,2),name,"desc");
+            showGenerateData("hospitalRates");
+            break;
+        case "hospitalRates":
+            
+            showGenerateData("hospitalRates");
+            break;
+        case "icuCases":
+            createTableFromJSON(JSON.stringify(icuCases,null,2),name,"desc");
+            break;
         default: 
             break;
     }

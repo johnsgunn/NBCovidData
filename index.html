@@ -30,11 +30,15 @@
     <!-- Compiled data as JSON -->
     <script type="text/javascript" src="./data/NBPediatricCaseHistory.js"></script>
     <script type="text/javascript" src="./data/NBCaseTrends.js"></script>
+    <script type="text/javascript" src="./data/NBHospitalCases.js"></script>
+    <script type="text/javascript" src="./data/NBICUCases.js"></script>
+    <script type="text/javascript" src="./data/NBZonePopulations.js"></script>
 
     <!-- Styles and Utils -->
     <link href="./css/style.css" rel="stylesheet">
     <script src="./js/API_Calls.js"></script>
     <script src="./js/Globals.js"></script>
+    <script src="./js/GenerateJsonData.js"></script>
     <script src="./js/BuildRawData.js"></script>
     <script src="./js/BuildBoards.js"></script>
     <script src="./js/BuildCharts.js"></script>
@@ -116,8 +120,10 @@
                 <li> 
                   <a class="dropdown-item" href="#"> Compiled Data &raquo; </a>
                     <ul class="submenu dropdown-menu-dark">
+                      <li onclick="showCompiledData('hospitalCases')"><a class="dropdown-item" href="#">Hospital Cases</a></li>
+                      <li onclick="showCompiledData('icuCases')"><a class="dropdown-item" href="#">ICU Cases</a></li>
                       <li onclick="showCompiledData('pediatricCases')"><a class="dropdown-item" href="#">Pediactric Cases</a></li>
-                      <li onclick="showCompiledData('caseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
+                      <li onclick="showCompiledData('caseTrends')"><a class="dropdown-item" href="#">Case Trends</a></li>
                     </ul>
                 </li>
               </ul>
@@ -173,6 +179,18 @@
         <div class="lds-dual-ring" id="lds-dual-ring"></div>
     </div>      
   </div>
+
+   <div class="row hidden" id="export_row">
+    <div class="col col-md-12 text-right">
+        <button type="button" id="json_button" onclick="downloadJSON()" class="btn btn-primary btn-sm">Download as JSON</button>
+    </div>
+  </div>   
+
+  <div class="row hidden" id="generate_row">
+    <div class="col col-md-12 text-right" id="generate_col">
+      <button type="button" id="json_button" onclick="generateData('hospitalRates')" class="btn btn-primary btn-sm">Generate Case Rates</button>
+    </div>
+  </div> 
 
   <!-- Main Body -->
   <div id="bodyRow">

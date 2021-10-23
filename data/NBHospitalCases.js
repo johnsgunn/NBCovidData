@@ -1,5 +1,5 @@
-hospitalRates = {
-    hospitalRates: [
+hospitalCases = {
+    hospitalCases: [
         {
           "Date": "2021-09-20",
           "Admitted": 23,

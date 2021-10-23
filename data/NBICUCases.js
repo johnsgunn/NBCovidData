@@ -1,5 +1,5 @@
-icuRates = {
-    icuRates: [
+icuCases = {
+  icuCases: [
         {
           "Date": "2021-09-20",
           "Admitted": 14,

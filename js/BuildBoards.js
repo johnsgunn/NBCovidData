@@ -144,7 +144,6 @@ function showSchoolListBoard(json,name,loc){
     var table = document.createElement("table");
     table.classList.add('table');
     table.classList.add('display');
-    // table.classList.add('nowrap');
     table.classList.add('dataTable');
     table.classList.add(tableTextColor);
 

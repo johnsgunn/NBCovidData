@@ -24,6 +24,7 @@ const canvasBG = {
     }
   };
 
+  // Store API data // 
   var caseSummaryJSON = null;
   var healthZoneJSON = null;
   var vaccinationSummaryJSON = null;
@@ -31,3 +32,7 @@ const canvasBG = {
   var vaccineHistoryJSON = null;
   var schoolsSummaryJSON = null;
   var schoolsListJSON = null;
+
+  // Store Calculated Data //
+  var hospitalCaseRateJSON = [];
+  var icuCaseRateJSON = [];

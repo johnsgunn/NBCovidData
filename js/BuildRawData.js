@@ -2,8 +2,9 @@
 
 
 // Converts json object to a table
-function createTableFromJSON(jsonData,name) {
+function createTableFromJSON(jsonData,name,sortOrder="asc") {
     var arr = [];
+
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
 
     var col = []; // Contains our headers 
@@ -86,7 +87,8 @@ function createTableFromJSON(jsonData,name) {
              dom: 'Bfrtip',
              buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+            ],
+            "order": [[ 0, sortOrder]],
     });
     } );    
 

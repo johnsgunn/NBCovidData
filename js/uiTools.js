@@ -138,8 +138,6 @@ function toggleDarkMode(){
       body.style.backgroundColor = 'white';
       navbar.classList.remove('bg-secondary');
       navbar.classList.add('bg-dark');
-    //   footer.classList.remove('text-light');
-    //   footer.classList.add('text-dark');
 
       for (let i = 0 ; i < tableBody.length ; i++){
           tableBody[i].classList.remove('text-light');
@@ -162,8 +160,6 @@ function toggleDarkMode(){
       body.style.backgroundColor = '#292b2c';
       navbar.classList.remove('bg-dark');
       navbar.classList.add('bg-secondary');
-    //   footer.classList.remove('text-dark');
-    //   footer.classList.add('text-light');
 
       for (let i = 0 ; i < tableBody.length ; i++){
           tableBody[i].classList.remove('text-dark');

@@ -93,8 +93,7 @@ function convertArcGIStoJSON(ArcGISData,jsonName){
                 jsonRow +=  '"' + col[j] + '":"' + displayReportDate + '"';
             }
             else {
-                var value = arr['features'][i].attributes[col[j]];
-                // if (jsonName == "SchoolsList"){value = sanitizeJSON(value);}   
+                var value = arr['features'][i].attributes[col[j]]; 
                 value = sanitizeJSON(value);             
                 jsonRow +=  '"' + col[j] + '":"' + value + '"';
             }
@@ -130,8 +129,7 @@ function downloadJSON(){
 function sanitizeJSON(unsanitized){	
     if (unsanitized != null){
         var string = unsanitized.toString();
-        // return string.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t").replace(/\f/g, "\\f").replace(/"/g,"\\\"").replace(/'/g,"\\\'").replace(/\&/g, "\\&"); 
-        return string.replace(/\\n/g, "\\n")  
+         return string.replace(/\\n/g, "\\n")  
                .replace(/\\'/g, "\\'")
                .replace(/\\"/g, '\\"')
                .replace(/\\&/g, "\\&")
