@@ -94,7 +94,8 @@ function convertArcGIStoJSON(ArcGISData,jsonName){
             }
             else {
                 var value = arr['features'][i].attributes[col[j]];
-                if (jsonName == "SchoolsList"){value = sanitizeJSON(value);}                
+                // if (jsonName == "SchoolsList"){value = sanitizeJSON(value);}   
+                value = sanitizeJSON(value);             
                 jsonRow +=  '"' + col[j] + '":"' + value + '"';
             }
             if (j < col.length -1) {jsonRow += ',';}  
@@ -138,6 +139,7 @@ function sanitizeJSON(unsanitized){
                .replace(/\\t/g, "\\t")
                .replace(/\\b/g, "\\b")
                .replace(/\\f/g, "\\f")
+               .replace(/"/g, '\\"')
                .replace(/[\u0000-\u0019]+/g,"");
     }
     else {

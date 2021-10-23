@@ -130,6 +130,8 @@ function showSchoolListBoard(json,name,loc){
     var arr = [];
     arr = JSON.parse(json);
 
+    hideElement(loc);
+
     var tableHeader = ["School","District","City","Status","New Cases","Prev. Impacted"];
     var tableIndexes = ['strnm','strdst','strcm','SchoolStatus','NewCases','TotalSchoolsImpacted'];
 
@@ -142,7 +144,8 @@ function showSchoolListBoard(json,name,loc){
     var table = document.createElement("table");
     table.classList.add('table');
     table.classList.add('display');
-    table.classList.add('nowrap');
+    // table.classList.add('nowrap');
+    table.classList.add('dataTable');
     table.classList.add(tableTextColor);
 
     // Remove previously rendered table

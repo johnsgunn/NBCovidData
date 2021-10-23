@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function hideAll(){
     let elementList = [
-        'export_row',
         'bodyRow',
         'summaryDashboard',
         'large_chart',

@@ -83,9 +83,12 @@ function createTableFromJSON(jsonData,name) {
             scrollCollapse: true,
             autoWidth:         true,  
              paging:         true, 
+             dom: 'Bfrtip',
+             buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
     });
     } );    
 
     showElement("bodyRow");
-    showElement("export_row");
 }
