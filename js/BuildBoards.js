@@ -133,11 +133,17 @@ function showSchoolListBoard(json,name,loc){
     var tableHeader = ["School","District","City","Status","New Cases","Prev. Impacted"];
     var tableIndexes = ['strnm','strdst','strcm','SchoolStatus','NewCases','TotalSchoolsImpacted'];
 
+    var tableTextColor = "text-dark";
+    if (darkMode){
+        tableTextColor = "text-light";
+    }
+
     // Create a dynamic table.
     var table = document.createElement("table");
     table.classList.add('table');
     table.classList.add('display');
     table.classList.add('nowrap');
+    table.classList.add(tableTextColor);
 
     // Remove previously rendered table
     var checkTable = document.getElementById('schoolListTable');
@@ -183,8 +189,13 @@ function showSchoolListBoard(json,name,loc){
             scrollX:        true,
             scrollCollapse: true,
             autoWidth:         true,  
-             paging:         true, 
-             columnDefs: [
+            paging:         true, 
+            language: {
+                searchPlaceholder: "Search exposures",
+                search: "",
+            },
+            "order": [[ 3, "asc" ],[ 4, "desc"]],
+            columnDefs: [
                 { "width": "150", "targets": [2] },
                 { "width": "100", "targets": [3] },
                 { "width": "75", "targets": [1,4,5] },

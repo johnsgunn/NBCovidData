@@ -29,6 +29,7 @@ function createTableFromJSON(jsonData,name) {
     table.classList.add('table');
     table.classList.add('display');
     table.classList.add('nowrap');
+    table.classList.add(tableTextColor);
 
     table.id = 'tblData';
     
