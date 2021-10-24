@@ -147,14 +147,15 @@ function showCompiledData(name){
             break;
         case "hospitalCases":
             createTableFromJSON(JSON.stringify(hospitalCases,null,2),name,"desc");
-            showGenerateData("hospitalRates");
             break;
-        case "hospitalRates":
-            
+        case "hospitalRates":            
             showGenerateData("hospitalRates");
             break;
         case "icuCases":
             createTableFromJSON(JSON.stringify(icuCases,null,2),name,"desc");
+            break;
+        case "icuRates":            
+            showGenerateData("icuRates");
             break;
         default: 
             break;

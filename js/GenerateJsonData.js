@@ -6,11 +6,18 @@ function showGenerateData(){
 
 function generateData(name){
     currentReport = name;
+    hideAll();
     hideElement("generate_row");
     switch (name) {
         case "hospitalRates":
+            hideAll();
             showElement("export_row");
             jsonOutput = buildHospitalCaseRate();
+            createTableFromJSON(JSON.stringify(jsonOutput,null,2),name,"desc");
+            break;
+        case "icuRates":
+            showElement("export_row");
+            jsonOutput = buildIcuCaseRate();
             createTableFromJSON(JSON.stringify(jsonOutput,null,2),name,"desc");
             break;
         default: 
@@ -114,7 +121,9 @@ function buildIcuCaseRate(){
     var uvPop = 780000 - fvPop - pvPop;
     var uvEligiblePop = 696000 - fvPop - pvPop;
 
-    // Hospitalizations 
+    // ICU Cases
+    
+    console.log(icuCases['icuCases']);
 
     for (var i = 0 ; i < icuCases['icuCases'].length ; i++){
         var date = icuCases['icuCases'][i]['Date'];

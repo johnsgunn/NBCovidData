@@ -71,7 +71,7 @@ function createTableFromJSON(jsonData,name,sortOrder="asc") {
     table.classList.add(tableTextColor);
 
     // Finally, add the dynamic table to a container.
-    var divContainer = document.getElementById("bodyRow");
+    var divContainer = document.getElementById("bodyContainer");
     divContainer.innerHTML = "<h4 class='" + tableTextColor + "'>Report from GNB Data: " + name + "</h4>";
     divContainer.appendChild(table);
 

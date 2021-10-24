@@ -121,7 +121,9 @@
                   <a class="dropdown-item" href="#"> Compiled Data &raquo; </a>
                     <ul class="submenu dropdown-menu-dark">
                       <li onclick="showCompiledData('hospitalCases')"><a class="dropdown-item" href="#">Hospital Cases</a></li>
+                      <li onclick="generateData('hospitalRates')"><a class="dropdown-item" href="#">Hospital Trends</a></li>
                       <li onclick="showCompiledData('icuCases')"><a class="dropdown-item" href="#">ICU Cases</a></li>
+                      <li onclick="generateData('icuRates')"><a class="dropdown-item" href="#">ICU Trends</a></li>
                       <li onclick="showCompiledData('pediatricCases')"><a class="dropdown-item" href="#">Pediactric Cases</a></li>
                       <li onclick="showCompiledData('caseTrends')"><a class="dropdown-item" href="#">Case Trends</a></li>
                     </ul>
@@ -193,8 +195,8 @@
   </div> 
 
   <!-- Main Body -->
-  <div id="bodyRow">
-    <div class="row justify-content-md-center"></div>
+  <div class="row justify-content-md-center hidden" id="bodyRow">
+    <div class="col-md-8" id="bodyContainer"></div>
   </div>
 
   <!-- Summary Dashboard (landing) -->
