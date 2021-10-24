@@ -6,7 +6,7 @@ function buildBoardTable(header,body){
             "<td colspan=2><h2>"+header+"</h2></td>"+
             "</tr>"+
         "</thead>"+
-        "<tbody>";
+        "<tbody class='board-table'>";
 
 
     for (var i = 0; i < body.length ; i++){
@@ -136,9 +136,6 @@ function showSchoolListBoard(json,name,loc){
     var tableIndexes = ['strnm','strdst','strcm','SchoolStatus','NewCases','TotalSchoolsImpacted'];
 
     var tableTextColor = "text-dark";
-    if (darkMode){
-        tableTextColor = "text-light";
-    }
 
     // Create a dynamic table.
     var table = document.createElement("table");

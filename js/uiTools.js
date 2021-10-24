@@ -128,10 +128,10 @@ function showMore (pageName) {
 function toggleDarkMode(){
   var body = document.querySelector('body');
   var navbar = document.getElementById('nav');
-  var tableBody = document.getElementsByTagName("tbody");
-  var footer = document.getElementById('footer');
+  var table = document.getElementsByClassName("board-table");
   var h4 = document.getElementsByTagName("h4");
-  var tableHead = document.getElementsByTagName("thead");
+  var labels = document.getElementsByTagName("label");
+  var tblData_info = document.getElementById("tblData_info");
 
   if (darkMode){
       darkMode = false;
@@ -139,14 +139,19 @@ function toggleDarkMode(){
       navbar.classList.remove('bg-secondary');
       navbar.classList.add('bg-dark');
 
-      for (let i = 0 ; i < tableBody.length ; i++){
-          tableBody[i].classList.remove('text-light');
-          tableBody[i].classList.add('text-dark');
+      if(tblData_info) {
+        tblData_info.classList.remove("text-light");
+        tblData_info.classList.add("text-dark");
       }
-      for (let i = 0 ; i < tableHead.length ; i++){            
-          tableHead[i].classList.add('text-dark');
-          tableHead[i].classList.remove('text-light');
-      } 
+
+      for (let i = 0 ; i < table.length ; i++){
+        table[i].classList.remove('text-light');
+        table[i].classList.add('text-dark');
+      }
+      for (let i = 0 ; i < labels.length ; i++){
+          labels[i].classList.remove('text-light');
+          labels[i].classList.add('text-dark');
+      }
 
       for (let i = 0 ; i < h4.length ; i++){
           h4[i].classList.remove('text-light');
@@ -161,14 +166,19 @@ function toggleDarkMode(){
       navbar.classList.remove('bg-dark');
       navbar.classList.add('bg-secondary');
 
-      for (let i = 0 ; i < tableBody.length ; i++){
-          tableBody[i].classList.remove('text-dark');
-          tableBody[i].classList.add('text-light');
+      if(tblData_info) {
+        tblData_info.classList.add("text-light");
+        tblData_info.classList.remove("text-dark");
+      }
+
+      for (let i = 0 ; i < table.length ; i++){
+        table[i].classList.remove('text-dark');
+        table[i].classList.add('text-light');
       } 
-      for (let i = 0 ; i < tableHead.length ; i++){
-          tableHead[i].classList.remove('text-dark');
-          tableHead[i].classList.add('text-light');
-      } 
+      for (let i = 0 ; i < labels.length ; i++){
+        labels[i].classList.add('text-light');
+        labels[i].classList.remove('text-dark');
+    }
       
       for (let i = 0 ; i < h4.length ; i++){
           h4[i].classList.remove('text-dark');

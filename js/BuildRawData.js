@@ -21,9 +21,6 @@ function createTableFromJSON(jsonData,name,sortOrder="asc") {
     }  
 
     var tableTextColor = "text-dark";
-    if (darkMode){
-        tableTextColor = "text-light";
-    }
 
     // Create a dynamic table.
     var table = document.createElement("table");
