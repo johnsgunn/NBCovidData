@@ -282,6 +282,25 @@ function showCaseTrendsChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
+    // console.log("Generating Chart -- " + name);
+    var checkType = "";
+    var titleText = "";
+
+    switch (name){
+        case "caseRates":
+            checkType = "New Cases";
+            titleText = "NB Covid-19 New Case Trend Rate, 7-Day Average";
+            break;
+        case "hospitalRates":
+            checkType = "Admitted";
+            titleText = "NB Covid-19 Hospital Trend Rate, 7-Day Average";
+            break;
+        case "icuRates":
+            checkType = "Admitted";
+            titleText = "NB Covid-19 ICU Trend Rate, 7-Day Average";
+            break;
+    }
+
     var dps1 = [];
     var dps2 = [];
     var dps3 = [];
@@ -290,7 +309,9 @@ function showCaseTrendsChart(json,name,loc) {
         dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['Fully Vaccinated Trend']});
         dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['Partially Vaccinated Trend']});        
         dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Unvaccinated Trend']});
-        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['New Cases']});
+        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i][checkType]});
+        
+        
     }
 
     var ctx = document.getElementById(loc);
@@ -299,7 +320,7 @@ function showCaseTrendsChart(json,name,loc) {
         datasets: [
         {
             type: "line",
-            label: "Vaccinated Average",
+            label: "Fully Vaccinated",
             data:dps1,
             borderWidth: 4,
             pointRadius: 0,
@@ -311,7 +332,7 @@ function showCaseTrendsChart(json,name,loc) {
         },
         {
             type: "line",
-            label: "Partially Vaccinated Average",
+            label: "Partially Vaccinated",
             data:dps2,
             borderWidth: 4,
             pointRadius: 0,
@@ -323,7 +344,7 @@ function showCaseTrendsChart(json,name,loc) {
         },
         {
             type: "line",
-            label: "Unvaccinated Average",
+            label: "Unvaccinated",
             data:dps3,
             borderWidth: 4,
             pointRadius: 0,
@@ -335,7 +356,7 @@ function showCaseTrendsChart(json,name,loc) {
         },            
         {
             type: "bar",
-            label: "New Cases",
+            label: checkType,
             data:dps4,
             borderWidth: 1,
             pointRadius: 1,
@@ -362,7 +383,7 @@ function showCaseTrendsChart(json,name,loc) {
                 color: chartTextColor,
                 title: {
                     display: true,
-                    text: 'Case Average',
+                    text: 'Cases (Per 100,000)',
                     color: chartTextColor,
                     font: {
                         size: 15
@@ -380,7 +401,7 @@ function showCaseTrendsChart(json,name,loc) {
                 },
                 title: {
                     display: true,
-                    text: 'New Cases',
+                    text: checkType,
                     color: chartTextColor,
                     font: {
                         size: 15
@@ -410,7 +431,7 @@ function showCaseTrendsChart(json,name,loc) {
         plugins: {
             title: {
                 display: true,
-                text: 'NB Covid-19 Case Rate, 7-day Average',
+                text: titleText,
                 color: chartTextColor
             },
             legend: {

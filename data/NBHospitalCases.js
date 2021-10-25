@@ -1,103 +1,103 @@
 hospitalCases = {
     hospitalCases: [
-        {
-          "Date": "2021-09-20",
-          "Admitted": 23,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-21",
-          "Admitted": 24,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-22",
-          "Admitted": 26,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-23",
-          "Admitted": 27,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-24",
-          "Admitted": 31,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-25",
-          "Admitted": 32,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-26",
-          "Admitted": 33,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-27",
-          "Admitted": 41,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-28",
-          "Admitted": 40,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-29",
-          "Admitted": 40,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-09-30",
-          "Admitted": 40,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-10-01",
-          "Admitted": 41,
-          "Fully Vaccinated": null,
-          "Partially Vaccinated": null,
-          "Unvaccinated": null
-        },
-        {
-          "Date": "2021-10-02",
-          "Admitted": 44,
-          "Fully Vaccinated": 9,
-          "Partially Vaccinated": null,
-          "Unvaccinated": 35
-        },
-        {
-          "Date": "2021-10-03",
-          "Admitted": 45,
-          "Fully Vaccinated": 10,
-          "Partially Vaccinated": null,
-          "Unvaccinated": 35
-        },
+        // {
+        //   "Date": "2021-09-20",
+        //   "Admitted": 23,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-21",
+        //   "Admitted": 24,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-22",
+        //   "Admitted": 26,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-23",
+        //   "Admitted": 27,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-24",
+        //   "Admitted": 31,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-25",
+        //   "Admitted": 32,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-26",
+        //   "Admitted": 33,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-27",
+        //   "Admitted": 41,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-28",
+        //   "Admitted": 40,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-29",
+        //   "Admitted": 40,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-09-30",
+        //   "Admitted": 40,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-10-01",
+        //   "Admitted": 41,
+        //   "Fully Vaccinated": null,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": null
+        // },
+        // {
+        //   "Date": "2021-10-02",
+        //   "Admitted": 44,
+        //   "Fully Vaccinated": 9,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": 35
+        // },
+        // {
+        //   "Date": "2021-10-03",
+        //   "Admitted": 45,
+        //   "Fully Vaccinated": 10,
+        //   "Partially Vaccinated": null,
+        //   "Unvaccinated": 35
+        // },
         {
           "Date": "2021-10-04",
           "Admitted": 49,
@@ -246,7 +246,7 @@ hospitalCases = {
           "Unvaccinated": 23
         },
         {
-          "Date": "2021-10-24",
+          "Date": "2021-10-25",
           "Admitted": 39,
           "Fully Vaccinated": 16,
           "Partially Vaccinated": 3,

@@ -86,6 +86,12 @@ async function showDashboardChart(chartName){
         case "caseTrends":
             showCaseTrendsChart(caseRatesJSON,'caseRates',"chart1");
             break;
+        case "hospitalTrends":
+            showCaseTrendsChart(hospitalRatesJSON,'hospitalRates',"chart1");
+            break;
+        case "icuTrends":
+            showCaseTrendsChart(icuRatesJSON,'icuRates',"chart1");
+            break;
         case "schoolList":
             showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableSmall');
             break;

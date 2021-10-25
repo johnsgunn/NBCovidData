@@ -20,17 +20,9 @@ async function generateData(name){
 // Check for data in session, generate and store if not
 // Then return data from session
 async function checkBuildDataSet(name,forceReload=false){
-    var loadedOn; 
-    var expired = false;
     return new Promise((resolve,reject)=>{
-        // if (sessionStorage.getItem(name)){ // item is already loaded 
-        //     loadedOn = sessionStorage.getItem(name + "-loadedOn"); 
-        //     console.log(loadedOn);
-        // }
-
         if (!sessionStorage.getItem(name) 
-                || forceReload
-                || expired ) { 
+                || forceReload) { 
             var jsonOutput;
             switch (name){
                 case "hospitalRates":
@@ -40,7 +32,6 @@ async function checkBuildDataSet(name,forceReload=false){
                     jsonOutput = buildIcuCaseRate();
                     break;
                 case "caseRates":
-                    console.log ("CASES");
                     jsonOutput = buildCaseRate();
                     break;
                 default:
@@ -268,8 +259,6 @@ function buildCaseRate(){
             "Unvaccinated": uvRate,
             "Unvaccinated Trend": uvRateTrend
         };
-
-        console.log(row);
 
         daily.caseRates.push(row);
     }

@@ -32,7 +32,11 @@ const canvasBG = {
   var vaccineHistoryJSON = null;
   var schoolsSummaryJSON = null;
   var schoolsListJSON = null;
+  var caseRatesJSON = null;
+  var hospitalRatesJSON = null;
+  var icuRatesJSON = null;
 
   // Store Calculated Data //
   var hospitalCaseRateJSON = [];
   var icuCaseRateJSON = [];
+

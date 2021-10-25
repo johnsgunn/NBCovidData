@@ -476,5 +476,14 @@ pediatricCases= {
   "Total Cases 10-19": 751,
   "Cases Age 10-19": 8,
   "7 Day Trend (Age 10-19)": 6
+},
+{
+  "Date": "2021-10-25",
+  "Total Cases < 10": 730,
+  "Cases Age < 10": 4,
+  "7 Day Trend (Age < 10)": 8,
+  "Total Cases 10-19": 752,
+  "Cases Age 10-19": 1,
+  "7 Day Trend (Age 10-19)": 5
 }
 ]};

@@ -58,7 +58,10 @@ function showCaseSummaryBoard(json,name){
     var cases = document.createElement("p");
     cases.innerHTML = buildBoardTable(tableHeader,tableBody);
 
-    tableHeader = "Hospitalizations";
+    tableHeader = "<div class='d-flex  justify-content-between'>In Hospital" +
+    "<div class='d-flex justify-content-end'>" +
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"icuTrends\")'>ICU Trends</button>&nbsp;" +
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"hospitalTrends\")'>Hospital Trends</button></div></div>";
     tableBody = [];
 
     tableBody.push({title: "In Hospital", value: arr[name][0]['Hospitalised']},
