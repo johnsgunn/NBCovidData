@@ -4,25 +4,54 @@ function showGenerateData(){
     showElement("generate_row");
 }
 
-function generateData(name){
+async function generateData(name){
     currentReport = name;
     hideAll();
     hideElement("generate_row");
-    switch (name) {
-        case "hospitalRates":
-            hideAll();
-            showElement("export_row");
-            jsonOutput = buildHospitalCaseRate();
-            createTableFromJSON(JSON.stringify(jsonOutput,null,2),name,"desc");
-            break;
-        case "icuRates":
-            showElement("export_row");
-            jsonOutput = buildIcuCaseRate();
-            createTableFromJSON(JSON.stringify(jsonOutput,null,2),name,"desc");
-            break;
-        default: 
-            break;
-    }
+    showElement("export_row");
+
+    console.log("Name = " + name);
+
+    var jsonOutput = await checkBuildDataSet(name,false);
+    // console.log(jsonOutput);
+    createTableFromJSON(jsonOutput,name,"desc");
+}
+
+// Check for data in session, generate and store if not
+// Then return data from session
+async function checkBuildDataSet(name,forceReload=false){
+    var loadedOn; 
+    var expired = false;
+    return new Promise((resolve,reject)=>{
+        // if (sessionStorage.getItem(name)){ // item is already loaded 
+        //     loadedOn = sessionStorage.getItem(name + "-loadedOn"); 
+        //     console.log(loadedOn);
+        // }
+
+        if (!sessionStorage.getItem(name) 
+                || forceReload
+                || expired ) { 
+            var jsonOutput;
+            switch (name){
+                case "hospitalRates":
+                    jsonOutput = buildHospitalCaseRate();
+                    break;
+                case "icuRates":
+                    jsonOutput = buildIcuCaseRate();
+                    break;
+                case "caseRates":
+                    console.log ("CASES");
+                    jsonOutput = buildCaseRate();
+                    break;
+                default:
+                    reject("Invalid selection");
+                    break;
+            }
+            sessionStorage.setItem(name,JSON.stringify(jsonOutput,null,2));
+            sessionStorage.setItem(name + "-loadedOn",new Date());
+        }   
+        resolve(sessionStorage.getItem(name));
+    })
 }
 
 // Generate single row for case age
@@ -35,7 +64,7 @@ function buildPediatricCaseRow(){
 
 }
 
-
+// Hospital Cases - Build Rate Per Pop plus 7 Day Average
 function buildHospitalCaseRate(){
     var daily = {};
     var hospitalRates = [];
@@ -104,6 +133,7 @@ function buildHospitalCaseRate(){
     return daily;
 }
 
+// ICU Cases - Build Rate Per Pop plus 7 Day Average
 function buildIcuCaseRate(){
     var daily = {};
     var icuRates = [];
@@ -170,6 +200,78 @@ function buildIcuCaseRate(){
         };
 
         daily.icuRates.push(row);
+    }
+
+    return daily;
+}
+
+// Total Cases - Build Rate Per Pop plus 7 Day Average
+function buildCaseRate(){
+    var daily = {};
+    var caseRates = [];
+    daily.caseRates = caseRates;
+
+    vaccinationSummaryArr = JSON.parse(vaccinationSummaryJSON);
+
+    // Populations 
+    // fv = fully vaccinated, pv = partially vaccinated, uv = unvaccinated 
+    var secondDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopSecondDose;
+    var firstDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopOneDose;
+
+    var fvPop = parseInt(secondDosePop);
+    var pvPop = parseInt(firstDosePop) - fvPop;
+    var uvPop = 780000 - fvPop - pvPop;
+    var uvEligiblePop = 696000 - fvPop - pvPop;
+
+    // ICU Cases
+
+    for (var i = 0 ; i < nbCases['nbCases'].length ; i++){
+        var date = nbCases['nbCases'][i]['Date'];
+        var newCases = parseInt(nbCases['nbCases'][i]['New Cases']);
+        var fvCases = parseInt(nbCases['nbCases'][i]['Fully Vaccinated']) || 0;
+        var pvCases = parseInt(nbCases['nbCases'][i]['Partially Vaccinated']) || 0;
+        var uvCases = parseInt(nbCases['nbCases'][i]['Unvaccinated']) || 0;
+
+        var fvRate = Math.round((fvCases/fvPop) * 100000);
+        var pvRate = Math.round((pvCases/pvPop) * 100000);
+        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
+
+        var fvRateTrend = fvCases;
+        var pvRateTrend = pvCases;
+        var uvRateTrend = uvCases;
+
+        if (i > 6){ // start generating averages 
+            var fvSum = 0;
+            var pvSum = 0;
+            var uvSum = 0;            
+
+            for (var j = i-1 ; j > i-7; j--){
+                var obj = daily.caseRates[j];           
+                
+                fvSum += obj["Fully Vaccinated"];;
+                pvSum += obj["Partially Vaccinated"];
+                uvSum += obj["Unvaccinated"];
+            }
+
+            fvRateTrend = Math.round(fvSum/7);
+            pvRateTrend = Math.round(pvSum/7);
+            uvRateTrend = Math.round(uvSum/7);
+        }
+
+        var row = {
+            "Date": date,
+            "New Cases": newCases,
+            "Fully Vaccinated": fvRate,
+            "Fully Vaccinated Trend": fvRateTrend,
+            "Partially Vaccinated": pvRate,
+            "Partially Vaccinated Trend": pvRateTrend,
+            "Unvaccinated": uvRate,
+            "Unvaccinated Trend": uvRateTrend
+        };
+
+        console.log(row);
+
+        daily.caseRates.push(row);
     }
 
     return daily;

@@ -84,7 +84,7 @@ async function showDashboardChart(chartName){
             showPedCasesChart(JSON.stringify(pediatricCases,null,2),'pediatricCases',"chart1");
             break;
         case "caseTrends":
-            showCaseTrendsChart(JSON.stringify(caseTrends,null,2),'caseTrends',"chart1");
+            showCaseTrendsChart(caseRatesJSON,'caseRates',"chart1");
             break;
         case "schoolList":
             showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableSmall');

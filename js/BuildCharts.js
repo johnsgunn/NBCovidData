@@ -287,9 +287,9 @@ function showCaseTrendsChart(json,name,loc) {
     var dps3 = [];
     var dps4 = [];
     for (var i=0 ; i < arr[name].length  ; i++){
-        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['V 7 Day Avg']});
-        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['PV 7 Day Avg']});        
-        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['UV 7 Day Avg']});
+        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['Fully Vaccinated Trend']});
+        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['Partially Vaccinated Trend']});        
+        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Unvaccinated Trend']});
         dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['New Cases']});
     }
 
