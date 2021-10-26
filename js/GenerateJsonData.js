@@ -45,92 +45,10 @@ async function checkBuildDataSet(name,forceReload=false){
     })
 }
 
-// Generate single row for case age
-// Returns current day, which is all that's stored on API
-function buildCaseAgeRow(){
-
-}
-
-function buildPediatricCaseRow(){
-
-}
-
-// Hospital Cases - Build Rate Per Pop plus 7 Day Average
-function buildHospitalCaseRate(){
+function buildCaseAgeRate(){
     var daily = {};
-    var hospitalRates = [];
-    daily.hospitalRates = hospitalRates;
-
-    vaccinationSummaryArr = JSON.parse(vaccinationSummaryJSON);
-
-    // Populations 
-    // fv = fully vaccinated, pv = partially vaccinated, uv = unvaccinated 
-    var secondDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopSecondDose;
-    var firstDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopOneDose;
-
-    var fvPop = parseInt(secondDosePop);
-    var pvPop = parseInt(firstDosePop) - fvPop;
-    var uvPop = 780000 - fvPop - pvPop;
-    var uvEligiblePop = 696000 - fvPop - pvPop;
-
-    // Hospitalizations 
-
-    for (var i = 0 ; i < hospitalCases['hospitalCases'].length ; i++){
-        var date = hospitalCases['hospitalCases'][i]['Date'];
-        var admitted = parseInt(hospitalCases['hospitalCases'][i]['Admitted']);
-        var fvCases = parseInt(hospitalCases['hospitalCases'][i]['Fully Vaccinated']) || 0;
-        var pvCases = parseInt(hospitalCases['hospitalCases'][i]['Partially Vaccinated']) || 0;
-        var uvCases = parseInt(hospitalCases['hospitalCases'][i]['Unvaccinated']) || 0;
-
-        var fvRate = Math.round((fvCases/fvPop) * 100000);
-        var pvRate = Math.round((pvCases/pvPop) * 100000);
-        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
-
-        var fvRateTrend = fvCases;
-        var pvRateTrend = pvCases;
-        var uvRateTrend = uvCases;
-
-        if (i > 6){ // start generating averages 
-            var fvSum = 0;
-            var pvSum = 0;
-            var uvSum = 0;            
-
-            for (var j = i-1 ; j > i-7; j--){
-                var obj = daily.hospitalRates[j];           
-                
-                fvSum += obj["Fully Vaccinated"];;
-                pvSum += obj["Partially Vaccinated"];
-                uvSum += obj["Unvaccinated"];
-            }
-
-            fvRateTrend = Math.round(fvSum/7);
-            pvRateTrend = Math.round(pvSum/7);
-            uvRateTrend = Math.round(uvSum/7);
-        }
-
-        var row = {
-            "Date": date,
-            "Admitted": admitted,
-            "Fully Vaccinated": fvRate,
-            "Fully Vaccinated Trend": fvRateTrend,
-            "Partially Vaccinated": pvRate,
-            "Partially Vaccinated Trend": pvRateTrend,
-            "Unvaccinated": uvRate,
-            "Unvaccinated Trend": uvRateTrend
-        };
-
-        daily.hospitalRates.push(row);
-    }
-    return daily;
-}
-
-// ICU Cases - Build Rate Per Pop plus 7 Day Average
-function buildIcuCaseRate(){
-    var daily = {};
-    var icuRates = [];
-    daily.icuRates = icuRates;
-
-    vaccinationSummaryArr = JSON.parse(vaccinationSummaryJSON);
+    var caseAgeRates = [];
+    daily.caseAgeRates = caseAgeRates;
 
     // Populations 
     // fv = fully vaccinated, pv = partially vaccinated, uv = unvaccinated 
@@ -143,8 +61,6 @@ function buildIcuCaseRate(){
     var uvEligiblePop = 696000 - fvPop - pvPop;
 
     // ICU Cases
-    
-    console.log(icuCases['icuCases']);
 
     for (var i = 0 ; i < icuCases['icuCases'].length ; i++){
         var date = icuCases['icuCases'][i]['Date'];
@@ -194,6 +110,150 @@ function buildIcuCaseRate(){
     }
 
     return daily;
+
+}
+
+function buildPediatricCaseRow(){
+
+}
+
+// Hospital Cases - Build Rate Per Pop plus 7 Day Average
+function buildHospitalCaseRate(){
+    var daily = {};
+    var hospitalRates = [];
+    daily.hospitalRates = hospitalRates;
+
+    vaccinationArr = JSON.parse(vaccineHistoryJSON);
+
+    // Hospitalizations 
+
+    for (var i = 0 ; i < hospitalCases['hospitalCases'].length ; i++){
+        var date = hospitalCases['hospitalCases'][i]['Date'];
+        var admitted = parseInt(hospitalCases['hospitalCases'][i]['Admitted']);
+        var fvCases = parseInt(hospitalCases['hospitalCases'][i]['Fully Vaccinated']) || 0;
+        var pvCases = parseInt(hospitalCases['hospitalCases'][i]['Partially Vaccinated']) || 0;
+        var uvCases = parseInt(hospitalCases['hospitalCases'][i]['Unvaccinated']) || 0;
+
+        // Populations 
+        var secondDosePop = vaccinationArr['VaccineHistory'][i].SecondDose;
+        var firstDosePop = vaccinationArr['VaccineHistory'][i].FirstDose;
+
+        var fvPop = parseInt(secondDosePop);
+        var pvPop = parseInt(firstDosePop) - fvPop;
+        var uvPop = 780000 - fvPop - pvPop;
+        var uvEligiblePop = 696000 - fvPop - pvPop;
+
+        var fvRate = Math.round((fvCases/fvPop) * 100000);
+        var pvRate = Math.round((pvCases/pvPop) * 100000);
+        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
+
+        var fvRateTrend = fvCases;
+        var pvRateTrend = pvCases;
+        var uvRateTrend = uvCases;
+
+        if (i > 6){ // start generating averages 
+            var fvSum = 0;
+            var pvSum = 0;
+            var uvSum = 0;            
+
+            for (var j = i-1 ; j > i-7; j--){
+                var obj = daily.hospitalRates[j];           
+                
+                fvSum += obj["Fully Vaccinated"];;
+                pvSum += obj["Partially Vaccinated"];
+                uvSum += obj["Unvaccinated"];
+            }
+
+            fvRateTrend = Math.round(fvSum/7);
+            pvRateTrend = Math.round(pvSum/7);
+            uvRateTrend = Math.round(uvSum/7);
+        }
+
+        var row = {
+            "Date": date,
+            "Admitted": admitted,
+            "Fully Vaccinated": fvRate,
+            "Fully Vaccinated Trend": fvRateTrend,
+            "Partially Vaccinated": pvRate,
+            "Partially Vaccinated Trend": pvRateTrend,
+            "Unvaccinated": uvRate,
+            "Unvaccinated Trend": uvRateTrend
+        };
+
+        daily.hospitalRates.push(row);
+    }
+    return daily;
+}
+
+// ICU Cases - Build Rate Per Pop plus 7 Day Average
+function buildIcuCaseRate(){
+    var daily = {};
+    var icuRates = [];
+    daily.icuRates = icuRates;
+
+    vaccinationArr = JSON.parse(vaccineHistoryJSON);
+
+    // ICU Cases
+    // fv = fully vaccinated, pv = partially vaccinated, uv = unvaccinated  
+    for (var i = 0 ; i < icuCases['icuCases'].length ; i++){
+        var date = icuCases['icuCases'][i]['Date'];
+        var admitted = parseInt(icuCases['icuCases'][i]['Admitted']);
+        var fvCases = parseInt(icuCases['icuCases'][i]['Fully Vaccinated']) || 0;
+        var pvCases = parseInt(icuCases['icuCases'][i]['Partially Vaccinated']) || 0;
+        var uvCases = parseInt(icuCases['icuCases'][i]['Unvaccinated']) || 0;
+
+        // Populations 
+        var secondDosePop = vaccinationArr['VaccineHistory'][i].SecondDose;
+        var firstDosePop = vaccinationArr['VaccineHistory'][i].FirstDose;
+
+        var fvPop = parseInt(secondDosePop);
+        var pvPop = parseInt(firstDosePop) - fvPop;
+        var uvPop = 780000 - fvPop - pvPop;
+        var uvEligiblePop = 696000 - fvPop - pvPop;
+
+        // Case Rates
+        var fvRate = Math.round((fvCases/fvPop) * 100000);
+        var pvRate = Math.round((pvCases/pvPop) * 100000);
+        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
+
+        var fvRateTrend = fvCases;
+        var pvRateTrend = pvCases;
+        var uvRateTrend = uvCases;
+
+        // Trending
+        if (i > 6){ // start generating averages 
+            var fvSum = 0;
+            var pvSum = 0;
+            var uvSum = 0;            
+
+            for (var j = i-1 ; j > i-7; j--){
+                var obj = daily.icuRates[j];           
+                
+                fvSum += obj["Fully Vaccinated"];;
+                pvSum += obj["Partially Vaccinated"];
+                uvSum += obj["Unvaccinated"];
+            }
+
+            fvRateTrend = Math.round(fvSum/7);
+            pvRateTrend = Math.round(pvSum/7);
+            uvRateTrend = Math.round(uvSum/7);
+        }
+
+        var row = {
+            "Date": date,
+            "Admitted": admitted,
+            "Fully Vaccinated": fvRate,
+            "Fully Vaccinated Trend": fvRateTrend,
+            "Partially Vaccinated": pvRate,
+            "Partially Vaccinated Trend": pvRateTrend,
+            "Unvaccinated": uvRate,
+            "Unvaccinated Trend": uvRateTrend
+        };
+
+        daily.icuRates.push(row);
+    }
+
+    return daily;
 }
 
 // Total Cases - Build Rate Per Pop plus 7 Day Average
@@ -202,19 +262,9 @@ function buildCaseRate(){
     var caseRates = [];
     daily.caseRates = caseRates;
 
-    vaccinationSummaryArr = JSON.parse(vaccinationSummaryJSON);
-
-    // Populations 
-    // fv = fully vaccinated, pv = partially vaccinated, uv = unvaccinated 
-    var secondDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopSecondDose;
-    var firstDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopOneDose;
-
-    var fvPop = parseInt(secondDosePop);
-    var pvPop = parseInt(firstDosePop) - fvPop;
-    var uvPop = 780000 - fvPop - pvPop;
-    var uvEligiblePop = 696000 - fvPop - pvPop;
-
-    // ICU Cases
+    vaccinationArr = JSON.parse(vaccineHistoryJSON);
+    
+    // NB Total Cases
 
     for (var i = 0 ; i < nbCases['nbCases'].length ; i++){
         var date = nbCases['nbCases'][i]['Date'];
@@ -222,6 +272,15 @@ function buildCaseRate(){
         var fvCases = parseInt(nbCases['nbCases'][i]['Fully Vaccinated']) || 0;
         var pvCases = parseInt(nbCases['nbCases'][i]['Partially Vaccinated']) || 0;
         var uvCases = parseInt(nbCases['nbCases'][i]['Unvaccinated']) || 0;
+
+        // Populations 
+        var secondDosePop = vaccinationArr['VaccineHistory'][i].SecondDose;
+        var firstDosePop = vaccinationArr['VaccineHistory'][i].FirstDose;
+
+        var fvPop = parseInt(secondDosePop);
+        var pvPop = parseInt(firstDosePop) - fvPop;
+        var uvPop = 780000 - fvPop - pvPop;
+        var uvEligiblePop = 696000 - fvPop - pvPop;
 
         var fvRate = Math.round((fvCases/fvPop) * 100000);
         var pvRate = Math.round((pvCases/pvPop) * 100000);
