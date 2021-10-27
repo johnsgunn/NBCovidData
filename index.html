@@ -34,6 +34,7 @@
     <script type="text/javascript" src="./data/NBICUCases.js"></script>
     <script type="text/javascript" src="./data/NBZonePopulations.js"></script>
     <script type="text/javascript" src="./data/NBCases.js"></script>
+    <script type="text/javascript" src="./data/NBCaseHistoryAge.js"></script>
 
     <!-- Styles and Utils -->
     <link href="./css/style.css" rel="stylesheet">
@@ -126,8 +127,8 @@
                       <li onclick="showCompiledData('icuCases')"><a class="dropdown-item" href="#">ICU Cases</a></li>
                       <li onclick="generateData('icuRates')"><a class="dropdown-item" href="#">ICU Trends</a></li>
                       <li onclick="showCompiledData('pediatricCases')"><a class="dropdown-item" href="#">Pediactric Cases</a></li>
-                      <!-- <li onclick="showCompiledData('caseTrends')"><a class="dropdown-item" href="#">Case Trends</a></li> -->
                       <li onclick="generateData('caseRates')"><a class="dropdown-item" href="#">Case Trends</a></li>
+                      <li onclick="generateData('caseAgeRates')"><a class="dropdown-item" href="#">Case Trends By Age</a></li>
                     </ul>
                 </li>
               </ul>
@@ -235,17 +236,28 @@
 <!-- Large Chart Display (for single chart) -->
 <div id="large_chart" class="hidden"> 
   <div class="row justify-content-md-center mt-3 mb-3">
-    <div class="col-md-auto">
-      <button type="button" class="btn btn-charts btn-outline-primary" id="caseTrends" onclick="showFullSizeChart('caseTrends')">Case Rate Trends</button>
-      <button type="button" class="btn btn-charts btn-outline-primary" id="pediatricCases" onclick="showFullSizeChart('pediatricCases')">Pediatric Cases</button>
-      <button type="button" class="btn btn-charts btn-outline-primary" id="HealthZoneSummary" onclick="showFullSizeChart('HealthZoneSummary')">Health Zone Summary</button>
-      <button type="button" class="btn btn-charts btn-outline-primary" id="caseHistory" onclick="showFullSizeChart('caseHistory')">Case History</button>     
-      <button type="button" class="btn btn-charts btn-outline-primary" id="VaccineHistory" onclick="showFullSizeChart('VaccineHistory')">Vaccination History</button>
-      <button type="button" class="btn btn-charts btn-outline-primary" id="schoolList" onclick="showFullSizeChart('schoolList')">School Exposures</button>
+    <div class="col-md-2">
+      <div class="btn-group-vertical">
+        <!-- Case Info -->
+        <button type="button" class="btn btn-charts btn-outline-primary" id="caseTrends" onclick="showFullSizeChart('caseTrends')">Case Rate Trends</button>
+        <button type="button" class="btn btn-charts btn-outline-primary" id="caseHistory" onclick="showFullSizeChart('caseHistory')">Case History</button>    
+        <button type="button" class="btn btn-charts btn-outline-primary" id="pediatricCases" onclick="showFullSizeChart('pediatricCases')">Pediatric Cases</button>
+
+        <!-- Health Zones -->
+        <button type="button" class="btn btn-charts btn-outline-primary" id="HealthZoneSummary" onclick="showFullSizeChart('HealthZoneSummary')">Health Zone Summary</button>
+         
+        <!-- Vaccination -->
+        <button type="button" class="btn btn-charts btn-outline-primary" id="VaccineHistory" onclick="showFullSizeChart('VaccineHistory')">Vaccination History</button>
+
+
+        <!-- Schools -->
+        <button type="button" class="btn btn-charts btn-outline-primary" id="schoolList" onclick="showFullSizeChart('schoolList')">School Exposures</button>
+      </div>
+      
     </div>
-  </div>
-  <div class="row justify-content-md-center" id="chart_lg_row">
-    <div class="col-md-auto" id="chart_lg_col" >
+  <!-- </div>
+  <div class="row justify-content-md-center" id="chart_lg_row"> -->
+    <div class="col-md-8" id="chart_lg_col" >
       <div id="dataTableContainer"></div>
       <canvas id="largeChart" width="800px" height="500px"></canvas>
     </div>
