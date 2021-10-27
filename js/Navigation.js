@@ -128,10 +128,9 @@ async function showFullSizeChart (chartName){
             showPedCasesChart(JSON.stringify(pediatricCases,null,2),'pediatricCases',"largeChart");
             break;
         case "caseTrends":
-            showCaseTrendsChart(JSON.stringify(caseTrends,null,2),'caseTrends',"largeChart");
+            showCaseTrendsChart(caseRatesJSON,'caseRates',"largeChart");
             break;
         case "schoolList":
-            // showSchoolListBoard(JSON.stringify(schoolsListJSON,null,2),"SchoolsList");
             showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableContainer');
             break;
         default:

@@ -10,9 +10,7 @@ async function generateData(name){
     hideElement("generate_row");
     showElement("export_row");
 
-    console.log("Name = " + name);
-
-    var jsonOutput = await checkBuildDataSet(name,false);
+    var jsonOutput = await checkBuildDataSet(name,true);
     // console.log(jsonOutput);
     createTableFromJSON(jsonOutput,name,"desc");
 }
@@ -34,81 +32,110 @@ async function checkBuildDataSet(name,forceReload=false){
                 case "caseRates":
                     jsonOutput = buildCaseRate();
                     break;
+                case "caseAgeRates":
+                    jsonOutput = buildCaseAgeTrends();
+                    break;
                 default:
                     reject("Invalid selection");
                     break;
             }
             sessionStorage.setItem(name,JSON.stringify(jsonOutput,null,2));
-            sessionStorage.setItem(name + "-loadedOn",new Date());
         }   
         resolve(sessionStorage.getItem(name));
     })
 }
 
-function buildCaseAgeRate(){
+function buildCaseAgeTrends(){
     var daily = {};
     var caseAgeRates = [];
     daily.caseAgeRates = caseAgeRates;
 
-    // Populations 
-    // fv = fully vaccinated, pv = partially vaccinated, uv = unvaccinated 
-    var secondDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopSecondDose;
-    var firstDosePop = vaccinationSummaryArr['VaccinationSummary'][0].PopOneDose;
+    var AgeTags = [
+        '< 10',
+        '10-19',
+        '20-29',
+        '30-39',
+        '40-49',
+        '50-59',
+        '60-69',
+        '70-79',
+        '80-89',
+        '90+'
+    ];
 
-    var fvPop = parseInt(secondDosePop);
-    var pvPop = parseInt(firstDosePop) - fvPop;
-    var uvPop = 780000 - fvPop - pvPop;
-    var uvEligiblePop = 696000 - fvPop - pvPop;
+    var NewCasesTags = [
+        'New Cases < 10',
+        'New Cases 10-19',
+        'New Cases 20-29',
+        'New Cases 30-39',
+        'New Cases 40-49',
+        'New Cases 50-59',
+        'New Cases 60-69',
+        'New Cases 70-79',
+        'New Cases 80-89',
+        'New Cases 90+'
+    ];
 
-    // ICU Cases
+    var TrendTags = [
+        'Trend < 10',
+        'Trend 10-19',
+        'Trend 20-29',
+        'Trend 30-39',
+        'Trend 40-49',
+        'Trend 50-59',
+        'Trend 60-69',
+        'Trend 70-79',
+        'Trend 80-89',
+        'Trend 90+'
+    ];
+    
+    for (var i = 0 ; i < ageCases['ageCases'].length ; i++){
+        var date = ageCases['ageCases'][i]['Date'];
+        var Age_Cases = [];
+        var Age_New_Cases = [];
+        var Age_Trend_Cases = [];
 
-    for (var i = 0 ; i < icuCases['icuCases'].length ; i++){
-        var date = icuCases['icuCases'][i]['Date'];
-        var admitted = parseInt(icuCases['icuCases'][i]['Admitted']);
-        var fvCases = parseInt(icuCases['icuCases'][i]['Fully Vaccinated']) || 0;
-        var pvCases = parseInt(icuCases['icuCases'][i]['Partially Vaccinated']) || 0;
-        var uvCases = parseInt(icuCases['icuCases'][i]['Unvaccinated']) || 0;
+        AgeTags.forEach(function (item,index) {
+            var newCases = parseInt(ageCases['ageCases'][i][item]) || 0;
+            var prevCases = 0;
+            if (i > 0) {prevCases = parseInt(ageCases['ageCases'][i-1][item]) || 0 } ;
 
-        var fvRate = Math.round((fvCases/fvPop) * 100000);
-        var pvRate = Math.round((pvCases/pvPop) * 100000);
-        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
+            
 
-        var fvRateTrend = fvCases;
-        var pvRateTrend = pvCases;
-        var uvRateTrend = uvCases;
+            Age_Cases[item] = newCases;
+            Age_New_Cases[item] = newCases - prevCases;  
 
-        if (i > 6){ // start generating averages 
-            var fvSum = 0;
-            var pvSum = 0;
-            var uvSum = 0;            
+            var newCasesSum = 0;
 
-            for (var j = i-1 ; j > i-7; j--){
-                var obj = daily.icuRates[j];           
-                
-                fvSum += obj["Fully Vaccinated"];;
-                pvSum += obj["Partially Vaccinated"];
-                uvSum += obj["Unvaccinated"];
+            if (i > 7){ // start generating averages 
+                for (var j = i-1 ; j > i-7; j--){
+                    var obj = daily.caseAgeRates[j] ;           
+                    
+                    newCasesSum += obj[item];
+                }                
             }
+            Age_Trend_Cases[item] = Math.round(newCasesSum/7);
 
-            fvRateTrend = Math.round(fvSum/7);
-            pvRateTrend = Math.round(pvSum/7);
-            uvRateTrend = Math.round(uvSum/7);
+        });
+
+        var row = {};
+
+        row['Date'] = date;
+
+        for (var j = 0 ; j < AgeTags.length ; j++){
+            var caseColumn = [NewCasesTags[j]];
+            var trendColumn = [TrendTags[j]];
+            var ageColumn = [AgeTags[j]];
+            
+            row[ageColumn] = Age_Cases[AgeTags[j]] ;
+            row[caseColumn] = Age_New_Cases[AgeTags[j]];
+            row[trendColumn] = Age_Trend_Cases[AgeTags[j]];
         }
-
-        var row = {
-            "Date": date,
-            "Admitted": admitted,
-            "Fully Vaccinated": fvRate,
-            "Fully Vaccinated Trend": fvRateTrend,
-            "Partially Vaccinated": pvRate,
-            "Partially Vaccinated Trend": pvRateTrend,
-            "Unvaccinated": uvRate,
-            "Unvaccinated Trend": uvRateTrend
-        };
-
-        daily.icuRates.push(row);
+       
+        daily.caseAgeRates.push(row);
     }
 
+    // console.log(daily);
     return daily;
 
 }
@@ -263,7 +290,7 @@ function buildCaseRate(){
     daily.caseRates = caseRates;
 
     vaccinationArr = JSON.parse(vaccineHistoryJSON);
-    
+
     // NB Total Cases
 
     for (var i = 0 ; i < nbCases['nbCases'].length ; i++){
