@@ -56,7 +56,6 @@ function selectedFullSizeChart (chartName){
         charts[i].classList.add("btn-outline-primary");
     }
 
-
     var selectedButton = document.getElementById(chartName);
     selectedButton.classList.remove("btn-outline-primary");
     selectedButton.classList.add("btn-primary");
@@ -95,11 +94,15 @@ async function showDashboardChart(chartName){
         case "schoolList":
             showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableSmall');
             break;
+        case "VaccineAgeGroups":
+            showVaccineAgeChart(vaccineAgeGroupsJSON,"VaccineAgeGroups","chart1");
+            break;
         default:
             // bad selection
             break;
     }   
 }
+
 
 // Display full sized chart on page
 async function showFullSizeChart (chartName){
@@ -133,6 +136,16 @@ async function showFullSizeChart (chartName){
         case "schoolList":
             showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableContainer');
             break;
+        case "VaccineAgeGroups":
+            showVaccineAgeChart(vaccineAgeGroupsJSON,"VaccineAgeGroups","largeChart");
+            break;
+        case "hospitalTrends":
+            showCaseTrendsChart(hospitalRatesJSON,'hospitalRates',"largeChart");
+            break;
+        case "icuTrends":
+            showCaseTrendsChart(icuRatesJSON,'icuRates',"largeChart");
+            break;
+
         default:
             // bad selection
             break;
@@ -161,6 +174,9 @@ function showCompiledData(name){
             break;
         case "icuRates":            
             showGenerateData("icuRates");
+            break;
+        case "vaccineAgeGroupHistory":
+            createTableFromJSON(JSON.stringify(vaccineAgeGroupHistory,null,2),name,"desc");            
             break;
         default: 
             break;

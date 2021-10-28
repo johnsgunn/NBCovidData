@@ -60,6 +60,7 @@ function destroyCharts(){
     if (healthZoneChart) healthZoneChart.destroy();
     if (pedCasesChart) pedCasesChart.destroy();
     if (largeChart) largeChart.destroy();
+    if (vaccineAgeGroupsChart) vaccineAgeGroupsChart.destroy();
 }
 
 function showElement(elementName){

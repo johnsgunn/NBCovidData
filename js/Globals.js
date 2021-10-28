@@ -7,6 +7,7 @@ var healthZoneChart = null;
 var largeChart = null;
 var pedCasesChart = null;
 var caseTrendsChart = null;
+var vaccineAgeGroupsChart = null;
 
 var darkMode = false;
 
@@ -18,7 +19,7 @@ const canvasBG = {
       const ctx = chart.canvas.getContext('2d');
       ctx.save();
       ctx.globalCompositeOperation = 'destination-over';
-      ctx.fillStyle = 'dimgray';
+      ctx.fillStyle = '#4d4d4d';
       ctx.fillRect(0, 0, chart.width, chart.height);
       ctx.restore();
     }
@@ -35,6 +36,8 @@ const canvasBG = {
   var caseRatesJSON = null;
   var hospitalRatesJSON = null;
   var icuRatesJSON = null;
+  var dailyTestingJSON = null;
+  var vaccineAgeGroupsJSON = null;
 
   // Store Calculated Data //
   var hospitalCaseRateJSON = [];

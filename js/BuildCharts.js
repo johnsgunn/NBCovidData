@@ -252,7 +252,9 @@ function showHealthZoneChart(json,name,loc) {
             }]
         },
         plugins: [canvasBG],
-        options: {    
+        options: {   
+            responsive: true,
+            maintainAspectRatio: false, 
             plugins: {
                 title: {
                     display: true,
@@ -261,7 +263,7 @@ function showHealthZoneChart(json,name,loc) {
                 },
                 legend: {
                     display: true,
-                    position:'top',
+                    position:'left',
                     fullWidth: false,
                     labels: {
                         color: chartTextColor
@@ -282,7 +284,8 @@ function showCaseTrendsChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
-    // console.log("Generating Chart -- " + name);
+    var titleFontSize = getChartTitleSize(loc);
+
     var checkType = "";
     var titleText = "";
 
@@ -432,7 +435,10 @@ function showCaseTrendsChart(json,name,loc) {
             title: {
                 display: true,
                 text: titleText,
-                color: chartTextColor
+                color: chartTextColor,
+                font: {
+                    size: titleFontSize
+                }, 
             },
             legend: {
                 display: true,
@@ -574,4 +580,126 @@ function showPedCasesChart(json,name,loc) {
         }
     });
     pedCasesChart.render();
+}
+
+function getChartTitleSize(loc){
+    var titleFontSize = 12;
+    if (loc == "largeChart") {titleFontSize = 20};
+
+    return titleFontSize;
+}
+
+function showVaccineAgeChart(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+
+    var labels = [
+        '12-19',
+        '20-29',
+        '30-39',
+        '40-49',
+        '50-59',
+        '60-64',
+        '65-69',
+        '70-74',
+        '75-79',
+        '80-84',
+        '85+'
+    ];
+
+    var dps1 = []; // first dose
+    var dps2 = []; // second dose
+
+    labels.forEach(function (item,index) {
+        
+        var secondDose = parseFloat(arr['vaccineAgeGroups'][index]['SecondDose']);
+        var firstDose = parseFloat(arr['vaccineAgeGroups'][index]['FirstDose']) - secondDose;
+
+        dps1.push(firstDose);
+        dps2.push(secondDose);
+
+    });
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Two Doses',
+                data: dps2,
+                backgroundColor: "#3399ff"
+            },
+            {
+                label: 'One Dose',
+                data: dps1,
+                backgroundColor: "#ff9966",
+            }            
+        ]
+    };
+
+    var ctx = document.getElementById(loc);
+    if (vaccineAgeGroupsChart) vaccineAgeGroupsChart.destroy();
+    vaccineAgeGroupsChart = new Chart(ctx, {
+        plugins: [canvasBG],
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+            title: {
+                    display: true,
+                    text: 'Vaccination By Age Group',
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    },    
+                },
+                legend: {
+                    display: true,
+                    position:'top',
+                    fullWidth: true,
+                    labels: {
+                        color: chartTextColor
+                    }
+                }
+              },
+              responsive: true,
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                },
+                y: {
+                  stacked: true,
+                  grid: {
+                        color: chartGridColor
+                    },
+                    display: true,
+                    type: 'linear',
+                    position: 'left',
+                    color: chartTextColor,
+                    title: {
+                        display: true,
+                        text: 'Percent',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        },                        
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    },
+                    beginAtZero: true
+                }
+              }            
+        }
+    });
+    vaccineAgeGroupsChart.render();
 }

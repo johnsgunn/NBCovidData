@@ -729,6 +729,26 @@ nbCases = {
         "Unvaccinated": 13,
         "Recovered": 5573,
         "Total Cases": 6206
+    },
+    {
+        "Date": "2021-10-27",
+        "Active Cases": 521,
+        "New Cases": 57,
+        "Fully Vaccinated": 26,
+        "Partially Vaccinated": 7,
+        "Unvaccinated": 33,
+        "Recovered": 5617,
+        "Total Cases": 6263
+    },
+    {
+        "Date": "2021-10-28",
+        "Active Cases": 549,
+        "New Cases": 69,
+        "Fully Vaccinated": 24,
+        "Partially Vaccinated": 2,
+        "Unvaccinated": 43,
+        "Recovered": 5668,
+        "Total Cases": 6332
     }
 ]
 };

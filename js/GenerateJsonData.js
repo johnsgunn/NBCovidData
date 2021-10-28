@@ -11,7 +11,6 @@ async function generateData(name){
     showElement("export_row");
 
     var jsonOutput = await checkBuildDataSet(name,true);
-    // console.log(jsonOutput);
     createTableFromJSON(jsonOutput,name,"desc");
 }
 
@@ -21,7 +20,7 @@ async function checkBuildDataSet(name,forceReload=false){
     return new Promise((resolve,reject)=>{
         if (!sessionStorage.getItem(name) 
                 || forceReload) { 
-            var jsonOutput;
+            // var jsonOutput;
             switch (name){
                 case "hospitalRates":
                     jsonOutput = buildHospitalCaseRate();
@@ -34,6 +33,12 @@ async function checkBuildDataSet(name,forceReload=false){
                     break;
                 case "caseAgeRates":
                     jsonOutput = buildCaseAgeTrends();
+                    break;
+                case "caseAgeHistory":
+                    jsonOutput = buildCaseAgeRow();
+                    break;
+                case "vaccinesByAge":
+                    jsonOutput = buildVaccineAgeRow();
                     break;
                 default:
                     reject("Invalid selection");
@@ -135,13 +140,75 @@ function buildCaseAgeTrends(){
         daily.caseAgeRates.push(row);
     }
 
-    // console.log(daily);
     return daily;
 
 }
 
-function buildPediatricCaseRow(){
+// JSON row for today's data to be able to save more easily
+function buildCaseAgeRow(){
+    var daily = {};
+    var caseAgeHistory = [];
+    daily.caseAgeHistory = caseAgeHistory;
 
+    var AgeTags = [
+        '< 10',
+        '10-19',
+        '20-29',
+        '30-39',
+        '40-49',
+        '50-59',
+        '60-69',
+        '70-79',
+        '80-89',
+        '90+'
+    ];
+
+    var row = {};
+    var positiveTests = JSON.parse(dailyTestingJSON);
+
+    AgeTags.forEach(function (item,index) {
+        row[item] = parseInt(positiveTests['dailyTesting'][index]['PostiveTests1']);
+    });
+
+    daily.caseAgeHistory.push(row);
+
+    return daily;
+}
+
+// JSON row for today's data to be able to save more easily
+function buildVaccineAgeRow(){
+    var daily = {};
+    var vaccinesByAge = [];
+    daily.vaccinesByAge = vaccinesByAge;
+
+    var AgeTags = [
+        '12-19',
+        '20-29',
+        '30-39',
+        '40-49',
+        '50-59',
+        '60-64',
+        '65-69',
+        '70-74',
+        '75-79',
+        '80-84',
+        '85+'
+    ];
+
+    var row = {};
+    var doses = JSON.parse(vaccineAgeGroupsJSON);
+
+    AgeTags.forEach(function (item,index) {
+        var firstDose = item + " 1st Dose";
+        var secondDose = item + " 2nd Dose";
+
+        row[firstDose] = parseFloat(doses['vaccineAgeGroups'][index]['FirstDose']);
+        row[secondDose] = parseFloat(doses['vaccineAgeGroups'][index]['SecondDose']);
+    });
+
+    daily.vaccinesByAge.push(row);
+
+    return daily;
 }
 
 // Hospital Cases - Build Rate Per Pop plus 7 Day Average

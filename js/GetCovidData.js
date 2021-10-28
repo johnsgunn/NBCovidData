@@ -18,9 +18,13 @@ async function preloadData(){
 async function backgroundLoadData(){
     schoolsListJSON = await checkGetDataJSON('SchoolsList',SchoolsListURL,true);
     healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
+    dailyTestingJSON = await checkGetDataJSON("dailyTesting",DailyTestingURL,true);
+    vaccineAgeGroupsJSON = await checkGetDataJSON("vaccineAgeGroups",VaccinesByAgeGroupURL,true);
     caseRatesJSON = await checkBuildDataSet("caseRates",true);
     hospitalRatesJSON = await checkBuildDataSet("hospitalRates",true);
     icuRatesJSON = await checkBuildDataSet("icuRates",true);
+
+    document.getElementById("circuitBreakerMap").href = CircuitBreakerMapURL;
 }
 
 

@@ -88,6 +88,8 @@ function showVaccineSummaryBoard(json,name){
     var board3 = document.getElementById("board3");
     board3.innerHTML = "";
     var tableHeader = "<div class='d-flex justify-content-between'>Vaccinations" +
+    "<div class='d-flex justify-content-end'>" +
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='schoolList' onclick='showDashboardChart(\"VaccineAgeGroups\")'>Age Groups</button>&nbsp;" +
     "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
     var tableBody = [];
 
