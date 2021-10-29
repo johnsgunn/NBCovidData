@@ -61,6 +61,7 @@ function destroyCharts(){
     if (pedCasesChart) pedCasesChart.destroy();
     if (largeChart) largeChart.destroy();
     if (vaccineAgeGroupsChart) vaccineAgeGroupsChart.destroy();
+    if (caseAgeChart) caseAgeChart.destroy();
 }
 
 function showElement(elementName){
@@ -86,7 +87,8 @@ async function showDashboard(firstLoad=false){
   showCaseSummaryBoard(caseSummaryJSON,'CaseSummary');
   showVaccineSummaryBoard(vaccinationSummaryJSON, "VaccinationSummary");
   showSchoolSummaryBoard(schoolsSummaryJSON,'SchoolsSummary');
-  showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");   
+  // showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");   
+  showDashboardChart('caseTrends');
   
   var tableBody = document.getElementsByTagName("tbody");
   var tableHead = document.getElementsByTagName("thead");

@@ -80,7 +80,8 @@ async function showDashboardChart(chartName){
             showHealthZoneChart(chartJSON,chartName,"chart1");
             break;
         case "pediatricCases":
-            showPedCasesChart(JSON.stringify(pediatricCases,null,2),'pediatricCases',"chart1");
+            chartJSON = await checkBuildDataSet("caseAgeRates");
+            showPedCasesChart(chartJSON,'caseAgeRates',"chart1");
             break;
         case "caseTrends":
             showCaseTrendsChart(caseRatesJSON,'caseRates',"chart1");
@@ -128,7 +129,12 @@ async function showFullSizeChart (chartName){
             showHealthZoneChart(chartJSON,chartName,"largeChart");
             break;
         case "pediatricCases":
-            showPedCasesChart(JSON.stringify(pediatricCases,null,2),'pediatricCases',"largeChart");
+            chartJSON = await checkBuildDataSet("caseAgeRates");
+            showPedCasesChart(chartJSON,'caseAgeRates',"largeChart");
+            break;
+        case "caseAgeGroups":
+            chartJSON = await checkBuildDataSet("caseAgeRates");
+            showAgeCaseChart(chartJSON,'caseAgeRates',"largeChart");
             break;
         case "caseTrends":
             showCaseTrendsChart(caseRatesJSON,'caseRates',"largeChart");

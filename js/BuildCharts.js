@@ -10,6 +10,7 @@ function showCaseHistoryChart(json,name,loc) {
         dps1.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
         dps2.push({ x: arr[name][i]['DATE'], y: arr[name][i]['Active']});
     }
+    var titleFontSize = getChartTitleSize(loc);
 
     var ctx = document.getElementById(loc);    
     if (caseHistoryChart) caseHistoryChart.destroy();
@@ -78,7 +79,10 @@ function showCaseHistoryChart(json,name,loc) {
                 title: {
                     display: true,
                     text: 'Daily Case History',
-                    color: chartTextColor
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    }, 
                 },
                 legend: {
                     display: true,
@@ -111,6 +115,7 @@ function showVaccineHistoryChart(json,name,loc) {
         dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['SecondDose']});
     }
     
+    var titleFontSize = getChartTitleSize(loc);
 
 
     var ctx = document.getElementById(loc);
@@ -177,8 +182,8 @@ function showVaccineHistoryChart(json,name,loc) {
                         text: 'Date',
                         color: chartTextColor,
                         font: {
-                            size: 15
-                        }
+                            size: titleFontSize
+                        }, 
                     },
                     ticks: {
                         precision: 0,
@@ -190,7 +195,10 @@ function showVaccineHistoryChart(json,name,loc) {
                 title: {
                     display: true,
                     text: 'Vaccination History',
-                    color: chartTextColor
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    }, 
                 },
                 legend: {
                     display: true,
@@ -213,7 +221,7 @@ function showHealthZoneChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
-    console.log(arr);
+    var titleFontSize = getChartTitleSize(loc);
 
     var chartLabels = [];
     var cases = [];
@@ -259,7 +267,10 @@ function showHealthZoneChart(json,name,loc) {
                 title: {
                     display: true,
                     text: 'Active Cases By Health Zone',
-                    color: chartTextColor
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    }, 
                 },
                 legend: {
                     display: true,
@@ -467,15 +478,17 @@ function showPedCasesChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
+    var titleFontSize = getChartTitleSize(loc);
+
     var dps1 = [];
     var dps2 = [];
     var dps3 = [];
     var dps4 = [];
-    for (var i=0 ; i < arr[name].length  ; i++){
-        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['Cases Age < 10']});
-        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['7 Day Trend (Age < 10)']});
-        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Cases Age 10-19']});
-        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['7 Day Trend (Age 10-19)']});
+    for (var i=1 ; i < arr[name].length  ; i++){
+        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['New Cases < 10']});
+        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend < 10']});
+        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['New Cases 10-19']});
+        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 10-19']});
     }
 
     var ctx = document.getElementById(loc);
@@ -565,7 +578,10 @@ function showPedCasesChart(json,name,loc) {
                 title: {
                     display: true,
                     text: 'Pediatric Case Trends',
-                    color: chartTextColor
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    }, 
                 },
                 legend: {
                     display: true,
@@ -580,6 +596,213 @@ function showPedCasesChart(json,name,loc) {
         }
     });
     pedCasesChart.render();
+}
+
+function showAgeCaseChart(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+
+    var dps0 = [];
+    var dps1 = [];
+    var dps2 = [];
+    var dps3 = [];
+    var dps4 = [];
+    var dps5 = [];
+    var dps6 = [];
+    var dps7 = [];
+    var dps8 = [];
+    var dps9 = [];    
+
+    for (var i=30 ; i < arr[name].length  ; i++){
+        dps0.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend < 10']});
+        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 10-19']});
+        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 20-29']});
+        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 30-39']});
+        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 40-49']});
+        dps5.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 50-59']});
+        dps6.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 60-69']});
+        dps7.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 70-79']});
+        dps8.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 80-89']});
+        dps9.push({ x: arr[name][i]['Date'], y: arr[name][i]['Trend 90+']});
+    }    
+
+    var ctx = document.getElementById(loc);
+    if (caseAgeChart) caseAgeChart.destroy();
+    caseAgeChart = new Chart(ctx, {
+        plugins: [canvasBG],
+        data: {
+            datasets: [
+            {
+                type: "line",
+                label: "Trend < 10",
+                data:dps0,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#ff0000",
+                tension: 0.1,
+                backgroundColor: "#ff0000" 
+            },
+            {
+                type: "line",
+                label: "Trend 10-19",
+                data:dps1,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#00cc00",
+                tension: 0.1,
+                backgroundColor: "#00cc00"
+            },
+            {
+                type: "line",
+                label: "Trend 20-29",
+                data:dps2,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#0000ff",
+                tension: 0.1,
+                backgroundColor: "#0000ff" 
+            },
+            {
+                type: "line",
+                label: "Trend 30-39",
+                data:dps3,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#cc66ff",
+                tension: 0.1,
+                backgroundColor: "#cc66ff" 
+            },
+            {
+                type: "line",
+                label: "Trend 40-49",
+                data:dps4,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#ccff33",
+                tension: 0.1,
+                backgroundColor: "#ccff33" 
+            },
+            {
+                type: "line",
+                label: "Trend 50-59",
+                data:dps5,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#ff6600",
+                tension: 0.1,
+                backgroundColor: "#ff6600" 
+            },
+            {
+                type: "line",
+                label: "Trend 60-69",
+                data:dps6,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#333300",
+                tension: 0.1,
+                backgroundColor: "#333300" 
+            },
+            {
+                type: "line",
+                label: "Trend 70-79",
+                data:dps7,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#ff00ff",
+                tension: 0.1,
+                backgroundColor: "#ff00ff" 
+            },
+            {
+                type: "line",
+                label: "Trend 80-89",
+                data:dps8,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#336699",
+                tension: 0.1,
+                backgroundColor: "#336699" 
+            },
+            {
+                type: "line",
+                label: "Trend 90+",
+                data:dps9,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#ffffff",
+                tension: 0.1,
+                backgroundColor: "#ffffff" 
+            }
+        ]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    grid: {
+                        color: chartGridColor
+                    },
+                    display: true,
+                    type: 'linear',
+                    position: 'left',
+                    color: chartTextColor,
+                    title: {
+                        display: true,
+                        text: 'Cases',
+                        color: chartTextColor,
+                        font: {
+                            size: 15
+                        },                        
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    },
+                    beginAtZero: true
+                },
+                x: {
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Case Trends By Age Group',
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    }, 
+                },
+                legend: {
+                    display: true,
+                    position:'top',
+                    fullWidth: false,
+                    labels: {
+                        color: chartTextColor
+                    }
+                }
+            }
+            
+        }
+    });
+    caseAgeChart.render();
 }
 
 function getChartTitleSize(loc){
@@ -689,8 +912,8 @@ function showVaccineAgeChart(json,name,loc) {
                         text: 'Percent',
                         color: chartTextColor,
                         font: {
-                            size: 15
-                        },                        
+                            size: titleFontSize
+                        },                       
                     },
                     ticks: {
                         precision: 0,

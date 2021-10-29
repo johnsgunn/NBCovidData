@@ -20,7 +20,6 @@ async function checkBuildDataSet(name,forceReload=false){
     return new Promise((resolve,reject)=>{
         if (!sessionStorage.getItem(name) 
                 || forceReload) { 
-            // var jsonOutput;
             switch (name){
                 case "hospitalRates":
                     jsonOutput = buildHospitalCaseRate();
@@ -103,9 +102,7 @@ function buildCaseAgeTrends(){
         AgeTags.forEach(function (item,index) {
             var newCases = parseInt(ageCases['ageCases'][i][item]) || 0;
             var prevCases = 0;
-            if (i > 0) {prevCases = parseInt(ageCases['ageCases'][i-1][item]) || 0 } ;
-
-            
+            if (i > 0) {prevCases = parseInt(ageCases['ageCases'][i-1][item])} ;
 
             Age_Cases[item] = newCases;
             Age_New_Cases[item] = newCases - prevCases;  
@@ -113,13 +110,15 @@ function buildCaseAgeTrends(){
             var newCasesSum = 0;
 
             if (i > 7){ // start generating averages 
-                for (var j = i-1 ; j > i-7; j--){
-                    var obj = daily.caseAgeRates[j] ;           
+                for (var j = i-1 ; j > i-8; j--){
+                    var obj = daily.caseAgeRates[j] ;  
+                    var tag = "New Cases " + item;                    
                     
-                    newCasesSum += obj[item];
+                    newCasesSum += parseInt(obj[tag]);
                 }                
             }
             Age_Trend_Cases[item] = Math.round(newCasesSum/7);
+             
 
         });
 

@@ -8,6 +8,7 @@ var largeChart = null;
 var pedCasesChart = null;
 var caseTrendsChart = null;
 var vaccineAgeGroupsChart = null;
+var caseAgeChart = null;
 
 var darkMode = false;
 
