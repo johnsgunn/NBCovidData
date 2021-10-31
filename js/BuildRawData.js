@@ -80,7 +80,8 @@ function createTableFromJSON(jsonData,name,sortOrder="asc") {
             scrollX:        true,
             scrollCollapse: true,
             autoWidth:         true,  
-             paging:         true, 
+            paging: true, 
+            "pageLength": 15,
              dom: 'Bfrtip',
              buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'

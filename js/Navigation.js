@@ -184,6 +184,10 @@ function showCompiledData(name){
         case "vaccineAgeGroupHistory":
             createTableFromJSON(JSON.stringify(vaccineAgeGroupHistory,null,2),name,"desc");            
             break;
+        case "vaccineAgeGroupCount":
+            showGenerateDate("vaccineAgeGroupCount");
+            //createTableFromJSON(JSON.stringify(vaccineAgeGroupCount, null, 2), name, "desc");
+            break;
         default: 
             break;
     }

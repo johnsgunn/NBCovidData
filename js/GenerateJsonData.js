@@ -4,14 +4,14 @@ function showGenerateData(){
     showElement("generate_row");
 }
 
-async function generateData(name){
+async function generateData(name,order="desc"){
     currentReport = name;
     hideAll();
     hideElement("generate_row");
     showElement("export_row");
 
     var jsonOutput = await checkBuildDataSet(name,true);
-    createTableFromJSON(jsonOutput,name,"desc");
+    createTableFromJSON(jsonOutput,name,order);
 }
 
 // Check for data in session, generate and store if not
@@ -38,6 +38,9 @@ async function checkBuildDataSet(name,forceReload=false){
                     break;
                 case "vaccinesByAge":
                     jsonOutput = buildVaccineAgeRow();
+                    break;
+                case "vaccineAgeGroupCount":
+                    jsonOutput = buildVaccineAgeCount();
                     break;
                 default:
                     reject("Invalid selection");
@@ -138,6 +141,51 @@ function buildCaseAgeTrends(){
        
         daily.caseAgeRates.push(row);
     }
+
+    return daily;
+
+}
+
+function buildVaccineAgeCount() {
+    var AgeTags = [
+        "12-19",
+        "20-29",
+        "30-39",
+        "40-49",
+        "50-59",
+        "60-64",
+        "65-69",
+        "70-74",
+        "75-79",
+        "80-84",
+        "85+"
+    ];
+
+    var daily = {};
+    var vaccineAgeGroupCount = [];
+    daily.vaccineAgeGroupCount = vaccineAgeGroupCount;
+    
+    var vaccineAgePercent = JSON.parse(vaccineAgeGroupsJSON);
+    var population = agePopulation;
+
+    AgeTags.forEach(function (item, index) {
+        var row = {};
+        var groupPopulation = parseInt(population['agePopulation'][index]['populationSize']);
+        row["Age Group"] = item;
+        row["Population"] = groupPopulation;
+        row["1st Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index]['FirstDose']) / 100;
+        row["2nd Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index]['SecondDose']) / 100;
+
+        
+        row["1st Dose Count"] = parseInt(groupPopulation * row["1st Dose Percent"]);
+        row["2nd Dose Count"] = parseInt(groupPopulation * row["2nd Dose Percent"]);
+
+        row["Fully Vaccinated"] = row["2nd Dose Count"];
+        row["Partially Vaccinated"] = row["1st Dose Count"] - row["2nd Dose Count"];
+        row["Unvaccinated"] = groupPopulation - row["1st Dose Count"];
+
+        daily.vaccineAgeGroupCount.push(row);
+    });
 
     return daily;
 
