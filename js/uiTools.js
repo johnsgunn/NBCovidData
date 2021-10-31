@@ -62,6 +62,7 @@ function destroyCharts(){
     if (largeChart) largeChart.destroy();
     if (vaccineAgeGroupsChart) vaccineAgeGroupsChart.destroy();
     if (caseAgeChart) caseAgeChart.destroy();
+    if (vaccineAgeCountsChart) vaccineAgeCountsChart.destroy();
 }
 
 function showElement(elementName){

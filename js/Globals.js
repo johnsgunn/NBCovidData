@@ -9,6 +9,7 @@ var pedCasesChart = null;
 var caseTrendsChart = null;
 var vaccineAgeGroupsChart = null;
 var caseAgeChart = null;
+var vaccineAgeCountsChart = null;
 
 var darkMode = false;
 

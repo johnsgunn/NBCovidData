@@ -151,7 +151,10 @@ async function showFullSizeChart (chartName){
         case "icuTrends":
             showCaseTrendsChart(icuRatesJSON,'icuRates',"largeChart");
             break;
-
+        case "VaccineAgeCount":
+            chartJSON = await checkBuildDataSet('vaccineAgeGroupCount');
+            showVaccineAgeCountChart(chartJSON, 'VaccineAgeCount', 'largeChart');
+            break;
         default:
             // bad selection
             break;

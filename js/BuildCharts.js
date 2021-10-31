@@ -926,3 +926,124 @@ function showVaccineAgeChart(json,name,loc) {
     });
     vaccineAgeGroupsChart.render();
 }
+
+function showVaccineAgeCountChart(json, name, loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+
+    var labels = [
+        '12-19',
+        '20-29',
+        '30-39',
+        '40-49',
+        '50-59',
+        '60-64',
+        '65-69',
+        '70-74',
+        '75-79',
+        '80-84',
+        '85+'
+    ];
+
+    var dps1 = []; // first dose
+    var dps2 = []; // second dose
+    var dps3 = []; // unvaccinated
+
+    labels.forEach(function (item, index) {
+        var fullyVaccinated = parseFloat(arr['vaccineAgeGroupCount'][index]['Fully Vaccinated']);
+        var partiallyVaccinated = parseFloat(arr['vaccineAgeGroupCount'][index]['Partially Vaccinated']);
+        var unvaccinated = parseFloat(arr['vaccineAgeGroupCount'][index]['Unvaccinated']);
+
+        dps1.push(partiallyVaccinated);
+        dps2.push(fullyVaccinated);
+        dps3.push(unvaccinated);
+    });
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Fully Vaccinated',
+                data: dps2,
+                backgroundColor: "#009933"
+            },
+            {
+                label: 'Partially Vaccinated',
+                data: dps1,
+                backgroundColor: "#ff9900",
+            },
+            {
+                label: 'Unvaccinated',
+                data: dps3,
+                backgroundColor: "#cc0000",
+            }
+        ]
+    };
+
+    var ctx = document.getElementById(loc);
+    if (vaccineAgeCountsChart) vaccineAgeCountsChart.destroy();
+    vaccineAgeCountsChart = new Chart(ctx, {
+        plugins: [canvasBG],
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Vaccination Count By Age Group',
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    fullWidth: true,
+                    labels: {
+                        color: chartTextColor
+                    }
+                }
+            },
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,
+                    }
+                },
+                y: {
+                    stacked: true,
+                    grid: {
+                        color: chartGridColor
+                    },
+                    display: true,
+                    type: 'linear',
+                    position: 'left',
+                    color: chartTextColor,
+                    title: {
+                        display: true,
+                        text: 'Population',
+                        color: chartTextColor,
+                        font: {
+                            size: titleFontSize
+                        },
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    vaccineAgeCountsChart.render();
+}
