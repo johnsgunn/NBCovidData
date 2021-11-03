@@ -307,6 +307,13 @@ hospitalCases = {
             "Fully Vaccinated": 9,
             "Partially Vaccinated": 1,
             "Unvaccinated": 14
+        },
+        {
+            "Date": "2021-11-03",
+            "Admitted": 19,
+            "Fully Vaccinated": 6,
+            "Partially Vaccinated": 0,
+            "Unvaccinated": 13
         }
        ]
 };
