@@ -809,6 +809,16 @@ nbCases = {
         "Unvaccinated": 47,
         "Recovered": 5998,
         "Total Cases": 6576
+    },
+    {
+        "Date": "2021-11-04",
+        "Active Cases": 464,
+        "New Cases": 39,
+        "Fully Vaccinated": 16,
+        "Partially Vaccinated": 1,
+        "Unvaccinated": 22,
+        "Recovered": 6030,
+        "Total Cases": 6615
     }
 
 ]
