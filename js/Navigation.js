@@ -189,7 +189,9 @@ function showCompiledData(name){
             break;
         case "vaccineAgeGroupCount":
             showGenerateDate("vaccineAgeGroupCount");
-            //createTableFromJSON(JSON.stringify(vaccineAgeGroupCount, null, 2), name, "desc");
+            break;
+        case "caseRateByVaccineStatus":
+            /// TODO: Build table based on new API call for cases based on vaccine status
             break;
         default: 
             break;
@@ -252,6 +254,9 @@ async function showArcGis(name){
             break;
         case "SchoolsList":
             url = SchoolsListURL;
+            break;
+        case "CaseVaccinationStatus":
+            url = VaccinationRatesURL;
             break;
         default: // invalid selection
             exit;

@@ -42,6 +42,9 @@ async function checkBuildDataSet(name,forceReload=false){
                 case "vaccineAgeGroupCount":
                     jsonOutput = buildVaccineAgeCount();
                     break;
+                case "dailyCaseRates":
+                    jsonOutput = buildDailyCaseRate();
+                    break;
                 default:
                     reject("Invalid selection");
                     break;
@@ -352,10 +355,14 @@ function buildIcuCaseRate(){
         var uvPop = 780000 - fvPop - pvPop;
         var uvEligiblePop = 696000 - fvPop - pvPop;
 
+        function precise(x) {
+            return Number.parseFloat(x).toPrecision(2);
+        }
+
         // Case Rates
-        var fvRate = Math.round((fvCases/fvPop) * 100000);
-        var pvRate = Math.round((pvCases/pvPop) * 100000);
-        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
+        var fvRate = precise((fvCases/fvPop) * 100000);
+        var pvRate = precise((pvCases/pvPop) * 100000);
+        var uvRate = precise((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
 
         var fvRateTrend = fvCases;
         var pvRateTrend = pvCases;
@@ -370,14 +377,14 @@ function buildIcuCaseRate(){
             for (var j = i-1 ; j > i-7; j--){
                 var obj = daily.icuRates[j];           
                 
-                fvSum += obj["Fully Vaccinated"];;
-                pvSum += obj["Partially Vaccinated"];
-                uvSum += obj["Unvaccinated"];
+                fvSum += parseFloat(obj["Fully Vaccinated"]);
+                pvSum += parseFloat(obj["Partially Vaccinated"]);
+                uvSum += parseFloat(obj["Unvaccinated"]);
             }
 
-            fvRateTrend = Math.round(fvSum/7);
-            pvRateTrend = Math.round(pvSum/7);
-            uvRateTrend = Math.round(uvSum/7);
+            fvRateTrend = precise(fvSum/7);
+            pvRateTrend = precise(pvSum/7);
+            uvRateTrend = precise(uvSum/7);
         }
 
         var row = {
@@ -462,6 +469,63 @@ function buildCaseRate(){
 
         daily.caseRates.push(row);
     }
+
+    return daily;
+}
+
+// Uses API call for daily case rate by vaccine status
+// Then calculates actual case numbers 
+function buildDailyCaseRate(){
+    var daily = {};
+    var dailyCaseRates = [];
+    daily.dailyCaseRates = dailyCaseRates;
+
+    var vaccinationArr = JSON.parse(vaccinationSummaryJSON);
+    var caseRatesArr = JSON.parse(caseStatusJSON);
+    var casesArr = JSON.parse(caseSummaryJSON);
+
+    var statusEnum = ['Fully Vaccinated', 'Partially Vaccinated', 'Unvaccinated'];
+
+    var newCases = casesArr['CaseSummary'][0].NewToday;
+
+    // Populations 
+    var secondDosePop = vaccinationArr['VaccinationSummary'][0].PopSecondDose;
+    var firstDosePop = vaccinationArr['VaccinationSummary'][0].PopOneDose;
+
+    var totalPop = 790000;
+
+    var populationCount = [
+        parseInt(secondDosePop),                            // Fully Vaccinated
+        parseInt(firstDosePop) - parseInt(secondDosePop),   // Partially Vaccinated
+        totalPop - parseInt(firstDosePop)];                 // Unvaccinated
+
+    statusEnum.forEach(function (item,index) {
+        var row = {};
+        
+        row['VaccinationStatus'] = item;
+
+        // Size of group
+        row['Population'] = parseInt(populationCount[index]);
+
+        // Case Details
+        row['NewCasePercent'] = caseRatesArr['CaseVaccinationStatus'][index].NewCasePercent;
+        row['NewCaseCount'] = Math.round((row['NewCasePercent'] / 100) * newCases);
+        row['NewCaseRate'] = Math.round((row['NewCaseCount'] / row['Population']) * 100000,2);
+
+        // Hospital Details
+        row['ActiveHospRate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveHospRate
+        row['ActiveHospCount'] = Math.round((row['ActiveHospRate'] / 100000) * row['Population']);
+
+        // ICU Details
+        row['ActiveICURate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveICURate
+        row['ActiveICUCount'] = Math.round((row['ActiveICURate'] / 100000) * row['Population']);
+
+        // Deceased Details
+        row['DeceasedRate'] = caseRatesArr['CaseVaccinationStatus'][index].DeceasedRate
+        row['DecasedCount'] = Math.round((row['DeceasedRate'] / 100000) * row['Population']);
+
+        daily.dailyCaseRates.push(row);
+    });
 
     return daily;
 }

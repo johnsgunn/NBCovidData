@@ -84,14 +84,15 @@
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                 <li> 
                   <a class="dropdown-item" href="#"> Case Details &raquo; </a>
-                    <ul class="submenu dropdown-menu-dark">
+                  <ul class="submenu dropdown-menu-dark">
                       <li onclick="showArcGis('ProvincialSummary')"><a class="dropdown-item" href="#">Provincial Summary</a></li>
                       <li onclick="showArcGis('HealthZoneSummary')"><a class="dropdown-item" href="#">Health Zone Summary</a></li>
                       <li onclick="showArcGis('DailyTesting')"><a class="dropdown-item" href="#">Daily Testing</a></li>
                       <li onclick="showArcGis('CaseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
                       <li onclick="showArcGis('CaseOrigin')"><a class="dropdown-item" href="#">Case Origin</a></li>
                       <li onclick="showArcGis('Exposures')"><a class="dropdown-item" href="#">Exposures</a></li>
-                    </ul>
+                      <li onclick="showArcGis('CaseVaccinationStatus')"><a class="dropdown-item" href="#">Case Vaccination Status</a></li>
+                  </ul>
                 </li>
 
                 <li> 
@@ -134,6 +135,7 @@
                       <li onclick="generateData('vaccinesByAge')"><a class="dropdown-item" href="#">Vaccines By Age</a></li>
                       <li onclick="showCompiledData('vaccineAgeGroupHistory')"><a class="dropdown-item" href="#">Vaccine Age History</a></li>
                       <li onclick="generateData('vaccineAgeGroupCount','asc')"><a class="dropdown-item" href="#">Vaccine Age Group Count</a></li>
+                      <li onclick="generateData('dailyCaseRates','asc')"><a class="dropdown-item" href="#">Daily Case Rates</a></li>
                   </ul>
                 </li>
               </ul>

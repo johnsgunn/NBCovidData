@@ -29,6 +29,9 @@ var GEO_AdultResidentialFacilitiesListURL = "https://services5.arcgis.com/WO0dQc
 // ArcGIS Maps
 var CircuitBreakerMapURL = "https://www.arcgis.com/home/webmap/viewer.html?url=https://services5.arcgis.com/WO0dQcVbxj7TZHkH/ArcGIS/rest/services/CircuitBreaker_8Oct2021/FeatureServer";
 
+// Vaccination Rates
+var VaccinationRatesURL = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/Covid19CaseVaccinationRates/FeatureServer/0/query?f=json&cacheHint=true&resultOffset=0&resultRecordCount=20&where=1%3D1&outFields=*&resultType=standard&returnGeometry=false&spatialRel=esriSpatialRelIntersects";
+
 // URLs for Google Charts
 var C_CaseRate_7DayAverageURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJQ8QsLBRdKxflonpyJdXP3oHbcRTyUINVBkJzQpJesbrpD0gL0dX6Lrb72RNJ4IbGbI/pubchart?oid=1169786871&amp;format=interactive";
 var C_DashboardURL = "https://docs.google.com/spreadsheets/u/1/d/1GyePBWpvLBIjWr7fxzwqoTyFy-nL_1tqK3gJWJ4LU5U/htmlembed?single=true&gid=2022522407&range=F1:H22";
