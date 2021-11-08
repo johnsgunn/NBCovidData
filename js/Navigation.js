@@ -155,6 +155,10 @@ async function showFullSizeChart (chartName){
             chartJSON = await checkBuildDataSet('vaccineAgeGroupCount');
             showVaccineAgeCountChart(chartJSON, 'VaccineAgeCount', 'largeChart');
             break;
+        case "CaseRate":
+            chartJSON = await checkBuildDataSet('dailyCaseRates');
+            showDailyCaseRatesChart(chartJSON,'DailyCaseRate','largeChart');
+            break;
         default:
             // bad selection
             break;

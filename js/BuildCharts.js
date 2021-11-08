@@ -927,6 +927,135 @@ function showVaccineAgeChart(json,name,loc) {
     vaccineAgeGroupsChart.render();
 }
 
+function showDailyCaseRatesChart(json,name,loc) {
+    console.log (json);
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+
+    var dataLabels = [
+        'NewCaseRate',
+        'ActiveHospRate',
+        'ActiveICURate',
+        'DeceasedRate'
+    ];
+
+    var labels = [
+        'New Case Rate',
+        'Active Hospital Rate',
+        'Active ICU Rate',
+        'Covid-19 Death Rate'
+    ];
+
+    var statusGroups = [
+        'Fully Vaccinated',
+        'Partially Vaccinated',
+        'Unvaccinated'
+    ];
+
+    var dpsFullyVaccinated = []; 
+    var dpsPartiallyVaccinated = []; 
+    var dpsUnvaccinated = [];
+
+    dataLabels.forEach(function (item,index) {
+        
+        var fullyVaccinated = parseFloat(arr['dailyCaseRates'][0][item]);
+        var partiallyVaccinated = parseFloat(arr['dailyCaseRates'][1][item]);
+        var unvaccinated = parseFloat(arr['dailyCaseRates'][2][item]);
+
+        dpsFullyVaccinated.push(fullyVaccinated);
+        dpsPartiallyVaccinated.push(partiallyVaccinated);
+        dpsUnvaccinated.push(unvaccinated);
+    });
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Unvaccinated',
+                data: dpsUnvaccinated,
+                backgroundColor: "#ff0000"
+            },
+            {
+                label: 'Partially Vaccinated',
+                data: dpsPartiallyVaccinated,
+                backgroundColor: "#ff6600",
+            },
+            {
+                label: 'Fully Vaccinated',
+                data: dpsFullyVaccinated,
+                backgroundColor: "#00ff66",
+            }          
+        ]
+    };
+
+    var ctx = document.getElementById(loc);
+    if (caseRateChart) caseRateChart.destroy();
+    caseRateChart = new Chart(ctx, {
+        plugins: [canvasBG],
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+            title: {
+                    display: true,
+                    text: 'Current Case Rates',
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    },    
+                },
+                legend: {
+                    display: true,
+                    position:'top',
+                    fullWidth: true,
+                    labels: {
+                        color: chartTextColor
+                    }
+                }
+              },
+              responsive: true,
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    }
+                },
+                y: {
+                  stacked: true,
+                  grid: {
+                        color: chartGridColor
+                    },
+                    display: true,
+                    type: 'linear',
+                    position: 'left',
+                    color: chartTextColor,
+                    title: {
+                        display: true,
+                        text: 'Cases Per 100,000',
+                        color: chartTextColor,
+                        font: {
+                            size: titleFontSize
+                        },                       
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,           
+                    },
+                    beginAtZero: true
+                }
+              }            
+        }
+    });
+    caseRateChart.render();
+}
+
 function showVaccineAgeCountChart(json, name, loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.

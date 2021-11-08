@@ -10,6 +10,7 @@ var caseTrendsChart = null;
 var vaccineAgeGroupsChart = null;
 var caseAgeChart = null;
 var vaccineAgeCountsChart = null;
+var caseRateChart = null;
 
 var darkMode = false;
 
