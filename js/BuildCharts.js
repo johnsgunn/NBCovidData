@@ -934,6 +934,9 @@ function showDailyCaseRatesChart(json,name,loc) {
 
     var titleFontSize = getChartTitleSize(loc);
 
+    var casesArr = JSON.parse(caseSummaryJSON);
+    var lastUpdate = casesArr['CaseSummary'][0].LastUpdateText;
+
     var dataLabels = [
         'NewCaseRate',
         'ActiveHospRate',
@@ -945,7 +948,7 @@ function showDailyCaseRatesChart(json,name,loc) {
         'New Case Rate',
         'Active Hospital Rate',
         'Active ICU Rate',
-        'Covid-19 Death Rate'
+        ['Covid-19 Death Rate','Total Population']
     ];
 
     var statusGroups = [
@@ -1001,7 +1004,7 @@ function showDailyCaseRatesChart(json,name,loc) {
             plugins: {
             title: {
                     display: true,
-                    text: 'Current Case Rates',
+                    text: 'New Brunswick Covid-19 Case Rate - ' + lastUpdate,
                     color: chartTextColor,
                     font: {
                         size: titleFontSize
