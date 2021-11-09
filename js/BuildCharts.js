@@ -948,28 +948,32 @@ function showDailyCaseRatesChart(json,name,loc) {
         'New Case Rate',
         'Active Hospital Rate',
         'Active ICU Rate',
-        ['Covid-19 Death Rate','Total Population']
+        ['Covid-19 Death Rate'/*,'Total Population'*/]
     ];
 
     var statusGroups = [
         'Fully Vaccinated',
         'Partially Vaccinated',
-        'Unvaccinated'
+        'Unvaccinated',
+        'Unvaccinated 12+'
     ];
 
     var dpsFullyVaccinated = []; 
     var dpsPartiallyVaccinated = []; 
     var dpsUnvaccinated = [];
+    var dpsUnvaccinatedEligible = [];
 
     dataLabels.forEach(function (item,index) {
         
         var fullyVaccinated = parseFloat(arr['dailyCaseRates'][0][item]);
         var partiallyVaccinated = parseFloat(arr['dailyCaseRates'][1][item]);
         var unvaccinated = parseFloat(arr['dailyCaseRates'][2][item]);
+        var unvaccinatedEligible = parseFloat(arr['dailyCaseRates'][3][item]);
 
         dpsFullyVaccinated.push(fullyVaccinated);
         dpsPartiallyVaccinated.push(partiallyVaccinated);
         dpsUnvaccinated.push(unvaccinated);
+        dpsUnvaccinatedEligible.push(unvaccinatedEligible);
     });
 
     const data = {
@@ -986,8 +990,13 @@ function showDailyCaseRatesChart(json,name,loc) {
                 backgroundColor: "#ff6600",
             },
             {
-                label: 'Unvaccinated',
+                label: 'Unvaccinated (Total Population)',
                 data: dpsUnvaccinated,
+                backgroundColor: "#aa0000"
+            },
+            {
+                label: 'Eligible Unvaccinated (12+)',
+                data: dpsUnvaccinatedEligible,
                 backgroundColor: "#ff0000"
             }
                      
