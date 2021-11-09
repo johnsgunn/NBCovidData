@@ -33,6 +33,9 @@ async function checkBuildDataSet(name,forceReload=false){
                 case "caseAgeRates":
                     jsonOutput = buildCaseAgeTrends();
                     break;
+                case "caseAgeRates_wUnder19":
+                    jsonOutput = buildCaseAgeTrends_wUnder19();
+                    break;
                 case "caseAgeHistory":
                     jsonOutput = buildCaseAgeRow();
                     break;
@@ -109,6 +112,98 @@ function buildCaseAgeTrends(){
             var newCases = parseInt(ageCases['ageCases'][i][item]) || 0;
             var prevCases = 0;
             if (i > 0) {prevCases = parseInt(ageCases['ageCases'][i-1][item])} ;
+
+            Age_Cases[item] = newCases;
+            Age_New_Cases[item] = newCases - prevCases;  
+
+            var newCasesSum = 0;
+
+            if (i > 7){ // start generating averages 
+                for (var j = i-1 ; j > i-8; j--){
+                    var obj = daily.caseAgeRates[j] ;  
+                    var tag = "New Cases " + item;                    
+                    
+                    newCasesSum += parseInt(obj[tag]);
+                }                
+            }
+            Age_Trend_Cases[item] = Math.round(newCasesSum/7);
+             
+
+        });
+
+        var row = {};
+
+        row['Date'] = date;
+
+        for (var j = 0 ; j < AgeTags.length ; j++){
+            var caseColumn = [NewCasesTags[j]];
+            var trendColumn = [TrendTags[j]];
+            var ageColumn = [AgeTags[j]];
+            
+            row[ageColumn] = Age_Cases[AgeTags[j]] ;
+            row[caseColumn] = Age_New_Cases[AgeTags[j]];
+            row[trendColumn] = Age_Trend_Cases[AgeTags[j]];
+        }
+       
+        daily.caseAgeRates.push(row);
+    }
+
+    return daily;
+
+}
+
+// Trending but only broken down to < 19
+function buildCaseAgeTrends_wUnder19(){
+    var daily = {};
+    var caseAgeRates = [];
+    daily.caseAgeRates = caseAgeRates;
+
+    var AgeTags = [
+        '<19',
+        '20-29',
+        '30-39',
+        '40-49',
+        '50-59',
+        '60-69',
+        '70-79',
+        '80-89',
+        '90+'
+    ];
+
+    var NewCasesTags = [
+        'New Cases <19',
+        'New Cases 20-29',
+        'New Cases 30-39',
+        'New Cases 40-49',
+        'New Cases 50-59',
+        'New Cases 60-69',
+        'New Cases 70-79',
+        'New Cases 80-89',
+        'New Cases 90+'
+    ];
+
+    var TrendTags = [
+        'Trend <19',
+        'Trend 20-29',
+        'Trend 30-39',
+        'Trend 40-49',
+        'Trend 50-59',
+        'Trend 60-69',
+        'Trend 70-79',
+        'Trend 80-89',
+        'Trend 90+'
+    ];
+    
+    for (var i = 0 ; i < ageCases_wUnder19['ageCases_wUnder19'].length ; i++){
+        var date = ageCases_wUnder19['ageCases_wUnder19'][i]['Date'];
+        var Age_Cases = [];
+        var Age_New_Cases = [];
+        var Age_Trend_Cases = [];
+
+        AgeTags.forEach(function (item,index) {
+            var newCases = parseInt(ageCases_wUnder19['ageCases_wUnder19'][i][item]) || 0;
+            var prevCases = 0;
+            if (i > 0) {prevCases = parseInt(ageCases_wUnder19['ageCases_wUnder19'][i-1][item])} ;
 
             Age_Cases[item] = newCases;
             Age_New_Cases[item] = newCases - prevCases;  
@@ -483,8 +578,7 @@ function buildDailyCaseRate(){
     var vaccinationArr = JSON.parse(vaccinationSummaryJSON);
     var caseRatesArr = JSON.parse(caseStatusJSON);
     var casesArr = JSON.parse(caseSummaryJSON);
-    var caseAgeRatesArr = JSON.parse(sessionStorage.getItem('caseAgeRates'));
-    console.log(caseAgeRatesArr);
+    var caseAgeRatesArr = JSON.parse(caseAgeRatesJSON);
 
     var statusEnum = ['Fully Vaccinated', 'Partially Vaccinated', 'Unvaccinated'];
 

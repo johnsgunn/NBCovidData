@@ -24,6 +24,7 @@ async function backgroundLoadData(){
     
     hospitalRatesJSON = await checkBuildDataSet("hospitalRates",true);
     icuRatesJSON = await checkBuildDataSet("icuRates",true);
+    caseAgeRatesJSON = await checkBuildDataSet("caseAgeRates",true);
 
     document.getElementById("circuitBreakerMap").href = CircuitBreakerMapURL;
 }

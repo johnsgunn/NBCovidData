@@ -44,6 +44,7 @@ const canvasBG = {
   var vaccineAgeGroupCountJSON = null;
   var caseStatusJSON = null;
   var dailyCaseRatesJSON = null;
+  var caseAgeRatesJSON = null;
 
   // Store Calculated Data //
   var hospitalCaseRateJSON = [];
