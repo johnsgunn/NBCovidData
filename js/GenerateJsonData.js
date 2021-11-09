@@ -483,6 +483,8 @@ function buildDailyCaseRate(){
     var vaccinationArr = JSON.parse(vaccinationSummaryJSON);
     var caseRatesArr = JSON.parse(caseStatusJSON);
     var casesArr = JSON.parse(caseSummaryJSON);
+    var caseAgeRatesArr = JSON.parse(sessionStorage.getItem('caseAgeRates'));
+    console.log(caseAgeRatesArr);
 
     var statusEnum = ['Fully Vaccinated', 'Partially Vaccinated', 'Unvaccinated'];
 
@@ -493,11 +495,13 @@ function buildDailyCaseRate(){
     var firstDosePop = vaccinationArr['VaccinationSummary'][0].PopOneDose;
 
     var totalPop = 790000;
+    var eligiblePop = 696000;
 
     var populationCount = [
         parseInt(secondDosePop),                            // Fully Vaccinated
         parseInt(firstDosePop) - parseInt(secondDosePop),   // Partially Vaccinated
-        totalPop - parseInt(firstDosePop)];                 // Unvaccinated
+        totalPop - parseInt(firstDosePop),                  // Unvaccinated Total
+        eligiblePop - parseInt(firstDosePop)];              // Unvaccinated Eligible
 
     statusEnum.forEach(function (item,index) {
         var row = {};
@@ -513,19 +517,62 @@ function buildDailyCaseRate(){
         row['NewCaseRate'] = Math.round((row['NewCaseCount'] / row['Population']) * 100000,2);
 
         // Hospital Details
-        row['ActiveHospRate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveHospRate
+        row['ActiveHospRate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveHospRate;
         row['ActiveHospCount'] = Math.round((row['ActiveHospRate'] / 100000) * row['Population']);
 
         // ICU Details
-        row['ActiveICURate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveICURate
+        row['ActiveICURate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveICURate;
         row['ActiveICUCount'] = Math.round((row['ActiveICURate'] / 100000) * row['Population']);
 
-        // Deceased Details
-        row['DeceasedRate'] = caseRatesArr['CaseVaccinationStatus'][index].DeceasedRate
-        row['DecasedCount'] = Math.round((row['DeceasedRate'] / 100000) * row['Population']);
+        // Deceased Details - Total Population 
+        row['DeceasedRate'] = caseRatesArr['CaseVaccinationStatus'][index].DeceasedRate;
+        row['DeceasedCount'] = Math.round((row['DeceasedRate'] / 100000) * row['Population']);
 
         daily.dailyCaseRates.push(row);
     });
+
+    // Calculate Death Rate for Eligible Population (12+)
+    var populationEligible = parseInt(populationCount[3]);
+    var caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
+    var newUnder10Cases = caseAgeRatesArr['caseAgeRates'][caseAgeEntries-1]['New Cases < 10'];
+    var newCasesEligible = daily.dailyCaseRates[2]['NewCaseCount'] - newUnder10Cases;
+
+    var newCasePercentEligible = parseFloat(((newCasesEligible / newCases) * 100).toFixed(1));
+    var newCaseRateEligible = parseFloat(((newCasesEligible / parseInt(populationCount[3])) * 100000).toFixed(1));
+
+    var hospitalCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveHospCount']);
+    var hospitalRateEligible = parseFloat(((hospitalCountEligible / populationEligible) * 100000).toFixed(1));
+
+    var icuCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveICUCount']);
+    var icuRateEligible = parseFloat(((icuCountEligible / populationEligible) * 100000).toFixed(1));
+
+    var deceasedCountEligible = parseInt(daily.dailyCaseRates[2]['DeceasedCount']);
+    var deceasedRateEligible = parseFloat(((deceasedCountEligible / populationEligible) * 100000).toFixed(1));
+
+    var row = {};
+    row['VaccinationStatus'] = "Unvaccinated 12+";
+
+    // Size of group
+    row['Population'] = populationEligible;
+
+    // Case Details - removing under-10 cases from unvaccinated count
+    row['NewCasePercent'] = newCasePercentEligible;
+    row['NewCaseCount'] = newCasesEligible;
+    row['NewCaseRate'] = newCaseRateEligible;
+
+    // Hospital Details
+    row['ActiveHospRate'] = hospitalRateEligible;
+    row['ActiveHospCount'] = hospitalCountEligible;
+
+    // ICU Details
+    row['ActiveICURate'] = icuRateEligible;
+    row['ActiveICUCount'] = icuCountEligible;
+
+    // Deceased Details - Total Population 
+    row['DeceasedRate'] = deceasedRateEligible;
+    row['DeceasedCount'] = deceasedCountEligible;
+
+    daily.dailyCaseRates.push(row);
 
     return daily;
 }
