@@ -973,20 +973,21 @@ function showDailyCaseRatesChart(json,name,loc) {
         labels: labels,
         datasets: [
             {
-                label: 'Unvaccinated',
-                data: dpsUnvaccinated,
-                backgroundColor: "#ff0000"
-            },
+                label: 'Fully Vaccinated',
+                data: dpsFullyVaccinated,
+                backgroundColor: "#00ff66",
+            } ,
             {
                 label: 'Partially Vaccinated',
                 data: dpsPartiallyVaccinated,
                 backgroundColor: "#ff6600",
             },
             {
-                label: 'Fully Vaccinated',
-                data: dpsFullyVaccinated,
-                backgroundColor: "#00ff66",
-            }          
+                label: 'Unvaccinated',
+                data: dpsUnvaccinated,
+                backgroundColor: "#ff0000"
+            }
+                     
         ]
     };
 
@@ -1018,7 +1019,7 @@ function showDailyCaseRatesChart(json,name,loc) {
               responsive: true,
               scales: {
                 x: {
-                  stacked: true,
+                  stacked: false,
                   grid: {
                         drawOnChartArea: false,
                     },
@@ -1028,7 +1029,7 @@ function showDailyCaseRatesChart(json,name,loc) {
                     }
                 },
                 y: {
-                  stacked: true,
+                  stacked: false,
                   grid: {
                         color: chartGridColor
                     },
