@@ -653,9 +653,6 @@ function buildDailyCaseRate(){
     // Size of group
     row['Population'] = populationEligible;
 
-    ///////////////
-    // Case Details - removing under-10 cases from unvaccinated count
-    ///////////////
     row['NewCasePercent'] = newCasePercentEligible;
     row['NewCaseCount'] = newCasesEligible;
     row['NewCaseRate'] = newCaseRateEligible;
@@ -674,45 +671,46 @@ function buildDailyCaseRate(){
 
     daily.dailyCaseRates.push(row);
 
+
     // Calculate Death Rate for Children
-    populationEligible = parseInt(populationCount[4]);
+    var populationChildren = parseInt(populationCount[4]);
     caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
     var newCasesChildren = newUnder10Cases;
 
-    newCasePercentEligible = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
-    newCaseRateEligible = parseFloat(((newCasesChildren / parseInt(populationCount[3])) * 100000).toFixed(1));
+    var newCasePercentChildren = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
+    var newCaseRateChildren = parseFloat(((newCasesChildren / parseInt(populationCount[4])) * 100000).toFixed(1));
 
-    hospitalCountEligible = 0;
-    hospitalRateEligible = 0;
+    var hospitalCountChildren = 0;
+    var hospitalRateChildren = 0;
 
-    icuCountEligible = 0;
-    icuRateEligible = 0;
+    var icuCountChildren = 0;
+    var icuRateChildren = 0;
 
-    deceasedCountEligible = 0;
-    deceasedRateEligible = 0;
+    var deceasedCountChildren = 0;
+    var deceasedRateChildren = 0;
 
     row = {};
     row['VaccinationStatus'] = "Children < 10";
 
     // Size of group
-    row['Population'] = populationEligible;
+    row['Population'] = populationChildren;
 
     // Case Details - removing under-10 cases from unvaccinated count
-    row['NewCasePercent'] = newCasePercentEligible;
-    row['NewCaseCount'] = newCasesEligible;
-    row['NewCaseRate'] = newCaseRateEligible;
+    row['NewCasePercent'] = newCasePercentChildren;
+    row['NewCaseCount'] = newCasesChildren;
+    row['NewCaseRate'] = newCaseRateChildren;
 
     // Hospital Details
-    row['ActiveHospRate'] = hospitalRateEligible;
-    row['ActiveHospCount'] = hospitalCountEligible;
+    row['ActiveHospRate'] = hospitalRateChildren;
+    row['ActiveHospCount'] = hospitalCountChildren;
 
     // ICU Details
-    row['ActiveICURate'] = icuRateEligible;
-    row['ActiveICUCount'] = icuCountEligible;
+    row['ActiveICURate'] = icuRateChildren;
+    row['ActiveICUCount'] = icuCountChildren;
 
     // Deceased Details - Total Population 
-    row['DeceasedRate'] = deceasedRateEligible;
-    row['DeceasedCount'] = deceasedCountEligible;
+    row['DeceasedRate'] = deceasedRateChildren;
+    row['DeceasedCount'] = deceasedCountChildren;
 
     daily.dailyCaseRates.push(row);
 
