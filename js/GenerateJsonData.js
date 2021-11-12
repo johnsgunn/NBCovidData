@@ -595,7 +595,9 @@ function buildDailyCaseRate(){
         parseInt(secondDosePop),                            // Fully Vaccinated
         parseInt(firstDosePop) - parseInt(secondDosePop),   // Partially Vaccinated
         totalPop - parseInt(firstDosePop),                  // Unvaccinated Total
-        eligiblePop - parseInt(firstDosePop)];              // Unvaccinated Eligible
+        eligiblePop - parseInt(firstDosePop),               // Unvaccinated Eligible
+        totalPop - eligiblePop                              // Children 
+    ];
 
     statusEnum.forEach(function (item,index) {
         var row = {};
@@ -625,7 +627,9 @@ function buildDailyCaseRate(){
         daily.dailyCaseRates.push(row);
     });
 
+    ////////////
     // Calculate Death Rate for Eligible Population (12+)
+    ////////////
     var populationEligible = parseInt(populationCount[3]);
     var caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
     var newUnder10Cases = caseAgeRatesArr['caseAgeRates'][caseAgeEntries-1]['New Cases < 10'];
@@ -645,6 +649,50 @@ function buildDailyCaseRate(){
 
     var row = {};
     row['VaccinationStatus'] = "Unvaccinated 12+";
+
+    // Size of group
+    row['Population'] = populationEligible;
+
+    ///////////////
+    // Case Details - removing under-10 cases from unvaccinated count
+    ///////////////
+    row['NewCasePercent'] = newCasePercentEligible;
+    row['NewCaseCount'] = newCasesEligible;
+    row['NewCaseRate'] = newCaseRateEligible;
+
+    // Hospital Details
+    row['ActiveHospRate'] = hospitalRateEligible;
+    row['ActiveHospCount'] = hospitalCountEligible;
+
+    // ICU Details
+    row['ActiveICURate'] = icuRateEligible;
+    row['ActiveICUCount'] = icuCountEligible;
+
+    // Deceased Details - Total Population 
+    row['DeceasedRate'] = deceasedRateEligible;
+    row['DeceasedCount'] = deceasedCountEligible;
+
+    daily.dailyCaseRates.push(row);
+
+    // Calculate Death Rate for Children
+    populationEligible = parseInt(populationCount[4]);
+    caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
+    var newCasesChildren = newUnder10Cases;
+
+    newCasePercentEligible = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
+    newCaseRateEligible = parseFloat(((newCasesChildren / parseInt(populationCount[3])) * 100000).toFixed(1));
+
+    hospitalCountEligible = 0;
+    hospitalRateEligible = 0;
+
+    icuCountEligible = 0;
+    icuRateEligible = 0;
+
+    deceasedCountEligible = 0;
+    deceasedRateEligible = 0;
+
+    row = {};
+    row['VaccinationStatus'] = "Children < 10";
 
     // Size of group
     row['Population'] = populationEligible;

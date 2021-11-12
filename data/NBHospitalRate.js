@@ -55,6 +55,13 @@ hospitalRate = {
             "Fully Vaccinated": 0.5,
             "Partially Vaccinated": 2.4,
             "Unvaccinated": 10.1
+        },
+        {
+            "Date": "2021-11-12",
+            "Count": 19,
+            "Fully Vaccinated": 0.5,
+            "Partially Vaccinated": 2.4,
+            "Unvaccinated": 10.8
         }
     ]
 };
