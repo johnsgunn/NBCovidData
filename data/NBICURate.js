@@ -62,6 +62,13 @@ icuRate = {
             "Fully Vaccinated": 0.2,
             "Partially Vaccinated": 2.4,
             "Unvaccinated": 6.5
+        },
+        {
+            "Date": "2021-11-13",
+            "Count": 11,
+            "Fully Vaccinated": 0.2,
+            "Partially Vaccinated": 2.4,
+            "Unvaccinated": 6.5
         }
     ]
 };
