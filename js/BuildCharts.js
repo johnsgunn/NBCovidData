@@ -883,14 +883,14 @@ function showVaccineAgeChart(json,name,loc) {
                         size: titleFontSize
                     },    
                 },
-                legend: {
-                    display: true,
-                    position:'top',
-                    fullWidth: true,
-                    labels: {
-                        color: chartTextColor
-                    }
+            legend: {
+                display: true,
+                position:'top',
+                fullWidth: true,
+                labels: {
+                    color: chartTextColor
                 }
+            }
               },
               responsive: true,
               scales: {
@@ -1085,6 +1085,7 @@ function showVaccineAgeCountChart(json, name, loc) {
     var titleFontSize = getChartTitleSize(loc);
 
     var labels = [
+        '0-11',
         '12-19',
         '20-29',
         '30-39',
@@ -1148,6 +1149,11 @@ function showVaccineAgeCountChart(json, name, loc) {
                     font: {
                         size: titleFontSize
                     },
+                },
+                subtitle: {
+                    display: true,
+                    text: '*Estimated based on GNB vaccination % and Population Projections',
+                    color: '#a6a6a6'
                 },
                 legend: {
                     display: true,

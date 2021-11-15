@@ -246,6 +246,7 @@ function buildCaseAgeTrends_wUnder19(){
 
 function buildVaccineAgeCount() {
     var AgeTags = [
+        "0-11",
         "12-19",
         "20-29",
         "30-39",
@@ -271,10 +272,16 @@ function buildVaccineAgeCount() {
         var groupPopulation = parseInt(population['agePopulation'][index]['populationSize']);
         row["Age Group"] = item;
         row["Population"] = groupPopulation;
-        row["1st Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index]['FirstDose']) / 100;
-        row["2nd Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index]['SecondDose']) / 100;
 
-        
+        if (index == 0){ // 0-11 age group, not yet eligible 
+            row["1st Dose Percent"] = 0;
+            row["2nd Dose Percent"] = 0; 
+        }
+        else {
+            row["1st Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']) / 100;
+            row["2nd Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose']) / 100;
+        }
+                
         row["1st Dose Count"] = parseInt(groupPopulation * row["1st Dose Percent"]);
         row["2nd Dose Count"] = parseInt(groupPopulation * row["2nd Dose Percent"]);
 
