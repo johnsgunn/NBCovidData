@@ -339,9 +339,11 @@ function showCaseTrendsChart(json,name,loc) {
             borderWidth: 4,
             pointRadius: 0,
             fill: false,
-            borderColor: "#00ffff",
-            tension: 0.1,
-            backgroundColor: "#00ffff",
+            // borderColor: "#00ffff",
+            // backgroundColor: "#00ffff",
+            borderColor: "#00ff66",
+            backgroundColor: "#00ff66",
+            tension: 0.1,            
             yAxisID: 'y'
         },
         {
@@ -351,9 +353,11 @@ function showCaseTrendsChart(json,name,loc) {
             borderWidth: 4,
             pointRadius: 0,
             fill: false,
-            borderColor: "#00cc00",
-            tension: 0.1,
-            backgroundColor: "#00cc00",
+            // borderColor: "#00cc00",
+            // backgroundColor: "#00cc00",
+            borderColor: "#ff9900",
+            backgroundColor: "#ff9900",
+            tension: 0.1,            
             yAxisID: 'y' 
         },
         {
@@ -363,9 +367,11 @@ function showCaseTrendsChart(json,name,loc) {
             borderWidth: 4,
             pointRadius: 0,
             fill: false,
-            borderColor: "#ff9900",
-            tension: 0.1,
-            backgroundColor: "#ff9900",
+            // borderColor: "#ff9900",
+            // backgroundColor: "#ff9900",
+            borderColor: "#ff0000",
+            backgroundColor: "#ff0000",
+            tension: 0.1,            
             yAxisID: 'y'
         },            
         {
@@ -990,7 +996,7 @@ function showDailyCaseRatesChart(json,name,loc) {
             {
                 label: 'Partially Vaccinated',
                 data: dpsPartiallyVaccinated,
-                backgroundColor: "#ff6600",
+                backgroundColor: "#ff9900",
             },
             {
                 label: 'Children',
