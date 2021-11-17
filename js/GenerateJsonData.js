@@ -615,10 +615,10 @@ function buildDailyCaseRate(){
         row['Population'] = parseInt(populationCount[index]);
 
         // Case Details
-        row['NewCasePercent'] = caseRatesArr['CaseVaccinationStatus'][index].NewCasePercent;
-        row['NewCaseCount'] = Math.round((row['NewCasePercent'] / 100) * newCases);
-        row['NewCaseRate'] = Math.round((row['NewCaseCount'] / row['Population']) * 100000,2);
-
+        row['NewCaseRate'] = caseRatesArr['CaseVaccinationStatus'][index].NewCaseRate;
+        row['NewCaseCount'] = Math.round((row['NewCaseRate'] / 100000) * row['Population']);
+        // row['NewCasePercent'] =  Math.round((row['NewCaseCount'] / newCases) * 100);
+        
         // Hospital Details
         row['ActiveHospRate'] = caseRatesArr['CaseVaccinationStatus'][index].ActiveHospRate;
         row['ActiveHospCount'] = Math.round((row['ActiveHospRate'] / 100000) * row['Population']);
@@ -642,7 +642,7 @@ function buildDailyCaseRate(){
     var newUnder10Cases = caseAgeRatesArr['caseAgeRates'][caseAgeEntries-1]['New Cases < 10'];
     var newCasesEligible = daily.dailyCaseRates[2]['NewCaseCount'] - newUnder10Cases;
 
-    var newCasePercentEligible = parseFloat(((newCasesEligible / newCases) * 100).toFixed(1));
+    // var newCasePercentEligible = parseFloat(((newCasesEligible / newCases) * 100).toFixed(1));
     var newCaseRateEligible = parseFloat(((newCasesEligible / parseInt(populationCount[3])) * 100000).toFixed(1));
 
     var hospitalCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveHospCount']);
@@ -660,7 +660,7 @@ function buildDailyCaseRate(){
     // Size of group
     row['Population'] = populationEligible;
 
-    row['NewCasePercent'] = newCasePercentEligible;
+    // row['NewCasePercent'] = newCasePercentEligible;
     row['NewCaseCount'] = newCasesEligible;
     row['NewCaseRate'] = newCaseRateEligible;
 
@@ -684,7 +684,7 @@ function buildDailyCaseRate(){
     caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
     var newCasesChildren = newUnder10Cases;
 
-    var newCasePercentChildren = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
+    // var newCasePercentChildren = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
     var newCaseRateChildren = parseFloat(((newCasesChildren / parseInt(populationCount[4])) * 100000).toFixed(1));
 
     var hospitalCountChildren = 0;
@@ -703,7 +703,7 @@ function buildDailyCaseRate(){
     row['Population'] = populationChildren;
 
     // Case Details - removing under-10 cases from unvaccinated count
-    row['NewCasePercent'] = newCasePercentChildren;
+    // row['NewCasePercent'] = newCasePercentChildren;
     row['NewCaseCount'] = newCasesChildren;
     row['NewCaseRate'] = newCaseRateChildren;
 
