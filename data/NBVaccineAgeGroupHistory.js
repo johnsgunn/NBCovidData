@@ -1349,6 +1349,31 @@ vaccineAgeGroupHistory = {
           "80-84 2nd Dose": 100,
           "85+ 1st Dose": 100,
           "85+ 2nd Dose": 98.9
+        },
+        {
+          "Date": "2021-11-16",
+          "12-19 1st Dose": 85.1,
+          "12-19 2nd Dose": 78,
+          "20-29 1st Dose": 89.6,
+          "20-29 2nd Dose": 78.7,
+          "30-39 1st Dose": 88.7,
+          "30-39 2nd Dose": 80.5,
+          "40-49 1st Dose": 89.9,
+          "40-49 2nd Dose": 84.2,
+          "50-59 1st Dose": 89.9,
+          "50-59 2nd Dose": 85.8,
+          "60-64 1st Dose": 94.8,
+          "60-64 2nd Dose": 91.4,
+          "65-69 1st Dose": 97.8,
+          "65-69 2nd Dose": 95.1,
+          "70-74 1st Dose": 99.5,
+          "70-74 2nd Dose": 97.2,
+          "75-79 1st Dose": 100,
+          "75-79 2nd Dose": 100,
+          "80-84 1st Dose": 100,
+          "80-84 2nd Dose": 100,
+          "85+ 1st Dose": 100,
+          "85+ 2nd Dose": 99
         }
      ]
 };
