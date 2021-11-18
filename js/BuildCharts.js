@@ -1028,6 +1028,11 @@ function showDailyCaseRatesChart(json,name,loc) {
                         size: titleFontSize
                     },    
                 },
+            subtitle: {
+                display: true,
+                text: '*Generated from GNB Dashboard, Death Rate since August 1, 2021',
+                color: '#a6a6a6'
+            },
                 legend: {
                     display: true,
                     position:'top',
