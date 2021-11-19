@@ -412,6 +412,13 @@ icuCases = {
             "Fully Vaccinated": 2,
             "Partially Vaccinated": 0,
             "Unvaccinated": 14
+        },
+        {
+            "Date": "2021-11-18",
+            "Admitted": 14,
+            "Fully Vaccinated": 2,
+            "Partially Vaccinated": 0,
+            "Unvaccinated": 12
         }
        ]
 };
