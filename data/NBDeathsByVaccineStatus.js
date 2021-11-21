@@ -118,6 +118,13 @@ deceasedRate = {
             "Fully Vaccinated": 5.8,
             "Partially Vaccinated": 18.6,
             "Unvaccinated": 24.9
+        },
+        {
+            "Date": "2021-11-20",
+            "Count": 122,
+            "Fully Vaccinated": 5.8,
+            "Partially Vaccinated": 18.8,
+            "Unvaccinated": 24.9
         }
     ]
 };
