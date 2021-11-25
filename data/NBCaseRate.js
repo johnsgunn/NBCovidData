@@ -146,6 +146,13 @@ caseRate = {
             "Fully Vaccinated": 5.9,
             "Partially Vaccinated": 8.3,
             "Unvaccinated": 35.4
+        },
+        {
+            "Date": "2021-11-25",
+            "Count": 95,
+            "Fully Vaccinated": 6.4,
+            "Partially Vaccinated": 11.3,
+            "Unvaccinated": 38.5
         }
     ]
 };
