@@ -290,13 +290,13 @@ function buildVaccineAgeCount() {
 
         // // }
         else {
-            row["1st Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']) / 100 || 0;
+            row["1st Dose Percent"] = vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']  || 0;
 
-            row["2nd Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose']) / 100 || 0;
+            row["2nd Dose Percent"] = vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose'] || 0;
         }
                 
-        row["1st Dose Count"] = parseInt(groupPopulation * row["1st Dose Percent"]);
-        row["2nd Dose Count"] = parseInt(groupPopulation * row["2nd Dose Percent"]);
+        row["1st Dose Count"] = parseInt(groupPopulation * (row["1st Dose Percent"]/100));
+        row["2nd Dose Count"] = parseInt(groupPopulation * (row["2nd Dose Percent"]/100));
 
         row["Fully Vaccinated"] = row["2nd Dose Count"];
         row["Partially Vaccinated"] = row["1st Dose Count"] - row["2nd Dose Count"];
