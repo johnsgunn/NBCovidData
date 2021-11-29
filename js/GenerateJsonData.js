@@ -286,12 +286,8 @@ function buildVaccineAgeCount() {
             row["1st Dose Percent"] = 0;
             row["2nd Dose Percent"] = 0; 
         }
-        // // else if (index == 1){ // 5-11 age group, placed at end of 
-
-        // // }
         else {
             row["1st Dose Percent"] = vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']  || 0;
-
             row["2nd Dose Percent"] = vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose'] || 0;
         }
                 
