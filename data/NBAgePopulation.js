@@ -1,9 +1,18 @@
 agePopulation = {
     agePopulation: [
+        // {
+        //     ageGroup: "0-11",
+        //     populationSize: 84000
+        //     // Checked against GNB 2021 projections
+        // },
         {
-            ageGroup: "0-11",
-            populationSize: 84000
-            // Checked against GNB 2021 projections
+            ageGroup: "0-4",
+            populationSize: 29500
+        },
+        {
+            ageGroup: "05-11",
+            populationSize: 54500
+            // Added to GNB API on 11/29/2021
         },
         {
             ageGroup: "12-19",

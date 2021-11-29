@@ -246,7 +246,9 @@ function buildCaseAgeTrends_wUnder19(){
 
 function buildVaccineAgeCount() {
     var AgeTags = [
-        "0-11",
+        // "0-11",
+        "0-4",
+        "05-11",
         "12-19",
         "20-29",
         "30-39",
@@ -269,17 +271,28 @@ function buildVaccineAgeCount() {
 
     AgeTags.forEach(function (item, index) {
         var row = {};
-        var groupPopulation = parseInt(population['agePopulation'][index]['populationSize']);
-        row["Age Group"] = item;
+        var sortOrder = 0;
+        if (index > 0) { // ignore 0-4, it is not yet on the GNB API
+            sortOrder = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['SortOrder']);
+        }
+        var groupPopulation = parseInt(population['agePopulation'][sortOrder]['populationSize']);        
+
+        row["Age Group"] = AgeTags[sortOrder];
         row["Population"] = groupPopulation;
 
-        if (index == 0){ // 0-11 age group, not yet eligible 
+        console.log("Age group: " + row["Age Group"] + " | Pop: " + groupPopulation + " | Order: " + sortOrder);
+
+        if (index == 0){ // 0-4 age group, not yet eligible 
             row["1st Dose Percent"] = 0;
             row["2nd Dose Percent"] = 0; 
         }
+        // // else if (index == 1){ // 5-11 age group, placed at end of 
+
+        // // }
         else {
-            row["1st Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']) / 100;
-            row["2nd Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose']) / 100;
+            row["1st Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']) / 100 || 0;
+
+            row["2nd Dose Percent"] = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose']) / 100 || 0;
         }
                 
         row["1st Dose Count"] = parseInt(groupPopulation * row["1st Dose Percent"]);
@@ -289,8 +302,10 @@ function buildVaccineAgeCount() {
         row["Partially Vaccinated"] = row["1st Dose Count"] - row["2nd Dose Count"];
         row["Unvaccinated"] = groupPopulation - row["1st Dose Count"];
 
-        daily.vaccineAgeGroupCount.push(row);
+        //daily.vaccineAgeGroupCount.push(row);
+        daily.vaccineAgeGroupCount[sortOrder] = row;
     });
+    console.log (daily);
 
     return daily;
 
@@ -349,6 +364,11 @@ function buildVaccineAgeRow(){
 
     var row = {};
     var doses = JSON.parse(vaccineAgeGroupsJSON);
+
+    // Input 5-11 group first since it appears out of order on the API data set
+    var resultCount = AgeTags.length;
+    row['5-11 1st Dose'] = parseFloat(doses['vaccineAgeGroups'][resultCount]['FirstDose']);
+    row['5-11 2nd Dose'] = parseFloat(doses['vaccineAgeGroups'][resultCount]['SecondDose']);
 
     AgeTags.forEach(function (item,index) {
         var firstDose = item + " 1st Dose";
@@ -514,6 +534,9 @@ function buildCaseRate(){
 
     vaccinationArr = JSON.parse(vaccineHistoryJSON);
 
+    var totalPop = 780000;
+    var eligiblePop = 696000;
+
     // NB Total Cases
 
     for (var i = 0 ; i < nbCases['nbCases'].length ; i++){
@@ -529,8 +552,8 @@ function buildCaseRate(){
 
         var fvPop = parseInt(secondDosePop);
         var pvPop = parseInt(firstDosePop) - fvPop;
-        var uvPop = 780000 - fvPop - pvPop;
-        var uvEligiblePop = 696000 - fvPop - pvPop;
+        var uvPop = totalPop - fvPop - pvPop;
+        var uvEligiblePop = eligiblePop - fvPop - pvPop;
 
         var fvRate = Math.round((fvCases/fvPop) * 100000);
         var pvRate = Math.round((pvCases/pvPop) * 100000);

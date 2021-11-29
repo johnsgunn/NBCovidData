@@ -825,6 +825,7 @@ function showVaccineAgeChart(json,name,loc) {
     var titleFontSize = getChartTitleSize(loc);
 
     var labels = [
+        '5-11',
         '12-19',
         '20-29',
         '30-39',
@@ -842,12 +843,13 @@ function showVaccineAgeChart(json,name,loc) {
     var dps2 = []; // second dose
 
     labels.forEach(function (item,index) {
+        var sortOrder = arr['vaccineAgeGroups'][index]['SortOrder']
         
         var secondDose = parseFloat(arr['vaccineAgeGroups'][index]['SecondDose']);
         var firstDose = parseFloat(arr['vaccineAgeGroups'][index]['FirstDose']) - secondDose;
 
-        dps1.push(firstDose);
-        dps2.push(secondDose);
+        dps1[sortOrder-1] = firstDose;
+        dps2[sortOrder-1] = secondDose;
 
     });
 
@@ -1090,7 +1092,8 @@ function showVaccineAgeCountChart(json, name, loc) {
     var titleFontSize = getChartTitleSize(loc);
 
     var labels = [
-        '0-11',
+        '0-4',
+        '05-11',
         '12-19',
         '20-29',
         '30-39',
