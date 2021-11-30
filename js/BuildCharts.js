@@ -956,7 +956,7 @@ function showDailyCaseRatesChart(json,name,loc) {
         'New Case Rate',
         'Active Hospital Rate',
         'Active ICU Rate',
-        ['Covid-19 Death Rate'/*,'Total Population'*/]
+        ['Covid-19 Death Rate','Total Population', 'Since August 1, 2021']
     ];
 
     var statusGroups = [
@@ -968,7 +968,7 @@ function showDailyCaseRatesChart(json,name,loc) {
 
     var dpsFullyVaccinated = []; 
     var dpsPartiallyVaccinated = []; 
-    // var dpsUnvaccinated = [];
+    var dpsUnvaccinated = [];
     var dpsChildren = [];
     var dpsUnvaccinatedEligible = [];
 
@@ -976,13 +976,14 @@ function showDailyCaseRatesChart(json,name,loc) {
         
         var fullyVaccinated = parseFloat(arr['dailyCaseRates'][0][item]);
         var partiallyVaccinated = parseFloat(arr['dailyCaseRates'][1][item]);
-        // var unvaccinated = parseFloat(arr['dailyCaseRates'][2][item]);
+        var unvaccinated = parseFloat(arr['dailyCaseRates'][2][item]);
+
         var children = parseFloat(arr['dailyCaseRates'][4][item]);
         var unvaccinatedEligible = parseFloat(arr['dailyCaseRates'][3][item]);
 
         dpsFullyVaccinated.push(fullyVaccinated);
         dpsPartiallyVaccinated.push(partiallyVaccinated);
-        // dpsUnvaccinated.push(unvaccinated);
+        dpsUnvaccinated.push(unvaccinated);
         dpsChildren.push(children);
         dpsUnvaccinatedEligible.push(unvaccinatedEligible);
     });
@@ -1001,15 +1002,20 @@ function showDailyCaseRatesChart(json,name,loc) {
                 backgroundColor: "#ff9900",
             },
             {
-                label: 'Children',
-                data: dpsChildren,
-                backgroundColor: "#aa0000"
-            },
-            {
-                label: 'Unvaccinated (12+)',
-                data: dpsUnvaccinatedEligible,
+                label: 'Unvaccinated',
+                data: dpsUnvaccinated,
                 backgroundColor: "#ff0000"
-            }
+            }//,
+            // {
+            //     label: 'Children',
+            //     data: dpsChildren,
+            //     backgroundColor: "#aa0000"
+            // },
+            // {
+            //     label: 'Unvaccinated (12+)',
+            //     data: dpsUnvaccinatedEligible,
+            //     backgroundColor: "#ff0000"
+            // }
                      
         ]
     };
@@ -1032,7 +1038,7 @@ function showDailyCaseRatesChart(json,name,loc) {
                 },
             subtitle: {
                 display: true,
-                text: '*Generated from GNB Dashboard, Death Rate since August 1, 2021',
+                text: '*Unvaccinated group results only include those also ineligible due to age',
                 color: '#a6a6a6'
             },
                 legend: {
