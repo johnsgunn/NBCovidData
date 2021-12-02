@@ -192,16 +192,23 @@ deceasedRate = {
         {
             "Date": "2021-11-30",
             "Count": 125,
-            "Fully Vaccinated": 6.2,
-            "Partially Vaccinated": 18.7,
-            "Unvaccinated": 26
+            "Fully Vaccinated": 6.2,        // 38
+            "Partially Vaccinated": 18.7,   // 7
+            "Unvaccinated": 26              // 36
         },
-        { // 1 fully vaccinated, 2 unvaccinated new deaths
+        { 
             "Date": "2021-12-01",
             "Count": 128,
-            "Fully Vaccinated": 6.4,
-            "Partially Vaccinated": 18.7,
-            "Unvaccinated": 27.8
+            "Fully Vaccinated": 6.4,        // 39
+            "Partially Vaccinated": 18.7,   // 7
+            "Unvaccinated": 27.8            // 38
+        },
+        { 
+            "Date": "2021-12-01",
+            "Count": 130,
+            "Fully Vaccinated": 6.5,        // 40
+            "Partially Vaccinated": 18.1,   // 7
+            "Unvaccinated": 28.8            // 39
         }
     ]
 };
