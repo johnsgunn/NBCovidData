@@ -956,7 +956,7 @@ function showDailyCaseRatesChart(json,name,loc) {
         'New Case Rate',
         'Active Hospital Rate',
         'Active ICU Rate',
-        ['Covid-19 Death Rate','Total Population', 'Since August 1, 2021']
+        ['Covid-19 Death Rate', 'Since August 1, 2021']
     ];
 
     var statusGroups = [
