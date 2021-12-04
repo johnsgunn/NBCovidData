@@ -1082,6 +1082,16 @@ nbCases = {
     },
     {
         "Date": "2021-12-01",
+        "Active Cases": 676,
+        "New Cases": 93,
+        "Fully Vaccinated": 37,
+        "Partially Vaccinated": 4,
+        "Unvaccinated": 55,
+        "Recovered": 7606,
+        "Total Cases": 8411
+    },
+    {
+        "Date": "2021-12-02",
         "Active Cases": 691,
         "New Cases": 95,
         "Fully Vaccinated": 43,
@@ -1089,6 +1099,26 @@ nbCases = {
         "Unvaccinated": 48,
         "Recovered": 7684,
         "Total Cases": 8506
+    },
+    {
+        "Date": "2021-12-03",
+        "Active Cases": 691,
+        "New Cases": 95,
+        "Fully Vaccinated": 54,
+        "Partially Vaccinated": 1,
+        "Unvaccinated": 45,
+        "Recovered": 7684,
+        "Total Cases": 8603
+    },
+    {
+        "Date": "2021-12-04",
+        "Active Cases": 772,
+        "New Cases": 77,
+        "Fully Vaccinated": 27,
+        "Partially Vaccinated": 2,
+        "Unvaccinated": 53,
+        "Recovered": 7825,
+        "Total Cases": 8680
     }
 
 ]

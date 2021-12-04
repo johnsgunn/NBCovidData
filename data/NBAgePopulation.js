@@ -5,6 +5,8 @@ agePopulation = {
         //     populationSize: 84000
         //     // Checked against GNB 2021 projections
         // },
+        // 0-9 Est Size: 76,363
+        // 10-19 Est Size: 72,687
         {
             ageGroup: "0-4",
             populationSize: 29500
