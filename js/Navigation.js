@@ -159,6 +159,12 @@ async function showFullSizeChart (chartName){
             chartJSON = await checkBuildDataSet('dailyCaseRates');
             showDailyCaseRatesChart(chartJSON,'DailyCaseRate','largeChart');
             break;
+        case "hospitalTrends_GNB":
+            //chartJSON = await checkBuildDataSet('HospitalTrends');
+            chartJSON = await checkGetDataJSON('HospitalTrends',hospitalTrendsURL,true);
+            console.log(chartJSON);
+            showHospitalTrendsChart(chartJSON,'HospitalTrends','largeChart');
+            break;
         default:
             // bad selection
             break;

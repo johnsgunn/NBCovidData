@@ -480,6 +480,151 @@ function showCaseTrendsChart(json,name,loc) {
     largeChart.render();
 }
 
+function showHospitalTrendsChart(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+
+    var checkType = "New Brunswick Hospital Trends";
+    var titleText = "Covid-19 Hospital Trends, 7-Day Average";
+
+    var dps1 = [];
+    var dps2 = [];
+    var dps3 = [];
+    var dps4 = [];
+    for (var i=7 ; i < arr[name].length  ; i++){
+        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['Hospitalizations']});
+        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['ICU']});        
+        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Hosp7dayaverage']});
+        dps4.push({ x: arr[name][i]['Date'], y: arr[name][i]['ICU7dayaverage']});
+        
+        
+    }
+
+    var ctx = document.getElementById(loc);
+    if (largeChart) largeChart.destroy();
+    const data = {
+        datasets: [
+        {
+            type: "line",
+            label: "Hospital 7 Day Trend",
+            data:dps3,
+            borderWidth: 4,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#0000cc",
+            backgroundColor: "#0000cc",
+            tension: 0.1,            
+            yAxisID: 'y'
+        },
+        {
+            type: "line",
+            label: "ICU 7 Day Trend",
+            data:dps4,
+            borderWidth: 4,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#ff0000",
+            backgroundColor: "#ff3300",
+            tension: 0.1,            
+            yAxisID: 'y' 
+        },
+        {
+            type: "bar",
+            label: "Hospital Admissions",
+            data:dps1,
+            borderWidth: 1,
+            pointRadius: 1,
+            fill: false,
+            borderColor: "#0000cc",
+            backgroundColor: "#1177bb",      
+            yAxisID: 'y'
+        },            
+        {
+            type: "bar",
+            label: "ICU Admissions",
+            data:dps2,
+            borderWidth: 1,
+            pointRadius: 1,
+            fill: false,
+            borderColor: "#ff3300",
+            backgroundColor: "#993333",
+            yAxisID: 'y'
+        }]
+    };
+
+    const options = {
+        responsive: true,
+        interaction: {
+            mode: 'index',
+            intersect: false, 
+        },
+        scales: {
+            y: {
+                grid: {
+                    color: chartGridColor
+                },
+                display: true,
+                type: 'linear',
+                position: 'left',
+                color: chartTextColor,
+                title: {
+                    display: true,
+                    text: 'Admissions',
+                    color: chartTextColor,
+                    font: {
+                        size: 15
+                    },                        
+                },
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+            },    
+            x: {
+                grid: {
+                    drawOnChartArea: false,
+                    color: chartGridColor
+                },
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+            }             
+        },   
+        plugins: {
+            title: {
+                display: true,
+                text: titleText,
+                color: chartTextColor,
+                font: {
+                    size: titleFontSize
+                }, 
+            },
+            legend: {
+                display: true,
+                position:'top',
+                fullWidth: false,
+                labels: {
+                    color: chartTextColor
+                }
+            },
+            filler: {
+                propagate: true
+            }
+        }
+    };
+
+    largeChart = new Chart(ctx, {
+        stacked: false, 
+        data: data,
+        options: options,
+        plugins: [canvasBG]
+    });
+    largeChart.render();
+}
+
 function showPedCasesChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.

@@ -45,6 +45,7 @@ const canvasBG = {
   var caseStatusJSON = null;
   var dailyCaseRatesJSON = null;
   var caseAgeRatesJSON = null;
+  var hospitalTrendsJSON = null;
 
   // Store Calculated Data //
   var hospitalCaseRateJSON = [];
