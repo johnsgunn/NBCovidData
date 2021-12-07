@@ -262,6 +262,9 @@ async function showArcGis(name){
         case "CaseVaccinationStatus":
             url = VaccinationRatesURL;
             break;
+        case "CaseAgeStats":
+            url = caseAgeStatsURL;
+            break;
         default: // invalid selection
             exit;
     }
