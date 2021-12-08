@@ -10,7 +10,9 @@ async function preloadData(){
     vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
     schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
     caseRatesJSON = await checkBuildDataSet("caseRates",true);
-    caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);    
+    caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
+    console.log("caseStatusJSON");
+
 
     hideElement('loadingSpinner');
 }
