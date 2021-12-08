@@ -66,9 +66,11 @@ function showCaseSummaryBoard(json,name){
 
     tableBody.push({title: "In Hospital", value: arr[name][0]['Hospitalised']},
                     {title: "In ICU", value: arr[name][0]['ICU']},
+                    {title: "Ventilator", value: arr[name][0]['MechVentilated']},
                     {title: "Tot. Deaths", value: arr[name][0]['Deaths']},
                     {title: "Tot. Hospitalized", value: arr[name][0]['TtlHospitald']},
-                    {title: "Tot. Discharged", value: arr[name][0]['DischHosp']},
+                    // {title: "Tot. Discharged", value: arr[name][0]['DischHosp']},
+                    
                     );
         
     
@@ -95,7 +97,7 @@ function showVaccineSummaryBoard(json,name){
 
     tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentOneDose'] + "%)"},
                     {title: "Two Doses", value: arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentSecondDose'] + "%)"},
-                    {title: "Total. Administered", value: arr[name][0]['TotalAdmin']},
+                    {title: "Tot. Administered", value: arr[name][0]['TotalAdmin']},
                     {title: "New First Dose", value: arr[name][0]['NewFirstDose']},
                     {title: "New Second", value: arr[name][0]['NewSecondDose']},
                     );
