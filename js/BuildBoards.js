@@ -13,7 +13,7 @@ function buildBoardTable(header,body){
         table += 
         "<tr>"+
             "<td><h3>"+body[i]["title"]+"</span></h3></td>"+
-            "<td><h3><span class='badge bg-info'>"+body[i]["value"]+"</span></h3></td>"+
+            "<td><h3><span class='badge bg-info text-start'>"+body[i]["value"]+"</span></h3></td>"+
         "</tr>"
     }
     table += 
@@ -95,11 +95,13 @@ function showVaccineSummaryBoard(json,name){
     "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
     var tableBody = [];
 
-    tableBody.push({title: "One Dose", value: arr[name][0]['PopOneDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentOneDose'] + "%)"},
-                    {title: "Two Doses", value: arr[name][0]['PopSecondDose']+"</span> <span class='badge bg-info'>(" + arr[name][0]['PercentSecondDose'] + "%)"},
-                    {title: "Tot. Administered", value: arr[name][0]['TotalAdmin']},
-                    {title: "New First Dose", value: arr[name][0]['NewFirstDose']},
-                    {title: "New Second", value: arr[name][0]['NewSecondDose']},
+    tableBody.push({title: "1st Dose", value: arr[name][0]['PopOneDose']+" <span class='badge bg-secondary'>" + arr[name][0]['PercentOneDose'] + "%</span>"},
+                    {title: "2nd Dose", value: arr[name][0]['PopSecondDose']+" <span class='badge bg-secondary'>" + arr[name][0]['PercentSecondDose'] + "%</span>"},
+                    {title: "3rd Dose", value: arr[name][0]['PopBoosterDose']+" <span class='badge bg-secondary'>" + arr[name][0]['PercentBoosterDose'] + "%</span>"},
+                    {title: "New Doses", value: "<span class='badge bg-secondary'>1)</span>&nbsp" + arr[name][0]['NewFirstDose'] + "<br />" + 
+                                          "<span class='badge bg-secondary'>2)</span>&nbsp" + arr[name][0]['NewSecondDose'] + "<br />" + 
+                                          "<span class='badge bg-secondary'>3)</span>&nbsp" + arr[name][0]['NewBoosterDose'] },
+                    // {title: "New Second", value: arr[name][0]['NewSecondDose']},
                     );
 
     var vaccinations = document.createElement("p");
