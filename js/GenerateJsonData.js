@@ -656,89 +656,89 @@ function buildDailyCaseRate(){
     ////////////
     // Calculate Death Rate for Eligible Population (12+)
     ////////////
-    var populationEligible = parseInt(populationCount[3]);
-    var caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
-    var newUnder10Cases = caseAgeRatesArr['caseAgeRates'][caseAgeEntries-1]['New Cases < 10'];
-    var newCasesEligible = daily.dailyCaseRates[2]['NewCaseCount'] - newUnder10Cases;
+    // var populationEligible = parseInt(populationCount[3]);
+    // var caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
+    // var newUnder10Cases = caseAgeRatesArr['caseAgeRates'][caseAgeEntries-1]['New Cases < 10'];
+    // var newCasesEligible = daily.dailyCaseRates[2]['NewCaseCount'] - newUnder10Cases;
 
-    // var newCasePercentEligible = parseFloat(((newCasesEligible / newCases) * 100).toFixed(1));
-    var newCaseRateEligible = parseFloat(((newCasesEligible / parseInt(populationCount[3])) * 100000).toFixed(1));
+    // // var newCasePercentEligible = parseFloat(((newCasesEligible / newCases) * 100).toFixed(1));
+    // var newCaseRateEligible = parseFloat(((newCasesEligible / parseInt(populationCount[3])) * 100000).toFixed(1));
 
-    var hospitalCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveHospCount']);
-    var hospitalRateEligible = parseFloat(((hospitalCountEligible / populationEligible) * 100000).toFixed(1));
+    // var hospitalCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveHospCount']);
+    // var hospitalRateEligible = parseFloat(((hospitalCountEligible / populationEligible) * 100000).toFixed(1));
 
-    var icuCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveICUCount']);
-    var icuRateEligible = parseFloat(((icuCountEligible / populationEligible) * 100000).toFixed(1));
+    // var icuCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveICUCount']);
+    // var icuRateEligible = parseFloat(((icuCountEligible / populationEligible) * 100000).toFixed(1));
 
-    var deceasedCountEligible = parseInt(daily.dailyCaseRates[2]['DeceasedCount']);
-    var deceasedRateEligible = parseFloat(((deceasedCountEligible / populationEligible) * 100000).toFixed(1));
+    // var deceasedCountEligible = parseInt(daily.dailyCaseRates[2]['DeceasedCount']);
+    // var deceasedRateEligible = parseFloat(((deceasedCountEligible / populationEligible) * 100000).toFixed(1));
 
-    var row = {};
-    row['VaccinationStatus'] = "Unvaccinated 12+";
+    // var row = {};
+    // row['VaccinationStatus'] = "Unvaccinated 5+";
 
-    // Size of group
-    row['Population'] = populationEligible;
+    // // Size of group
+    // row['Population'] = populationEligible;
 
-    // row['NewCasePercent'] = newCasePercentEligible;
-    row['NewCaseCount'] = newCasesEligible;
-    row['NewCaseRate'] = newCaseRateEligible;
+    // // row['NewCasePercent'] = newCasePercentEligible;
+    // row['NewCaseCount'] = newCasesEligible;
+    // row['NewCaseRate'] = newCaseRateEligible;
 
-    // Hospital Details
-    row['ActiveHospRate'] = hospitalRateEligible;
-    row['ActiveHospCount'] = hospitalCountEligible;
+    // // Hospital Details
+    // row['ActiveHospRate'] = hospitalRateEligible;
+    // row['ActiveHospCount'] = hospitalCountEligible;
 
-    // ICU Details
-    row['ActiveICURate'] = icuRateEligible;
-    row['ActiveICUCount'] = icuCountEligible;
+    // // ICU Details
+    // row['ActiveICURate'] = icuRateEligible;
+    // row['ActiveICUCount'] = icuCountEligible;
 
-    // Deceased Details - Total Population 
-    row['DeceasedRate'] = deceasedRateEligible;
-    row['DeceasedCount'] = deceasedCountEligible;
+    // // Deceased Details - Total Population 
+    // row['DeceasedRate'] = deceasedRateEligible;
+    // row['DeceasedCount'] = deceasedCountEligible;
 
-    daily.dailyCaseRates.push(row);
+    // daily.dailyCaseRates.push(row);
 
 
-    // Calculate Death Rate for Children
-    var populationChildren = parseInt(populationCount[4]);
-    caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
-    var newCasesChildren = newUnder10Cases;
+    // // Calculate Death Rate for Children
+    // var populationChildren = parseInt(populationCount[4]);
+    // caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
+    // var newCasesChildren = newUnder10Cases;
 
-    // var newCasePercentChildren = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
-    var newCaseRateChildren = parseFloat(((newCasesChildren / parseInt(populationCount[4])) * 100000).toFixed(1));
+    // // var newCasePercentChildren = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
+    // var newCaseRateChildren = parseFloat(((newCasesChildren / parseInt(populationCount[4])) * 100000).toFixed(1));
 
-    var hospitalCountChildren = 0;
-    var hospitalRateChildren = 0;
+    // var hospitalCountChildren = 0;
+    // var hospitalRateChildren = 0;
 
-    var icuCountChildren = 0;
-    var icuRateChildren = 0;
+    // var icuCountChildren = 0;
+    // var icuRateChildren = 0;
 
-    var deceasedCountChildren = 0;
-    var deceasedRateChildren = 0;
+    // var deceasedCountChildren = 0;
+    // var deceasedRateChildren = 0;
 
-    row = {};
-    row['VaccinationStatus'] = "Children < 10";
+    // row = {};
+    // row['VaccinationStatus'] = "Children < 5";
 
-    // Size of group
-    row['Population'] = populationChildren;
+    // // Size of group
+    // row['Population'] = populationChildren;
 
-    // Case Details - removing under-10 cases from unvaccinated count
-    // row['NewCasePercent'] = newCasePercentChildren;
-    row['NewCaseCount'] = newCasesChildren;
-    row['NewCaseRate'] = newCaseRateChildren;
+    // // Case Details - removing under-10 cases from unvaccinated count
+    // // row['NewCasePercent'] = newCasePercentChildren;
+    // row['NewCaseCount'] = newCasesChildren;
+    // row['NewCaseRate'] = newCaseRateChildren;
 
-    // Hospital Details
-    row['ActiveHospRate'] = hospitalRateChildren;
-    row['ActiveHospCount'] = hospitalCountChildren;
+    // // Hospital Details
+    // row['ActiveHospRate'] = hospitalRateChildren;
+    // row['ActiveHospCount'] = hospitalCountChildren;
 
-    // ICU Details
-    row['ActiveICURate'] = icuRateChildren;
-    row['ActiveICUCount'] = icuCountChildren;
+    // // ICU Details
+    // row['ActiveICURate'] = icuRateChildren;
+    // row['ActiveICUCount'] = icuCountChildren;
 
-    // Deceased Details - Total Population 
-    row['DeceasedRate'] = deceasedRateChildren;
-    row['DeceasedCount'] = deceasedCountChildren;
+    // // Deceased Details - Total Population 
+    // row['DeceasedRate'] = deceasedRateChildren;
+    // row['DeceasedCount'] = deceasedCountChildren;
 
-    daily.dailyCaseRates.push(row);
+    // daily.dailyCaseRates.push(row);
 
     return daily;
 }
