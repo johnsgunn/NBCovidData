@@ -292,3 +292,22 @@ async function showArcGis(name){
     createTableFromJSON(tableData,name);
     hideElement("loadingSpinner");
 }
+
+function loadArcGisFeatures (jurisdiction) {
+    var select = document.getElementById('arcgis_features');
+    
+
+    console.log(arcgis_features[jurisdiction.value]);
+
+    var features = arcgis_features[jurisdiction.value];
+
+    features.forEach(function (item,index){
+            var option = document.createElement("option");
+            option.text = item['FeatureName'];
+            select.add(option,select[index+1]);
+        }
+    )
+
+    showElement('arcgis_features');
+
+}

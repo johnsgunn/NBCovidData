@@ -30,6 +30,9 @@
     <script src="../js/GetCovidData.js"></script>
     <script src="../js/uiTools.js"></script>
 
+    <!-- Features Available -->
+    <script type="text/javascript" src="../arcgis_features/arcgis_features_ca.js"></script>
+
     <style>
         html { font-size: 80.5%; }
         .scroll {
@@ -44,11 +47,31 @@
             <div class="col col-md-12">  
                 <form>
                     <div class="mb-3">
-                      <label for="arcgislink" class="form-label">ArcGIS Link:</label>
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                            id="arcgis_jurisdictions" onchange="loadArcGisFeatures(this)">
+                            <option selected>Select Jurisdiction</option>
+                            <option value="britishcolumbia">British Columbia</option>
+                            <option value="novascotia">Nova Scotia</option>
+                            <option value="newbrunswick">New Brunswick</option>
+                        </select>
+                    
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select form-select-lg mb-3 hidden" aria-label=".form-select-lg example"
+                            id="arcgis_features" onchange="">
+                            <option selected>Select Features</option>
+                            <!-- <option value="britishcolumbia">British Columbia</option>
+                            <option value="novascotia">Nova Scotia</option>
+                            <option value="newbrunswick">New Brunswick</option> -->
+                        </select>
+
+                    </div>  
+
+<!-- 
                       <input type="text" class="form-control" placeholder="https://services1.arcgis.com/" id="arcgis_url" aria-describedby="arcgis" required>
                       <div id="arcgis_info" class="form-text">Enter feature link from ArcGIS dashboard</div>
                     </div>
-                    <button type="button" onclick="showArcGis_FromLink(document.getElementById('arcgis_url').value.toString())" class="btn btn-primary">Convert To Table</button>
+                    <button type="button" onclick="showArcGis_FromLink(document.getElementById('arcgis_url').value.toString())" class="btn btn-primary">Convert To Table</button> -->
                 </form>
             </div>
         </div>
