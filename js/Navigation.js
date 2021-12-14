@@ -213,6 +213,16 @@ function showChartsDisplay(){
     showElement("large_chart");
     showFullSizeChart('caseTrends');
 }
+async function showArcGis_FromLink(url){
+    // replace pbf with json in link
+    var jsonUrl = url.replace("pbf","json");
+    jsonUrl = jsonUrl.replace("html","json");
+
+    var name = url.split('services/').pop().split('/FeatureServer')[0];
+
+    var tableData = await checkGetDataJSON(name,jsonUrl,true);
+    createTableFromJSON(tableData,name,"asc","tableRow","tableContainer");
+}
 
 async function showArcGis(name){
     hideAll();

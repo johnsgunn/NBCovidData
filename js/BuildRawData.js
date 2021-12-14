@@ -2,7 +2,7 @@
 
 
 // Converts json object to a table
-function createTableFromJSON(jsonData,name,sortOrder="asc") {
+function createTableFromJSON(jsonData,name,sortOrder="asc",elementLoc="bodyRow",container="bodyContainer") {
     var arr = [];
 
     arr = JSON.parse(jsonData); 	// Convert JSON to array.
@@ -71,8 +71,8 @@ function createTableFromJSON(jsonData,name,sortOrder="asc") {
     table.classList.add(tableTextColor);
 
     // Finally, add the dynamic table to a container.
-    var divContainer = document.getElementById("bodyContainer");
-    divContainer.innerHTML = "<h4 class='" + tableTextColor + "'>Report from GNB Data: " + name + "</h4>";
+    var divContainer = document.getElementById(container);
+    divContainer.innerHTML = "<h4 class='" + tableTextColor + "'>Report from ArcGIS Data: " + name + "</h4>";
     divContainer.appendChild(table);
 
     $(document).ready(function() {
@@ -90,5 +90,5 @@ function createTableFromJSON(jsonData,name,sortOrder="asc") {
     });
     } );    
 
-    showElement("bodyRow");
+    showElement(elementLoc);
 }
