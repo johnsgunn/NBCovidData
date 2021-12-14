@@ -286,6 +286,13 @@ deceasedRate = {
             "Fully Vaccinated": 7.1,        // 44* 
             "Partially Vaccinated": 14.9,   // 7
             "Unvaccinated": 39.4            // 49* 
+        },
+        { 
+            "Date": "2021-12-14",
+            "Count": 144,
+            "Fully Vaccinated": 7.1,        // 44
+            "Partially Vaccinated": 14.7,   // 7
+            "Unvaccinated": 41.5            // 51**
         }
     ]
 };
