@@ -101,9 +101,157 @@ arcgis_features = {
         }
     ],
     newbrunswick: [
-        
+        {
+            "FeatureName": "AdultResidentialFacilities"
+          },
+          {
+            "FeatureName": "Airports"
+          },
+          {
+            "FeatureName": "CircuitBreaker_8Oct2021"
+          },
+          {
+            "FeatureName": "Counties"
+          },
+          {
+            "FeatureName": "Covid19_Exposures"
+          },
+          {
+            "FeatureName": "Covid19_Exposures2"
+          },
+          {
+            "FeatureName": "Covid19AssessmentSites"
+          },
+          {
+            "FeatureName": "Covid19CaseVaccinationRates2"
+          },
+          {
+            "FeatureName": "Covid19Compliance"
+          },
+          {
+            "FeatureName": "Covid19ComplianceEnforcement2"
+          },
+          {
+            "FeatureName": "Covid19DailyCaseStats"
+          },
+          {
+            "FeatureName": "Covid19DailyCaseStats3"
+          },
+          {
+            "FeatureName": "Covid19DailyVaccineStats"
+          },
+          {
+            "FeatureName": "Covid19HospitalTrends"
+          },
+          {
+            "FeatureName": "Covid19NBSchools"
+          },
+          {
+            "FeatureName": "Covid19NewCaseAgeStats2"
+          },
+          {
+            "FeatureName": "Covid19SchoolsData"
+          },
+          {
+            "FeatureName": "Covid19TestStatistics"
+          },
+          {
+            "FeatureName": "Covid19VaccineAge"
+          },
+          {
+            "FeatureName": "Covid19VaccineData2"
+          },
+          {
+            "FeatureName": "Covid19VaccineTimetable"
+          },
+          {
+            "FeatureName": "Ferries"
+          },
+          {
+            "FeatureName": "HealthZones"
+          },
+          {
+            "FeatureName": "Hospitals"
+          },
+          {
+            "FeatureName": "International_Border"
+          },
+          {
+            "FeatureName": "NBCommunities"
+          },
+          {
+            "FeatureName": "Neighbour_CountiesRegions2"
+          },
+          {
+            "FeatureName": "Neighbour_StateProv"
+          },
+          {
+            "FeatureName": "NursingHomes"
+          },
+          {
+            "FeatureName": "Parishes"
+          },
+          {
+            "FeatureName": "RecoveryPhases"
+          },
+          {
+            "FeatureName": "TrafficControlPoints"
+          },
+          {
+            "FeatureName": "WinterPlanLevel"
+          }
     ],
     novascotia: [
-        
+        {
+            "FeatureName": "ApplicationExtent"
+          },
+          {
+            "FeatureName": "BND_NS_CommunityHealthNetworks_Join_PROD"
+          },
+          {
+            "FeatureName": "BND_NSH_MZones_V4_Join_PROD"
+          },
+          {
+            "FeatureName": "Breakthrough_Outcomes_V4_PROD"
+          },
+          {
+            "FeatureName": "Demographics_V4_PROD"
+          },
+          {
+            "FeatureName": "Health_Boundaries_PROD"
+          },
+          {
+            "FeatureName": "Immunizations_V4_PROD"
+          },
+          {
+            "FeatureName": "Lab_Testing_MaxDate_V4_PROD"
+          },
+          {
+            "FeatureName": "Lab_Testing_V4_PROD"
+          },
+          {
+            "FeatureName": "NSGNApplications"
+          },
+          {
+            "FeatureName": "Onset_Zones_V4_PROD"
+          },
+          {
+            "FeatureName": "Serious_Outcomes_V4_PROD"
+          },
+          {
+            "FeatureName": "VaccineCoverageCHN_V4_PROD"
+          },
+          {
+            "FeatureName": "VaccineUptakeAge_V4_PROD"
+          },
+          {
+            "FeatureName": "VaccineUptakeAge_V4a_PROD"
+          },
+          {
+            "FeatureName": "Zones_MaxDate_V4_PROD"
+          },
+          {
+            "FeatureName": "Zones_V4_PROD"
+          }
     ]
 };
