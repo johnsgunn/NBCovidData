@@ -295,9 +295,7 @@ async function showArcGis(name){
 
 function loadArcGisFeatures (jurisdiction) {
     var select = document.getElementById('arcgis_features');
-    
-
-    console.log(arcgis_features[jurisdiction.value]);
+    select.innerHTML = "";
 
     var features = arcgis_features[jurisdiction.value];
 
@@ -309,5 +307,28 @@ function loadArcGisFeatures (jurisdiction) {
     )
 
     showElement('arcgis_features');
+
+}
+
+async function showArcGis_FromFeatures(feature, jurisdiction){
+    var arcGisBase = "";
+    switch (jurisdiction){
+        case "britishcolumbia":
+            arcGisBase = acrgisBC;
+            break;
+        case "newbrunswick":
+            arcGisBase = arcgisNB;
+            break;
+        case "novascotia":
+            arcGisBase = arcgisNS;
+            break;
+        default: 
+            exit();
+            break;
+    }
+    // build url from passed feature
+    var url = arcGisBase + feature + arcgisOptions;
+
+    await showArcGis_FromLink(url);
 
 }

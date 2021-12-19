@@ -54,5 +54,6 @@ var CSV_PedData = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0RViSegmUaJ
 // Base API format for ArcGIS
 var arcgisNB = "https://services5.arcgis.com/WO0dQcVbxj7TZHkH/arcgis/rest/services/";
 var acrgisBC = "https://services1.arcgis.com/xeMpV7tU1t4KD3Ei/arcgis/rest/services/";
+var arcgisNS = "https://services7.arcgis.com/guiEgv5T1fmjU8SW/arcgis/rest/services/";
 
 var arcgisOptions = "/FeatureServer/0/query?where=1%3D1&resultType=standard&outFields=*&f=html";

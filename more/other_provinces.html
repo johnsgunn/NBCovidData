@@ -58,7 +58,7 @@
                     </div>
                     <div class="mb-3">
                         <select class="form-select form-select-lg mb-3 hidden" aria-label=".form-select-lg example"
-                            id="arcgis_features" onchange="">
+                            id="arcgis_features" onchange="showArcGis_FromFeatures(this.value, document.getElementById('arcgis_jurisdictions').value.toString())">
                             <option selected>Select Features</option>
                             <!-- <option value="britishcolumbia">British Columbia</option>
                             <option value="novascotia">Nova Scotia</option>
