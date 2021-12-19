@@ -102,5 +102,8 @@ arcgis_features = {
     ],
     newbrunswick: [
         
+    ],
+    novascotia: [
+        
     ]
 };
