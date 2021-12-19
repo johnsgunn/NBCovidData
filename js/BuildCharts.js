@@ -1108,7 +1108,7 @@ function showDailyCaseRatesChart(json,name,loc) {
         'Fully Vaccinated',
         'Partially Vaccinated',
         'Unvaccinated',
-        'Unvaccinated 12+'
+        // 'Unvaccinated 12+'
     ];
 
     var dpsFullyVaccinated = []; 
@@ -1123,14 +1123,14 @@ function showDailyCaseRatesChart(json,name,loc) {
         var partiallyVaccinated = parseFloat(arr['dailyCaseRates'][1][item]);
         var unvaccinated = parseFloat(arr['dailyCaseRates'][2][item]);
 
-        var children = parseFloat(arr['dailyCaseRates'][4][item]);
-        var unvaccinatedEligible = parseFloat(arr['dailyCaseRates'][3][item]);
+        // var children = parseFloat(arr['dailyCaseRates'][4][item]);
+        // var unvaccinatedEligible = parseFloat(arr['dailyCaseRates'][3][item]);
 
         dpsFullyVaccinated.push(fullyVaccinated);
         dpsPartiallyVaccinated.push(partiallyVaccinated);
         dpsUnvaccinated.push(unvaccinated);
-        dpsChildren.push(children);
-        dpsUnvaccinatedEligible.push(unvaccinatedEligible);
+        // dpsChildren.push(children);
+        // dpsUnvaccinatedEligible.push(unvaccinatedEligible);
     });
 
     const data = {
