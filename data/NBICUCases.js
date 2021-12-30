@@ -685,6 +685,13 @@ icuCases = {
             "Fully Vaccinated": 2,
             "Partially Vaccinated": 0,
             "Unvaccinated": 11
+        },
+        { // On vent: 10
+            "Date": "2021-12-28",
+            "Admitted": 17,
+            "Fully Vaccinated": 3,
+            "Partially Vaccinated": 0,
+            "Unvaccinated": 14
         }
        ]
 };
