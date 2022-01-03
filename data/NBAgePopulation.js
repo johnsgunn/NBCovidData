@@ -1,90 +1,69 @@
 agePopulation = {
     agePopulation: [
-        // {
-        //     ageGroup: "0-11",
-        //     populationSize: 84000
-        //     // Checked against GNB 2021 projections
-        // },
-        // 0-9 Est Size: 76,363
-        // 10-19 Est Size: 72,687
         {
+            sortIndex: 0,
             ageGroup: "0-4",
             populationSize: 29500
         },
         {
-            ageGroup: "05-11",
+            sortIndex: 1,
+            ageGroup: "5-11",
             populationSize: 54500
-            // Added to GNB API on 11/29/2021
         },
         {
+            sortIndex: 2,
             ageGroup: "12-19",
             populationSize: 65050
-            // Checked against GNB 2021 projections
         },
         {
+            sortIndex: 3,
             ageGroup: "20-29",
-            // populationSize: 87740
             populationSize: 90624
-            // Updated to match GNB 2021 Projections
         },
         {
+            sortIndex: 4,
             ageGroup: "30-39",
-            // populationSize: 91696
             populationSize: 92920
-            // Updated to match GNB 2021 Projections
         },
         {
+            sortIndex: 5,
             ageGroup: "40-49",
-            // populationSize: 100099
             populationSize: 100120
-            // Updated to match GNB 2021 Projections
         },
         {
+            sortIndex: 6,
             ageGroup: "50-59",
-            // populationSize: 117778
             populationSize:  114789 
-            // Updated to match GNB 2021 Projections
         },
         {
+            sortIndex: 7,
             ageGroup: "60-64",
-            // populationSize: 61741
             populationSize: 62383
-            // Updated to match GNB 2021 Projections
         },
         {
+            sortIndex: 8,
             ageGroup: "65-69",
-            // populationSize: 55682
             populationSize: 57465
-            // Updated to match GNB 2021 Projections
-            // Differential 1.032019
         },
         {
+            sortIndex: 9,
             ageGroup: "70-74",
-            // populationSize: 47136
             populationSize: 48645
-            // Updated to match GNB 2021 Projections
-            // Differential 1.032019
         },
         {
+            sortIndex: 10,
             ageGroup: "75-79",
-            // populationSize: 30575
             populationSize: 31554
-            // Updated to match GNB 2021 Projections
-            // Differential 1.032019
         },
         {
+            sortIndex: 11,
             ageGroup: "80-84",
-            // populationSize: 19547
             populationSize: 20173
-            // Updated to match GNB 2021 Projections
-            // Differential 1.032019
         },
         {
+            sortIndex: 12,
             ageGroup: "85+",
-            // populationSize: 18956
             populationSize: 19563
-            // Updated to match GNB 2021 Projections
-            // Differential 1.032019
         }
     ]
 };

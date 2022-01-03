@@ -969,7 +969,16 @@ function showVaccineAgeChart(json,name,loc) {
 
     var titleFontSize = getChartTitleSize(loc);
 
+    // build proper sort order 
+    var population = [];// agePopulation;
+    var sortOrder = [];
+    agePopulation['agePopulation'].forEach(function (item, index) {
+        population[item['ageGroup']] = item['populationSize'];
+        sortOrder[item['ageGroup']] = item['sortIndex'];
+    })
+
     var labels = [
+        '0-4',
         '5-11',
         '12-19',
         '20-29',
@@ -987,16 +996,16 @@ function showVaccineAgeChart(json,name,loc) {
     var dps1 = []; // first dose
     var dps2 = []; // second dose
 
-    labels.forEach(function (item,index) {
-        var sortOrder = arr['vaccineAgeGroups'][index]['SortOrder']
+    arr['vaccineAgeGroups'].forEach(function (item, index) {
+        var ageGroup = item['StatGroup'];
+        var secondDose = parseFloat(item['SecondDose']);
+        var firstDose = parseFloat(item['FirstDose']-secondDose);
         
-        var secondDose = parseFloat(arr['vaccineAgeGroups'][index]['SecondDose']);
-        var firstDose = parseFloat(arr['vaccineAgeGroups'][index]['FirstDose']) - secondDose;
+        var sortIndex = sortOrder[ageGroup];
 
-        dps1[sortOrder-1] = firstDose;
-        dps2[sortOrder-1] = secondDose;
-
-    });
+        dps1[sortIndex] = firstDose;
+        dps2[sortIndex] = secondDose;
+    })
 
     const data = {
         labels: labels,
@@ -1242,9 +1251,19 @@ function showVaccineAgeCountChart(json, name, loc) {
 
     var titleFontSize = getChartTitleSize(loc);
 
+    // build proper sort order 
+    var population = [];// agePopulation;
+    var sortOrder = [];
+    agePopulation['agePopulation'].forEach(function (item, index) {
+        population[item['ageGroup']] = item['populationSize'];
+        sortOrder[item['ageGroup']] = item['sortIndex'];
+    })
+
+    console.log(arr);
+
     var labels = [
         '0-4',
-        '05-11',
+        '5-11',
         '12-19',
         '20-29',
         '30-39',
@@ -1262,15 +1281,19 @@ function showVaccineAgeCountChart(json, name, loc) {
     var dps2 = []; // second dose
     var dps3 = []; // unvaccinated
 
-    labels.forEach(function (item, index) {
-        var fullyVaccinated = parseFloat(arr['vaccineAgeGroupCount'][index]['Fully Vaccinated']);
-        var partiallyVaccinated = parseFloat(arr['vaccineAgeGroupCount'][index]['Partially Vaccinated']);
-        var unvaccinated = parseFloat(arr['vaccineAgeGroupCount'][index]['Unvaccinated']);
+    arr['vaccineAgeGroupCount'].forEach(function (item, index) {
+        var ageGroup = item['Age Group'];
 
-        dps1.push(partiallyVaccinated);
-        dps2.push(fullyVaccinated);
-        dps3.push(unvaccinated);
-    });
+        var fullyVaccinated = parseFloat(item['Fully Vaccinated']);
+        var partiallyVaccinated = parseFloat(item['Partially Vaccinated']);
+        var unvaccinated = parseFloat(item['Unvaccinated']);
+        
+        var sortIndex = sortOrder[ageGroup];
+
+        dps1[sortIndex] = partiallyVaccinated;
+        dps2[sortIndex] = fullyVaccinated;
+        dps3[sortIndex] = unvaccinated;
+    })
 
     const data = {
         labels: labels,

@@ -244,53 +244,43 @@ function buildCaseAgeTrends_wUnder19(){
 
 }
 
+function indexAgeGroups(){
+}
+
 function buildVaccineAgeCount() {
-    var AgeTags = [
-        // "0-11",
-        "0-4",
-        "05-11",
-        "12-19",
-        "20-29",
-        "30-39",
-        "40-49",
-        "50-59",
-        "60-64",
-        "65-69",
-        "70-74",
-        "75-79",
-        "80-84",
-        "85+"
-    ];
 
     var daily = {};
     var vaccineAgeGroupCount = [];
     daily.vaccineAgeGroupCount = vaccineAgeGroupCount;
     
     var vaccineAgePercent = JSON.parse(vaccineAgeGroupsJSON);
-    var population = agePopulation;
+    var population = [];
+    var sortOrder = [];
 
-    AgeTags.forEach(function (item, index) {
+    agePopulation['agePopulation'].forEach(function (item, index) {
+        population[item['ageGroup']] = item['populationSize'];
+        sortOrder[item['ageGroup']] = item['sortIndex'];
+    })
+
+    vaccineAgePercent['vaccineAgeGroups'].forEach(function (item, index) {
+        var ageGroup = item['StatGroup'];
+        var firstDose = item['FirstDose'];
+        var secondDose = item['SecondDose'];
+
+        var groupPopulation = population[ageGroup];
+        var sortIndex = sortOrder[ageGroup]
+        
         var row = {};
-        var sortOrder = 0;
-        if (index > 0) { // ignore 0-4, it is not yet on the GNB API
-            sortOrder = parseInt(vaccineAgePercent['vaccineAgeGroups'][index-1]['SortOrder']);
-        }
-        var groupPopulation = parseInt(population['agePopulation'][sortOrder]['populationSize']);        
 
-        row["Age Group"] = AgeTags[sortOrder];
+        row["sortIndex"] = sortIndex;
+
+        row["Age Group"] = ageGroup;
+
         row["Population"] = groupPopulation;
 
-        console.log("Age group: " + row["Age Group"] + " | Pop: " + groupPopulation + " | Order: " + sortOrder);
+        row["1st Dose Percent"] = firstDose;
+        row["2nd Dose Percent"] = secondDose; 
 
-        if (index == 0){ // 0-4 age group, not yet eligible 
-            row["1st Dose Percent"] = 0;
-            row["2nd Dose Percent"] = 0; 
-        }
-        else {
-            row["1st Dose Percent"] = vaccineAgePercent['vaccineAgeGroups'][index-1]['FirstDose']  || 0;
-            row["2nd Dose Percent"] = vaccineAgePercent['vaccineAgeGroups'][index-1]['SecondDose'] || 0;
-        }
-                
         row["1st Dose Count"] = parseInt(groupPopulation * (row["1st Dose Percent"]/100));
         row["2nd Dose Count"] = parseInt(groupPopulation * (row["2nd Dose Percent"]/100));
 
@@ -298,13 +288,11 @@ function buildVaccineAgeCount() {
         row["Partially Vaccinated"] = row["1st Dose Count"] - row["2nd Dose Count"];
         row["Unvaccinated"] = groupPopulation - row["1st Dose Count"];
 
-        //daily.vaccineAgeGroupCount.push(row);
-        daily.vaccineAgeGroupCount[sortOrder] = row;
-    });
-    console.log (daily);
+        daily.vaccineAgeGroupCount[sortIndex] = row;                   
+    })
 
+    daily.vaccineAgeGroupCount = daily.vaccineAgeGroupCount.filter(function () {return true} );
     return daily;
-
 }
 
 // JSON row for today's data to be able to save more easily
