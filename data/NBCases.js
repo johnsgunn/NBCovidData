@@ -1379,6 +1379,16 @@ nbCases = {
         "Unvaccinated": 429,
         "Recovered": 11214,
         "Total Cases": 16820
+    },
+    {
+        "Date": "2022-01-04",
+        "Active Cases": 6112,
+        "New Cases": 746,
+        "Fully Vaccinated": 601,
+        "Partially Vaccinated": 49,
+        "Unvaccinated": 104,
+        "Recovered": 11287,
+        "Total Cases": 17566
     }
 
 ]
