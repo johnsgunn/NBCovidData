@@ -59,6 +59,7 @@ async function checkBuildDataSet(name,forceReload=false){
 }
 
 function buildCaseAgeTrends(){
+    console.log("Case Age Trends");
     var daily = {};
     var caseAgeRates = [];
     daily.caseAgeRates = caseAgeRates;
@@ -101,20 +102,48 @@ function buildCaseAgeTrends(){
         'Trend 80-89',
         'Trend 90+'
     ];
+
+    console.log(newCases);
     
-    for (var i = 0 ; i < ageCases['ageCases'].length ; i++){
-        var date = ageCases['ageCases'][i]['Date'];
-        var Age_Cases = [];
+    for (var i = 0 ; i < newCases['newCases'].length ; i++){
+        var date = newCases['newCases'][i]['Date'];
+        var Age_Tot_Cases = [];
         var Age_New_Cases = [];
         var Age_Trend_Cases = [];
 
-        AgeTags.forEach(function (item,index) {
-            var newCases = parseInt(ageCases['ageCases'][i][item]) || 0;
-            var prevCases = 0;
-            if (i > 0) {prevCases = parseInt(ageCases['ageCases'][i-1][item])} ;
+        // AgeTags.forEach(function (item,index) {
+        //     var newCases = parseInt(ageCases['ageCases'][i][item]) || 0;
+        //     var prevCases = 0;
+        //     if (i > 0) {prevCases = parseInt(ageCases['ageCases'][i-1][item])} ;
 
-            Age_Cases[item] = newCases;
-            Age_New_Cases[item] = newCases - prevCases;  
+        //     Age_Cases[item] = newCases;
+        //     Age_New_Cases[item] = newCases - prevCases;  
+
+        //     var newCasesSum = 0;
+
+        //     if (i > 7){ // start generating averages 
+        //         for (var j = i-1 ; j > i-8; j--){
+        //             var obj = daily.caseAgeRates[j] ;  
+        //             var tag = "New Cases " + item;                    
+                    
+        //             newCasesSum += parseInt(obj[tag]);
+        //         }                
+        //     }
+        //     Age_Trend_Cases[item] = Math.round(newCasesSum/7);
+             
+
+        // });
+
+        AgeTags.forEach(function (item,index) {
+            var newCaseCount = parseInt(newCases['newCases'][i][item]) || 0;
+            var prevCases = 0;
+            if (i > 0) {
+                prevCases = parseInt(daily.caseAgeRates[i-1][item]);
+                //prevCases = parseInt(newCases['newCases'][i-1][item])
+            } ;
+
+            Age_New_Cases[item] = newCaseCount;  
+            Age_Tot_Cases[item] = newCaseCount + prevCases;            
 
             var newCasesSum = 0;
 
@@ -131,16 +160,17 @@ function buildCaseAgeTrends(){
 
         });
 
+
         var row = {};
 
         row['Date'] = date;
 
         for (var j = 0 ; j < AgeTags.length ; j++){
-            var caseColumn = [NewCasesTags[j]];
-            var trendColumn = [TrendTags[j]];
+            var caseColumn = "New Cases " + [AgeTags[j]];//[NewCasesTags[j]];
+            var trendColumn = "Trend " + [AgeTags[j]];//[TrendTags[j]];
             var ageColumn = [AgeTags[j]];
             
-            row[ageColumn] = Age_Cases[AgeTags[j]] ;
+            row[ageColumn] = Age_Tot_Cases[AgeTags[j]] ;
             row[caseColumn] = Age_New_Cases[AgeTags[j]];
             row[trendColumn] = Age_Trend_Cases[AgeTags[j]];
         }
