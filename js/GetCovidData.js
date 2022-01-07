@@ -11,8 +11,6 @@ async function preloadData(){
     schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
     caseRatesJSON = await checkBuildDataSet("caseRates",true);
     caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
-    console.log("caseStatusJSON");
-
 
     hideElement('loadingSpinner');
 }
@@ -22,8 +20,7 @@ async function backgroundLoadData(){
     schoolsListJSON = await checkGetDataJSON('SchoolsList',SchoolsListURL,true);
     healthZoneJSON = await checkGetDataJSON('HealthZoneSummary',ZoneSummaryURL,true);
     dailyTestingJSON = await checkGetDataJSON("dailyTesting",DailyTestingURL,true);
-    vaccineAgeGroupsJSON = await checkGetDataJSON("vaccineAgeGroups",VaccinesByAgeGroupURL,true);
-    
+    vaccineAgeGroupsJSON = await checkGetDataJSON("vaccineAgeGroups",VaccinesByAgeGroupURL,true);    
     hospitalRatesJSON = await checkBuildDataSet("hospitalRates",true);
     icuRatesJSON = await checkBuildDataSet("icuRates",true);
     caseAgeRatesJSON = await checkBuildDataSet("caseAgeRates",true);

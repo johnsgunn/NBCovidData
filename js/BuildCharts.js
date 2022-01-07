@@ -78,11 +78,16 @@ function showCaseHistoryChart(json,name,loc) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Daily Case History',
+                    text: 'New Brunswick Daily Case History',
                     color: chartTextColor,
                     font: {
                         size: titleFontSize
                     }, 
+                subtitle: {
+                    display: true,
+                    text: 'Case History Beginning March 9, 2020',
+                    color: '#a6a6a6'
+                    },
                 },
                 legend: {
                     display: true,

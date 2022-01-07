@@ -349,6 +349,8 @@ function buildVaccineAgeRow(){
     var row = {};
     var doses = JSON.parse(vaccineAgeGroupsJSON);
 
+    console.log(vaccineAgeGroupsJSON);
+
     // Input 5-11 group first since it appears out of order on the API data set
     var resultCount = AgeTags.length;
     row['5-11 1st Dose'] = parseFloat(doses['vaccineAgeGroups'][resultCount]['FirstDose']);
