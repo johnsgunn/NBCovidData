@@ -433,6 +433,13 @@ caseRate = {
             "Fully Vaccinated": 61.7,
             "Partially Vaccinated": 26.4,
             "Unvaccinated": 20.8
+        },
+        {
+            "Date": "2022-01-09",
+            "Count": 201,
+            "Fully Vaccinated": 29.8,
+            "Partially Vaccinated": 8.8,
+            "Unvaccinated": 10
         }
     ]
 };
