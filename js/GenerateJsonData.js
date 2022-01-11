@@ -48,6 +48,9 @@ async function checkBuildDataSet(name,forceReload=false){
                 case "dailyCaseRates":
                     jsonOutput = buildDailyCaseRate();
                     break;
+                case "dailyCases":
+                    jsonOutput = buildDailyCaseUpdate();
+                    break;
                 default:
                     reject("Invalid selection");
                     break;
@@ -326,6 +329,54 @@ function buildVaccineAgeCount() {
 }
 
 // JSON row for today's data to be able to save more easily
+function buildDailyCaseUpdate(){
+    var daily = {};
+    var dailyCases = [];
+    daily.dailyCases = dailyCases;
+
+    var vaccinationArr = JSON.parse(vaccineHistoryJSON);
+    var caseRatesArr = JSON.parse(caseStatusJSON);
+    var casesArr = JSON.parse(caseSummaryJSON);
+
+    var totPopulation = 780000;
+    var secondDosePop = vaccinationArr['VaccineHistory'][0].SecondDose;
+    var firstDosePop = vaccinationArr['VaccineHistory'][0].FirstDose;
+
+    var fvPop = secondDosePop;
+    var pvPop = firstDosePop - secondDosePop;
+    var uvPop = totPopulation - firstDosePop;
+
+    var fvRate = caseRatesArr['CaseVaccinationStatus'][0].NewCaseRate;
+    var pvRate = caseRatesArr['CaseVaccinationStatus'][1].NewCaseRate;
+    var uvRate = caseRatesArr['CaseVaccinationStatus'][2].NewCaseRate;
+
+    var fvCount = Math.round((fvRate/100000) * fvPop);
+    var pvCount = Math.round((pvRate/100000) * pvPop);
+    var uvCount = Math.round((uvRate/100000) * uvPop);  
+
+    var row = {};
+
+    row['Date'] = casesArr['CaseSummary'][0].LastUpdateText;
+    row['Active Cases'] = parseInt(casesArr['CaseSummary'][0].ActiveCases);
+    row['New Cases'] = parseInt(casesArr['CaseSummary'][0].NewToday);
+    row["Fully Vaccinated"] = fvCount;
+    row['Partially Vaccinated'] = pvCount;
+    row['Unvaccinated'] = uvCount;
+    row['Fully Vaccinated Rate'] = parseFloat(fvRate);
+    row['Partially Vaccinated Rate'] = parseFloat(pvRate);
+    row['Unvaccinated Rate'] = parseFloat(uvRate);
+    row['Recovered'] = parseInt(casesArr['CaseSummary'][0].Recovered);
+    row['Total Cases'] = parseInt(casesArr['CaseSummary'][0].TotalCases);
+    row['Total Tests'] = parseInt(casesArr['CaseSummary'][0].TotalTests);
+
+    daily.dailyCases.push(row);
+
+    console.log(daily);
+
+    return daily;
+}
+
+// JSON row for today's data to be able to save more easily
 function buildCaseAgeRow(){
     var daily = {};
     var caseAgeHistory = [];
@@ -548,11 +599,6 @@ function buildCaseRate(){
     var caseRates = [];
     daily.caseRates = caseRates;
 
-    vaccinationArr = JSON.parse(vaccineHistoryJSON);
-
-    var totalPop = 780000;
-    var eligiblePop = 696000;
-
     // NB Total Cases
 
     for (var i = 0 ; i < nbCases['nbCases'].length ; i++){
@@ -562,18 +608,9 @@ function buildCaseRate(){
         var pvCases = parseInt(nbCases['nbCases'][i]['Partially Vaccinated']) || 0;
         var uvCases = parseInt(nbCases['nbCases'][i]['Unvaccinated']) || 0;
 
-        // Populations 
-        var secondDosePop = vaccinationArr['VaccineHistory'][i].SecondDose;
-        var firstDosePop = vaccinationArr['VaccineHistory'][i].FirstDose;
-
-        var fvPop = parseInt(secondDosePop);
-        var pvPop = parseInt(firstDosePop) - fvPop;
-        var uvPop = totalPop - fvPop - pvPop;
-        var uvEligiblePop = eligiblePop - fvPop - pvPop;
-
-        var fvRate = Math.round((fvCases/fvPop) * 100000);
-        var pvRate = Math.round((pvCases/pvPop) * 100000);
-        var uvRate = Math.round((uvCases/uvEligiblePop) * 100000); // Eligible as no cases are under 19
+        var fvRate = nbCases['nbCases'][i]['Fully Vaccinated Rate'];
+        var pvRate = nbCases['nbCases'][i]['Partially Vaccinated Rate'];
+        var uvRate = nbCases['nbCases'][i]['Unvaccinated Rate']; 
 
         var fvRateTrend = fvCases;
         var pvRateTrend = pvCases;
@@ -672,93 +709,5 @@ function buildDailyCaseRate(){
 
         daily.dailyCaseRates.push(row);
     });
-
-    ////////////
-    // Calculate Death Rate for Eligible Population (12+)
-    ////////////
-    // var populationEligible = parseInt(populationCount[3]);
-    // var caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
-    // var newUnder10Cases = caseAgeRatesArr['caseAgeRates'][caseAgeEntries-1]['New Cases < 10'];
-    // var newCasesEligible = daily.dailyCaseRates[2]['NewCaseCount'] - newUnder10Cases;
-
-    // // var newCasePercentEligible = parseFloat(((newCasesEligible / newCases) * 100).toFixed(1));
-    // var newCaseRateEligible = parseFloat(((newCasesEligible / parseInt(populationCount[3])) * 100000).toFixed(1));
-
-    // var hospitalCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveHospCount']);
-    // var hospitalRateEligible = parseFloat(((hospitalCountEligible / populationEligible) * 100000).toFixed(1));
-
-    // var icuCountEligible = parseInt(daily.dailyCaseRates[2]['ActiveICUCount']);
-    // var icuRateEligible = parseFloat(((icuCountEligible / populationEligible) * 100000).toFixed(1));
-
-    // var deceasedCountEligible = parseInt(daily.dailyCaseRates[2]['DeceasedCount']);
-    // var deceasedRateEligible = parseFloat(((deceasedCountEligible / populationEligible) * 100000).toFixed(1));
-
-    // var row = {};
-    // row['VaccinationStatus'] = "Unvaccinated 5+";
-
-    // // Size of group
-    // row['Population'] = populationEligible;
-
-    // // row['NewCasePercent'] = newCasePercentEligible;
-    // row['NewCaseCount'] = newCasesEligible;
-    // row['NewCaseRate'] = newCaseRateEligible;
-
-    // // Hospital Details
-    // row['ActiveHospRate'] = hospitalRateEligible;
-    // row['ActiveHospCount'] = hospitalCountEligible;
-
-    // // ICU Details
-    // row['ActiveICURate'] = icuRateEligible;
-    // row['ActiveICUCount'] = icuCountEligible;
-
-    // // Deceased Details - Total Population 
-    // row['DeceasedRate'] = deceasedRateEligible;
-    // row['DeceasedCount'] = deceasedCountEligible;
-
-    // daily.dailyCaseRates.push(row);
-
-
-    // // Calculate Death Rate for Children
-    // var populationChildren = parseInt(populationCount[4]);
-    // caseAgeEntries = caseAgeRatesArr['caseAgeRates'].length;
-    // var newCasesChildren = newUnder10Cases;
-
-    // // var newCasePercentChildren = parseFloat(((newCasesChildren / newCases) * 100).toFixed(1));
-    // var newCaseRateChildren = parseFloat(((newCasesChildren / parseInt(populationCount[4])) * 100000).toFixed(1));
-
-    // var hospitalCountChildren = 0;
-    // var hospitalRateChildren = 0;
-
-    // var icuCountChildren = 0;
-    // var icuRateChildren = 0;
-
-    // var deceasedCountChildren = 0;
-    // var deceasedRateChildren = 0;
-
-    // row = {};
-    // row['VaccinationStatus'] = "Children < 5";
-
-    // // Size of group
-    // row['Population'] = populationChildren;
-
-    // // Case Details - removing under-10 cases from unvaccinated count
-    // // row['NewCasePercent'] = newCasePercentChildren;
-    // row['NewCaseCount'] = newCasesChildren;
-    // row['NewCaseRate'] = newCaseRateChildren;
-
-    // // Hospital Details
-    // row['ActiveHospRate'] = hospitalRateChildren;
-    // row['ActiveHospCount'] = hospitalCountChildren;
-
-    // // ICU Details
-    // row['ActiveICURate'] = icuRateChildren;
-    // row['ActiveICUCount'] = icuCountChildren;
-
-    // // Deceased Details - Total Population 
-    // row['DeceasedRate'] = deceasedRateChildren;
-    // row['DeceasedCount'] = deceasedCountChildren;
-
-    // daily.dailyCaseRates.push(row);
-
     return daily;
 }

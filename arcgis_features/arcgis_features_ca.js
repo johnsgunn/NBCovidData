@@ -111,6 +111,9 @@ arcgis_features = {
             "FeatureName": "CircuitBreaker_8Oct2021"
           },
           {
+            "FeatureName": "Communities"
+          },
+          {
             "FeatureName": "Counties"
           },
           {
@@ -118,6 +121,12 @@ arcgis_features = {
           },
           {
             "FeatureName": "Covid19_Exposures2"
+          },
+          {
+            "FeatureName": "Covid19_Exposures_ECO"
+          },
+          {
+            "FeatureName": "Covid19_Exposures_Heat_Map"
           },
           {
             "FeatureName": "Covid19AssessmentSites"
