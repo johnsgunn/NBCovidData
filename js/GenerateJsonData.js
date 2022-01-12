@@ -338,6 +338,8 @@ function buildDailyCaseUpdate(){
     var caseRatesArr = JSON.parse(caseStatusJSON);
     var casesArr = JSON.parse(caseSummaryJSON);
 
+    var newCasesTotal = parseInt(casesArr['CaseSummary'][0].NewPOCT) + parseInt(casesArr['CaseSummary'][0].NewToday);
+
     var totPopulation = 780000;
     var secondDosePop = vaccinationArr['VaccineHistory'][0].SecondDose;
     var firstDosePop = vaccinationArr['VaccineHistory'][0].FirstDose;
@@ -358,7 +360,9 @@ function buildDailyCaseUpdate(){
 
     row['Date'] = casesArr['CaseSummary'][0].LastUpdateText;
     row['Active Cases'] = parseInt(casesArr['CaseSummary'][0].ActiveCases);
-    row['New Cases'] = parseInt(casesArr['CaseSummary'][0].NewToday);
+    row['New Cases'] = newCasesTotal;
+    row['New PCR'] = parseInt(casesArr['CaseSummary'][0].NewToday);
+    row['New POCT'] = parseInt(casesArr['CaseSummary'][0].NewPOCT);
     row["Fully Vaccinated"] = fvCount;
     row['Partially Vaccinated'] = pvCount;
     row['Unvaccinated'] = uvCount;
@@ -368,6 +372,7 @@ function buildDailyCaseUpdate(){
     row['Recovered'] = parseInt(casesArr['CaseSummary'][0].Recovered);
     row['Total Cases'] = parseInt(casesArr['CaseSummary'][0].TotalCases);
     row['Total Tests'] = parseInt(casesArr['CaseSummary'][0].TotalTests);
+    row['Total POCT'] = parseInt(casesArr['CaseSummary'][0].TotalPOCT);
 
     daily.dailyCases.push(row);
 

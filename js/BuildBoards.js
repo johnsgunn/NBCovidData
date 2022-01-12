@@ -13,7 +13,7 @@ function buildBoardTable(header,body){
         table += 
         "<tr>"+
             "<td><h3>"+body[i]["title"]+"</span></h3></td>"+
-            "<td><h3><span class='badge bg-info text-start'>"+body[i]["value"]+"</span></h3></td>"+
+            "<td><span class='badge bg-info text-start' style='font-size:130%'>"+body[i]["value"]+"</span></td>"+
         "</tr>"
     }
     table += 
@@ -48,11 +48,16 @@ function showCaseSummaryBoard(json,name){
     "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>Case History</button></div></div>";
     var tableBody = [];
 
-    tableBody.push({title: "New Cases", value: arr[name][0]['NewToday']},
-                    {title: "Active Cases", value: arr[name][0]['ActiveCases']},
-                    {title: "New Recoveries", value: arr[name][0]['NewRecoveries']},
-                    {title: "Tot. Recoveries", value: arr[name][0]['Recovered']},
-                    {title: "Tot. Cases", value: arr[name][0]['TotalCases']},
+    var totNewCases = parseInt(arr[name][0]['NewToday']) + parseInt(arr[name][0]['NewPOCT']);
+    var totCases = parseInt(arr[name][0]['TotalCases']) + parseInt(arr[name][0]['TotalPOCT']);
+
+    tableBody.push(//{title: "New Cases", value: arr[name][0]['NewToday']},
+                    {title: "New Cases", value: totNewCases + "</span> (<small>PCR+POCT</small>)"},
+                    {title: "Tot Cases", value: totCases + "</span> (<small>PCR+POCT</small>)"}, 
+                    {title: "New PCR: ", value: arr[name][0]['NewToday']},
+                    {title: "New POCT: ", value: arr[name][0]['NewPOCT']},
+                    
+                    {title: "Tot POCT Cases", value: arr[name][0]['TotalPOCT']},
                     );
 
     var cases = document.createElement("p");
