@@ -51,6 +51,9 @@ async function checkBuildDataSet(name,forceReload=false){
                 case "dailyCases":
                     jsonOutput = buildDailyCaseUpdate();
                     break;
+                case "hospitalStatus":
+                    jsonOutput = buildDailyHospitalUpdate();
+                    break;
                 default:
                     reject("Invalid selection");
                     break;
@@ -375,6 +378,86 @@ function buildDailyCaseUpdate(){
     row['Total POCT'] = parseInt(casesArr['CaseSummary'][0].TotalPOCT);
 
     daily.dailyCases.push(row);
+
+    console.log(daily);
+
+    return daily;
+}
+
+// JSON data for Hospital Status
+function buildDailyHospitalUpdate(){
+    var daily = {};
+    var hospitalStatus = [];
+    daily.hospitalStatus = hospitalStatus;
+   
+    var casesArr = JSON.parse(caseSummaryJSON); // Daily summary
+    var hospitalArr = JSON.parse(hospitalStatusAllJSON) // Hospital statuses 
+
+    var covidHospitalized = parseInt(casesArr['CaseSummary'][0].Hospitalised);
+    var covidICU = parseInt(casesArr['CaseSummary'][0].ICU);
+
+    var NBtotHospitalBeds = 0;
+    var NBHospitalBedsUsed = 0;
+    var NBHospitalsAtCapacity = [];
+
+    var NBtotICUBeds = 0;
+    var NBICUBedsUsed = 0;
+    var NBHospitalsWithICU = 0;
+    var NBICUsAtCapacity = [];
+
+    var NBTotalHospitals = hospitalArr['HospitalStatusAll'].length;
+    
+    for (let i = 0 ; i < NBTotalHospitals ; i++){
+        var hospitalBedCount = parseInt(hospitalArr['HospitalStatusAll'][i].TotalBedCount);
+        var hospitalBedOcc = parseInt(hospitalArr['HospitalStatusAll'][i].OccupiedBed);
+
+        var icuBedCount = parseInt(hospitalArr['HospitalStatusAll'][i].TotICUBedCount);
+        var icuBedOcc = parseInt(hospitalArr['HospitalStatusAll'][i].TotICUBedOCC);
+
+        console.log(icuBedCount);
+
+        var hospitalName = hospitalArr['HospitalStatusAll'][i].englabel;
+
+        if (icuBedCount > 0){ 
+            NBtotICUBeds += icuBedCount;
+            NBICUBedsUsed += icuBedOcc;
+            NBHospitalsWithICU++;
+
+            if (icuBedOcc >= icuBedCount){
+                NBICUsAtCapacity.push(hospitalName);
+            }         
+         }
+    
+        NBtotHospitalBeds += hospitalBedCount;
+        NBHospitalBedsUsed += hospitalBedOcc;
+
+        if (hospitalBedOcc >= hospitalBedCount){
+            NBHospitalsAtCapacity.push(hospitalName);
+        }        
+    }
+
+    var percentCovidUseHospital = Math.round((covidHospitalized / NBHospitalBedsUsed)*100);
+    var percentCovidUseICU = Math.round((covidICU / NBICUBedsUsed)*100);
+
+    var row = {};
+
+    row['NB # Of Hospitals'] = NBTotalHospitals;
+    row['Hospitals With ICU'] = NBHospitalsWithICU;
+    row['Available Beds'] = NBtotHospitalBeds - NBHospitalBedsUsed;
+    row['Available ICU'] = NBtotICUBeds - NBICUBedsUsed;
+    row['Hospitals At Capacity'] = NBHospitalsAtCapacity.length;
+    row['ICUs At Capacity'] = NBICUsAtCapacity.length;
+    row['Beds In Use By Covid'] = covidHospitalized;
+    row['ICU In Use By Covid'] = covidICU;
+    row['Total Hospital Beds'] = NBtotHospitalBeds;
+    row['Total ICU Beds'] = NBtotICUBeds;
+    row['% In Use By Covid'] = percentCovidUseHospital + "%";
+    row['% ICU In Use By Covid'] = percentCovidUseICU + "%";
+    row['Hospitals At Capacity'] = NBHospitalsAtCapacity;
+    row['ICUs At Capacity'] = NBICUsAtCapacity;
+
+
+    daily.hospitalStatus.push(row);    
 
     console.log(daily);
 
