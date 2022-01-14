@@ -414,8 +414,6 @@ function buildDailyHospitalUpdate(){
         var icuBedCount = parseInt(hospitalArr['HospitalStatusAll'][i].TotICUBedCount);
         var icuBedOcc = parseInt(hospitalArr['HospitalStatusAll'][i].TotICUBedOCC);
 
-        console.log(icuBedCount);
-
         var hospitalName = hospitalArr['HospitalStatusAll'][i].englabel;
 
         if (icuBedCount > 0){ 
@@ -441,25 +439,21 @@ function buildDailyHospitalUpdate(){
 
     var row = {};
 
-    row['NB # Of Hospitals'] = NBTotalHospitals;
-    row['Hospitals With ICU'] = NBHospitalsWithICU;
-    row['Available Beds'] = NBtotHospitalBeds - NBHospitalBedsUsed;
-    row['Available ICU'] = NBtotICUBeds - NBICUBedsUsed;
-    row['Hospitals At Capacity'] = NBHospitalsAtCapacity.length;
-    row['ICUs At Capacity'] = NBICUsAtCapacity.length;
-    row['Beds In Use By Covid'] = covidHospitalized;
-    row['ICU In Use By Covid'] = covidICU;
-    row['Total Hospital Beds'] = NBtotHospitalBeds;
-    row['Total ICU Beds'] = NBtotICUBeds;
-    row['% In Use By Covid'] = percentCovidUseHospital + "%";
-    row['% ICU In Use By Covid'] = percentCovidUseICU + "%";
-    row['Hospitals At Capacity'] = NBHospitalsAtCapacity;
-    row['ICUs At Capacity'] = NBICUsAtCapacity;
+    row['HospitalCount'] = NBTotalHospitals;
+    row['HospitalBedCount'] = NBtotHospitalBeds;    
+    row['ICUCount'] = NBHospitalsWithICU;
+    row['ICUBedCount'] = NBtotICUBeds;
+    row['AvailableBeds'] = NBtotHospitalBeds - NBHospitalBedsUsed;
+    row['AvailableICU'] = NBtotICUBeds - NBICUBedsUsed;    
+    row['BedCovidUse'] = covidHospitalized;
+    row['ICUCovidUse'] = covidICU;
+    row['HospitalsAtCapacity'] = NBHospitalsAtCapacity.length;
+    row['ICUsAtCapacity'] = NBICUsAtCapacity.length;
+    row['HospitalsAtCapacityList'] = NBHospitalsAtCapacity;
+    row['ICUsAtCapacityList'] = NBICUsAtCapacity;
 
 
     daily.hospitalStatus.push(row);    
-
-    console.log(daily);
 
     return daily;
 }

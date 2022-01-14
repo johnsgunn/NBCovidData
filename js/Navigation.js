@@ -98,6 +98,10 @@ async function showDashboardChart(chartName){
         case "VaccineAgeGroups":
             showVaccineAgeChart(vaccineAgeGroupsJSON,"VaccineAgeGroups","chart1");
             break;
+        case "hospitalStatus":
+            chartJSON = await checkBuildDataSet('hospitalStatus');
+            showCurrentHospitalStatus(chartJSON,'HospitalStatus','chart1');
+            break;
         default:
             // bad selection
             break;
@@ -162,8 +166,11 @@ async function showFullSizeChart (chartName){
         case "hospitalTrends_GNB":
             //chartJSON = await checkBuildDataSet('HospitalTrends');
             chartJSON = await checkGetDataJSON('HospitalTrends',hospitalTrendsURL,true);
-            console.log(chartJSON);
             showHospitalTrendsChart(chartJSON,'HospitalTrends','largeChart');
+            break;
+        case "hospitalStatus":
+            chartJSON = await checkBuildDataSet('hospitalStatus');
+            showCurrentHospitalStatus(chartJSON,'HospitalStatus','largeChart');
             break;
         default:
             // bad selection

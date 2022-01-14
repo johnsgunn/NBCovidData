@@ -1250,6 +1250,212 @@ function showDailyCaseRatesChart(json,name,loc) {
     caseRateChart.render();
 }
 
+function showCurrentHospitalStatus(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+    var nbHospitalBeds = [];
+    var nbICUBeds = [];
+    var nbHospitals = [];
+    var nbICUs = [];
+
+    nbHospitalBeds['Count'] = arr['hospitalStatus'][0].HospitalCount;
+    nbHospitalBeds['TotalBeds'] = arr['hospitalStatus'][0].HospitalBedCount;
+    nbHospitalBeds['AvailableBeds'] = arr['hospitalStatus'][0].AvailableBeds;
+    nbHospitalBeds['CovidBeds'] = arr['hospitalStatus'][0].BedCovidUse;
+    nbHospitalBeds['NonCovidBeds'] = nbHospitalBeds['TotalBeds'] - nbHospitalBeds['AvailableBeds'] - nbHospitalBeds['CovidBeds'];
+    nbHospitalBeds['AtCapacity'] = arr['hospitalStatus'][0].HospitalsAtCapacity;
+
+    nbHospitalBeds['NonCovidBedsPercent'] = nbHospitalBeds['NonCovidBeds'] / nbHospitalBeds['TotalBeds'] * 100;
+    nbHospitalBeds['CovidBedsPercent'] = nbHospitalBeds['CovidBeds'] / nbHospitalBeds['TotalBeds'] * 100 ;
+    nbHospitalBeds['AvailableBedsPercent'] = nbHospitalBeds['AvailableBeds'] / nbHospitalBeds['TotalBeds'] *100;
+
+    nbICUBeds['Count'] = arr['hospitalStatus'][0].ICUCount;
+    nbICUBeds['TotalBeds'] = arr['hospitalStatus'][0].ICUBedCount;
+    nbICUBeds['AvailableBeds'] = arr['hospitalStatus'][0].AvailableICU;
+    nbICUBeds['CovidBeds'] = arr['hospitalStatus'][0].ICUCovidUse;
+    nbICUBeds['NonCovidBeds'] = nbICUBeds['TotalBeds'] - nbICUBeds['AvailableBeds'] - nbICUBeds['CovidBeds'];
+    nbICUBeds['AtCapacity'] = arr['hospitalStatus'][0].ICUsAtCapacity;
+
+    nbICUBeds['NonCovidBedsPercent'] = nbICUBeds['NonCovidBeds'] / nbICUBeds['TotalBeds'] * 100;
+    nbICUBeds['CovidBedsPercent'] = nbICUBeds['CovidBeds'] / nbICUBeds['TotalBeds'] * 100 ;
+    nbICUBeds['AvailableBedsPercent'] = nbICUBeds['AvailableBeds'] / nbICUBeds['TotalBeds'] *100;
+
+
+    nbHospitals['Count'] = arr['hospitalStatus'][0].HospitalCount;
+    nbHospitals['AtCapacity'] = arr['hospitalStatus'][0].HospitalsAtCapacity;
+    nbHospitals['AtCapacityPercent'] = nbHospitals['AtCapacity'] / nbHospitals['Count'] * 100 ;
+    nbHospitals['AtCapacityList'] = arr['hospitalStatus'][0].HospitalsAtCapacityList;
+
+    nbICUs['Count'] = arr['hospitalStatus'][0].ICUCount;
+    nbICUs['AtCapacity'] = arr['hospitalStatus'][0].ICUsAtCapacity;
+    nbICUs['AtCapacityPercent'] = nbICUs['AtCapacity'] / nbICUs['Count'] * 100 ;
+    nbICUs['AtCapacityList'] = arr['hospitalStatus'][0].ICUsAtCapacityList;
+
+    var nbICUList = ['ICUs At Capacity:'];
+    nbICUList.push("");
+    
+    for (let i = 0; i < nbICUs['AtCapacityList'].length ; i++){
+        nbICUList.push(nbICUs['AtCapacityList'][i]);
+    }
+
+
+    var casesArr = JSON.parse(caseSummaryJSON);
+    var lastUpdate = casesArr['CaseSummary'][0].LastUpdateText;
+
+    var labels = [
+        'Hospital Capacity',
+        'ICU Capacity',
+        ['Hospitals'],//, '(Total Hospitals in NB: ' + nbHospitals['Count'] + ')'],        
+        ['ICUs']//, '(Hospitals with ICU: ' + nbICUs['Count'] + ')']
+    ];
+
+    var dpsBedsAvailable = []; 
+    var dpsCovidPts = []; 
+    var dpsOtherPts = [];
+    var dpsAtCapacity = [];
+    var dpsNotAtCapacity = [];
+
+    dpsBedsAvailable[0] = nbHospitalBeds['AvailableBedsPercent'];
+    dpsCovidPts[0] = nbHospitalBeds['CovidBedsPercent'];
+    dpsOtherPts[0] = nbHospitalBeds['NonCovidBedsPercent'];
+    dpsAtCapacity[0] = 0;
+    dpsNotAtCapacity[0] = 0;
+
+    dpsBedsAvailable[1] = nbICUBeds['AvailableBedsPercent'];
+    dpsCovidPts[1] = nbICUBeds['CovidBedsPercent'];
+    dpsOtherPts[1] = nbICUBeds['NonCovidBedsPercent'];
+    dpsAtCapacity[1] = 0;
+    dpsNotAtCapacity[1] = 0;
+
+    dpsBedsAvailable[2] = 0;
+    dpsCovidPts[2] = 0;
+    dpsOtherPts[2] = 0;
+    dpsAtCapacity[2] = nbHospitals['AtCapacityPercent'];
+    dpsNotAtCapacity[2] = 100 - nbHospitals['AtCapacityPercent'];
+
+    dpsBedsAvailable[3] = 0;
+    dpsCovidPts[3] = 0;
+    dpsOtherPts[3] = 0;
+    dpsAtCapacity[3] = nbICUs['AtCapacityPercent'];
+    dpsNotAtCapacity[3] = 100 - nbICUs['AtCapacityPercent'];
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: '% Other Patients',
+                data: dpsOtherPts,
+                backgroundColor: "#ff9900"
+            },
+            
+            {
+                label: '% Covid-19 Patients',
+                data: dpsCovidPts,
+                backgroundColor: "#ff0000",
+            },
+            {
+                label: '% Available',
+                data: dpsBedsAvailable,
+                backgroundColor: "#00ff66",
+            },
+            {
+                label: '% At Capacity',
+                data: dpsAtCapacity,
+                backgroundColor: "#990000",
+            } ,
+            {
+                label: '% Available',
+                data: dpsNotAtCapacity,
+                backgroundColor: "#009900",
+            } ,
+            {
+                label: "ICUs At Capacity: " + nbICUs['AtCapacityList'].toString(),//nbICUList,
+                data: null,
+                backgroundColor: "#4D4D4D",
+                fillOpacity: 0
+            } ,
+            
+                     
+        ]
+    };
+
+    var ctx = document.getElementById(loc);
+    if (hospitalStatusChart) hospitalStatusChart.destroy();
+    hospitalStatusChart = new Chart(ctx, {
+        plugins: [canvasBG],
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+            label: {
+                render: 'value'
+            },
+            title: {
+                    display: true,
+                    text: 'New Brunswick Hospital Status',
+                    color: chartTextColor,
+                    font: {
+                        size: titleFontSize
+                    },    
+                },
+            subtitle: {
+                display: true,
+                text: 'Updated ' + lastUpdate,
+                color: '#a6a6a6'
+            },
+                legend: {
+                    display: true,
+                    position:'bottom',
+                    fullWidth: true,
+                    labels: {
+                        color: chartTextColor,
+                    },
+                }
+              },
+              responsive: true,
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,      
+                    }
+                },
+                y: {
+                  stacked: true,
+                  grid: {
+                        color: chartGridColor
+                    },
+                    display: true,
+                    type: 'linear',
+                    position: 'left',
+                    color: chartTextColor,
+                    title: {
+                        display: false,
+                        text: '% of Total',
+                        color: chartTextColor,
+                        font: {
+                            size: titleFontSize
+                        },                       
+                    },
+                    ticks: {
+                        precision: 0,
+                        color: chartTextColor,  
+                        mirror: true         
+                    },
+                    beginAtZero: true
+                }
+              }            
+        }
+    });
+    hospitalStatusChart.render();
+}
+
 function showVaccineAgeCountChart(json, name, loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.

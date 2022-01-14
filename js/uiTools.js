@@ -90,7 +90,7 @@ async function showDashboard(firstLoad=false){
   showVaccineSummaryBoard(vaccinationSummaryJSON, "VaccinationSummary");
   showSchoolSummaryBoard(schoolsSummaryJSON,'SchoolsSummary');
   // showCaseHistoryChart(caseHistoryJSON,'CaseHistory',"chart1");   
-  showDashboardChart('caseTrends');
+  showDashboardChart('hospitalStatus');
   
   var tableBody = document.getElementsByTagName("tbody");
   var tableHead = document.getElementsByTagName("thead");

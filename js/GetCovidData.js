@@ -11,7 +11,7 @@ async function preloadData(){
     schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
     caseRatesJSON = await checkBuildDataSet("caseRates",true);
     caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
-
+    
     hideElement('loadingSpinner');
 }
 
@@ -24,7 +24,7 @@ async function backgroundLoadData(){
     hospitalRatesJSON = await checkBuildDataSet("hospitalRates",true);
     icuRatesJSON = await checkBuildDataSet("icuRates",true);
     caseAgeRatesJSON = await checkBuildDataSet("caseAgeRates",true);
-    hospitalStatusAllJSON = await checkGetDataJSON("HospitalStatusAll",true);
+    hospitalStatusAllJSON = await checkGetDataJSON("HospitalStatusAll",HospitalStatusAllURL, true);
 
     document.getElementById("circuitBreakerMap").href = CircuitBreakerMapURL;
 }

@@ -11,6 +11,7 @@ var vaccineAgeGroupsChart = null;
 var caseAgeChart = null;
 var vaccineAgeCountsChart = null;
 var caseRateChart = null;
+var hospitalStatusChart = null;
 
 var darkMode = false;
 
@@ -27,6 +28,7 @@ const canvasBG = {
       ctx.restore();
     }
   };
+
 
   // Store API data // 
   var caseSummaryJSON = null;

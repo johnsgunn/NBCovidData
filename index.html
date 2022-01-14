@@ -252,7 +252,7 @@
 <!-- Large Chart Display (for single chart) -->
 <div id="large_chart" class="hidden" style="height:600px"> 
   <div class="row justify-content-md-center mt-3 mb-3">
-    <div class="col-md-2">
+    <div class="col-md-2" id='chartButtons'>
         <div class="btn-group-vertical" role="group">
             <!-- Case Info -->
             <button type="button" class="btn btn-charts btn-outline-primary" id="caseTrends" onclick="showFullSizeChart('caseTrends')">Case Rate Trends</button>
@@ -263,6 +263,7 @@
             <button type="button" class="btn btn-charts btn-outline-primary" id="CaseRate" onclick="showFullSizeChart('CaseRate')">Current Case Rates</button>
 
             <!-- Hospital Info -->
+            <button type="button" class="btn btn-charts btn-outline-primary" id="hospitalStatus" onclick="showFullSizeChart('hospitalStatus')">Hospital Status</button>
             <button type="button" class="btn btn-charts btn-outline-primary" id="hospitalTrends" onclick="showFullSizeChart('hospitalTrends')">Hospital Rate Trends</button>
             <button type="button" class="btn btn-charts btn-outline-primary" id="icuTrends" onclick="showFullSizeChart('icuTrends')">ICU Rate Trends</button>
             <button type="button" class="btn btn-charts btn-outline-primary" id="hospitalTrends_GNB" onclick="showFullSizeChart('hospitalTrends_GNB')">GNB Hospital Trends</button>
@@ -285,7 +286,9 @@
   <div class="row justify-content-md-center" id="chart_lg_row"> -->
     <div class="col-md-8" id="chart_lg_col" >
       <div id="dataTableContainer"></div>
-      <canvas id="largeChart" width="800px" height="500px"></canvas>
+        <div class="chart">
+          <canvas id="largeChart" width="800px" height="500px"></canvas>
+        </div>
     </div>
   </div>
 </div>        
