@@ -620,6 +620,15 @@ deceasedRate = {
 		"PV Count": 9,
 		"Unvaccinated": 64.4,
 		"UV Count": 68 // + 
+	},{
+		"Date": "2022-01-15",
+		"Count": 183,
+		"Fully Vaccinated": 10.4,
+		"FV Count": 65, 
+		"Partially Vaccinated": 15.6,
+		"PV Count": 9,
+		"Unvaccinated": 65.5,
+		"UV Count": 69 // + 
 	}
 ]
 };
