@@ -1860,6 +1860,22 @@ nbCases = {
 		"Total Cases": 23173,
 		"Total Tests": 655924,
 		"Total POCT": 9029
+	  },{
+		"Date": "2022-01-18",
+		"Active Cases": 4568,
+		"New Cases": 1953,
+		"New PCR": 330,
+		"New POCT": 1623,
+		"Fully Vaccinated": 267,
+		"Partially Vaccinated": 10,
+		"Unvaccinated": 53,
+		"Fully Vaccinated Rate": 42.6,
+		"Partially Vaccinated Rate": 17.8,
+		"Unvaccinated Rate": 55.7,
+		"Recovered": 18741,
+		"Total Cases": 23503,
+		"Total Tests": 659205,
+		"Total POCT": 10652
 	  }
 ]
 };

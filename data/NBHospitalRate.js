@@ -496,6 +496,13 @@ hospitalRate = {
             "Fully Vaccinated": 12.9,
             "Partially Vaccinated": 10.3,
             "Unvaccinated": 26.7
+        },
+        {
+            "Date": "2022-01-18",
+            "Count": 113,
+            "Fully Vaccinated": 13.1,
+            "Partially Vaccinated": 13,
+            "Unvaccinated": 24.6
         }
     ]
 };
