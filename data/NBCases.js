@@ -1876,6 +1876,38 @@ nbCases = {
 		"Total Cases": 23503,
 		"Total Tests": 659205,
 		"Total POCT": 10652
+	  },{
+		"Date": "2022-01-19",
+		"Active Cases": 4296,
+		"New Cases": 1303,
+		"New PCR": 498,
+		"New POCT": 805,
+		"Fully Vaccinated": 400,
+		"Partially Vaccinated": 20,
+		"Unvaccinated": 77,
+		"Fully Vaccinated Rate": 63.8,
+		"Partially Vaccinated Rate": 33.8,
+		"Unvaccinated Rate": 81.7,
+		"Recovered": 19507,
+		"Total Cases": 24001,
+		"Total Tests": 662339,
+		"Total POCT": 11457
+	  },{
+		"Date": "2022-01-20",
+		"Active Cases": 4389,
+		"New Cases": 1441,
+		"New PCR": 488,
+		"New POCT": 953,
+		"Fully Vaccinated": 420,
+		"Partially Vaccinated": 14,
+		"Unvaccinated": 53,
+		"Fully Vaccinated Rate": 67,
+		"Partially Vaccinated Rate": 23.6,
+		"Unvaccinated Rate": 56.9,
+		"Recovered": 19899,
+		"Total Cases": 24489,
+		"Total Tests": 666919,
+		"Total POCT": 12410
 	  }
 ]
 };

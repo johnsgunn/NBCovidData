@@ -651,11 +651,29 @@ deceasedRate = {
 		"Date": "2022-01-18",
 		"Count": 192,
 		"Fully Vaccinated": 11.2,
-		"FV Count": 68, // +   70.157
+		"FV Count": 70, // ++
 		"Partially Vaccinated": 16.2,
 		"PV Count": 10,  
 		"Unvaccinated": 71.7, 
-		"UV Count": 72 // + 75.227
+		"UV Count": 74 // +++
+	},{
+		"Date": "2022-01-19",
+		"Count": 196,
+		"Fully Vaccinated": 11.3,
+		"FV Count": 71, // +++
+		"Partially Vaccinated": 16.9,
+		"PV Count": 10,  
+		"Unvaccinated": 71.7, 
+		"UV Count": 75 // +
+	},{
+		"Date": "2022-01-20",
+		"Count": 199,
+		"Fully Vaccinated": 11.6,
+		"FV Count": 71, // +
+		"Partially Vaccinated": 18.5, 
+		"PV Count": 10,  // +
+		"Unvaccinated": 73.7, 
+		"UV Count": 75 // +
 	}
 ]
 };
