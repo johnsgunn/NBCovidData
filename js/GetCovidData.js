@@ -13,6 +13,7 @@ async function preloadData(){
         caseRatesJSON = await checkBuildDataSet("caseRates",true);
         caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
         hospitalStatusAllJSON = await checkGetDataJSON("HospitalStatusAll",HospitalStatusAllURL, true);
+        covidHospitalJSON = await checkGetDataJSON('CovidHospitalSummary', CovidHospitalSummaryURL, true);
     }
     catch(err) {
         hideElement('loadingSpinner');

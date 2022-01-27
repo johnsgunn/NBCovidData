@@ -30,6 +30,13 @@ function showCaseSummaryBoard(json,name){
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
+    hospitalArr = JSON.parse(covidHospitalJSON);
+    console.log(covidHospitalJSON);
+
+    var inHospital = parseInt(hospitalArr['CovidHospitalSummary'][0]['HospWithC19']) + parseInt(hospitalArr['CovidHospitalSummary'][0]['HospForC19']);
+    var inICU = parseInt(hospitalArr['CovidHospitalSummary'][0]['ICUWithC19']) + parseInt(hospitalArr['CovidHospitalSummary'][0]['ICUForC19']);
+    var vent = parseInt(hospitalArr['CovidHospitalSummary'][0]['Ventilated']);
+
     var menuHeader = document.getElementById("menuHeader");
     menuHeader.innerHTML = "Last Updated: " + arr[name][0]['LastUpdateText'];
     var board1 = document.getElementById("board1");
@@ -69,9 +76,9 @@ function showCaseSummaryBoard(json,name){
     // "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"hospitalTrends\")'>Hospital Trends</button></div></div>";
     tableBody = [];
 
-    tableBody.push({title: "In Hospital", value: arr[name][0]['Hospitalised']},
-                    {title: "In ICU", value: arr[name][0]['ICU']},
-                    {title: "Ventilator", value: arr[name][0]['MechVentilated']},
+    tableBody.push({title: "In Hospital", value: inHospital},
+                    {title: "In ICU", value: inICU},
+                    {title: "Ventilator", value: vent},
                     {title: "Tot. Deaths", value: arr[name][0]['Deaths']},
                     {title: "Tot. Hospitalized", value: arr[name][0]['TtlHospitald']},
                     // {title: "Tot. Discharged", value: arr[name][0]['DischHosp']},
