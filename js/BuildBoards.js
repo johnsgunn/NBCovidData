@@ -43,7 +43,7 @@ function showCaseSummaryBoard(json,name){
 
     var tableHeader = "<div class='d-flex  justify-content-between'>Cases" +
     "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
+    // "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='pediatricCases' onclick='showDashboardChart(\"pediatricCases\")'>Pediatric Cases</button>&nbsp;" +
     "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"caseTrends\")'>Case Trends</button>&nbsp;" +
     "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseHistory' onclick='showDashboardChart(\"caseHistory\")'>Case History</button></div></div>";
     var tableBody = [];
@@ -64,9 +64,9 @@ function showCaseSummaryBoard(json,name){
     cases.innerHTML = buildBoardTable(tableHeader,tableBody);
 
     tableHeader = "<div class='d-flex  justify-content-between'>In Hospital" +
-    "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"icuTrends\")'>ICU Trends</button>&nbsp;" +
-    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"hospitalTrends\")'>Hospital Trends</button></div></div>";
+    "<div class='d-flex justify-content-end'>" ;//+
+    // "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"icuTrends\")'>ICU Trends</button>&nbsp;" +
+    // "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='caseTrends' onclick='showDashboardChart(\"hospitalTrends\")'>Hospital Trends</button></div></div>";
     tableBody = [];
 
     tableBody.push({title: "In Hospital", value: arr[name][0]['Hospitalised']},
@@ -96,8 +96,8 @@ function showVaccineSummaryBoard(json,name){
     board3.innerHTML = "";
     var tableHeader = "<div class='d-flex justify-content-between'>Vaccinations" +
     "<div class='d-flex justify-content-end'>" +
-    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='schoolList' onclick='showDashboardChart(\"VaccineAgeGroups\")'>Age Groups</button>&nbsp;" +
-    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
+    "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='schoolList' onclick='showDashboardChart(\"VaccineAgeGroups\")'>Age Groups</button>&nbsp;" ;//+
+    // "<button type='button' class='btn btn-charts btn-outline-primary d-none d-lg-block' id='VaccineHistory' onclick='showDashboardChart(\"VaccineHistory\")'>View History</button></div>";
     var tableBody = [];
 
     tableBody.push({title: "1st Dose", value: arr[name][0]['PopOneDose']+" <span class='badge bg-secondary'>" + arr[name][0]['PercentOneDose'] + "%</span>"},
