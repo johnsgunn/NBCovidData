@@ -674,6 +674,21 @@ deceasedRate = {
 		"PV Count": 10,  // +
 		"Unvaccinated": 73.7, 
 		"UV Count": 75 // +
+	},{
+		"Date": "2022-01-21",
+		"Count": 201,
+		"Fully Vaccinated": 11.6,
+		"FV Count": 71,
+		"Partially Vaccinated": 18.5, 
+		"PV Count": 10,
+		"Unvaccinated": 73.7, 
+		"UV Count": 75,
+		// RESET TO DEC 1
+		"Protected": 2.8,
+		"Partial": 11.7
+		// Two people who had COVID-19 have died: 
+		// one person 80-89 in Zone 2 (Saint John region) 
+		// one person 80-89 in Zone 5 (Campbellton region).
 	}
 ]
 };
