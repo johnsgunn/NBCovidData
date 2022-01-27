@@ -7,7 +7,7 @@ async function preloadData(){
     caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
     vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
     caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
-    vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
+    // vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
     schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
     caseRatesJSON = await checkBuildDataSet("caseRates",true);
     caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
