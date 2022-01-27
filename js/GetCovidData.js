@@ -3,17 +3,24 @@
 async function preloadData(){
     showElement('loadingSpinner');
 
-    // Load out endpoints into session on refresh
-    caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
-    vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
-    caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
-    // vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
-    schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
-    caseRatesJSON = await checkBuildDataSet("caseRates",true);
-    caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
-    hospitalStatusAllJSON = await checkGetDataJSON("HospitalStatusAll",HospitalStatusAllURL, true);
+    try {
+        // Load out endpoints into session on refresh
+        caseSummaryJSON = await checkGetDataJSON('CaseSummary',ProvincialSummaryURL,true);
+        vaccinationSummaryJSON = await checkGetDataJSON('VaccinationSummary',VaccinationSummaryURL,true);
+        caseHistoryJSON = await checkGetDataJSON('CaseHistory',CaseHistoryURL,true);
+        // vaccineHistoryJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL,true);
+        schoolsSummaryJSON = await checkGetDataJSON('SchoolsSummary',SchoolsDataURL,true);
+        caseRatesJSON = await checkBuildDataSet("caseRates",true);
+        caseStatusJSON = await checkGetDataJSON('CaseVaccinationStatus',VaccinationRatesURL,true);   
+        hospitalStatusAllJSON = await checkGetDataJSON("HospitalStatusAll",HospitalStatusAllURL, true);
+    }
+    catch(err) {
+        hideElement('loadingSpinner');
+        document.getElementById("bodyContainer").innerHTML = err.message;
+    }
     
-    hideElement('loadingSpinner');
+    
+    
 }
 
 // Load in the background into session
