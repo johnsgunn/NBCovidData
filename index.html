@@ -457,9 +457,74 @@
                         <div class="tab-pane" id="schools" role="tabpanel" aria-labelledby="schools-tab">Schools</div>
                         <div class="tab-pane" id="rawdata" role="tabpanel" aria-labelledby="rawdata-tab">
                             <div class="row">
-                                <div class="col display-4">
-                                    Raw Data Display Coming Soon
+                                <div class="col">
+                                    <p class="display-4">Raw Data View</p>
+                                    <p id="raw_dateStamp">Updated on: </p>
                                 </div>
+                            </div>
+                            <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Cases</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('CaseSummary',ProvincialSummaryURL)">Active Case Summary</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('CaseHistory',CaseHistoryURL)">Case History</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('Covid19CaseVaccineStats',Covid19CaseVaccineStatsURL)">Case Rate Stats</button>
+                                        </div>  
+                                    </div>  
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Hospitals</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('HospitalStatusAll',HospitalStatusAllURL)">Hospital Summary</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('CovidHospitalAgeStats', CovidHospitalAgeStatsURL)">Hospital Age Stats</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('CovidNewDeathsAgeStatsAll', CovidNewDeathsAgeStatAllURL)">Death Age Stats</button>
+                                        </div>  
+                                    </div>  
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Vaccination</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('VaccinationSummary',VaccinationSummaryURL)">Vaccination Summary</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('VaccineAgeGroups',VaccinesByAgeGroupURL)">Vaccination Age Groups</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('VaccinationHistory', VaccineTimetableURL)">Vaccination History</button>
+                                        </div>  
+                                    </div>  
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Schools</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('SchoolsSummary',SchoolsDataURL)">Schools Summary</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('SchoolsList',SchoolsListURL)">Schools List</button>
+                                        </div>  
+                                    </div>  
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Compliance</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('Covid19EnforcementData',Covid19EnforcementDataURL)">Enforcement Data</button>
+                                        </div>  
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" id="raw_data_display"></div>
                             </div>
                         </div>
                     </div>

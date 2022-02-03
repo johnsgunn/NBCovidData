@@ -341,6 +341,26 @@ async function LoadActiveHospitalData (){
     hideElement('loadingSpinner');
     showElement('bodyContainer');  
 }
+
+async function LoadRawData(name,data){
+    hideElement('raw_data_display');
+    showElement('loadingSpinner');  
+
+    try {
+        var dataJSON = await checkGetDataJSON(name,data,true);
+
+        await createTableFromJSON(dataJSON, name, 'desc', 'raw_data_display','raw_data_display');
+    }
+    catch(err) {
+        hideElement('loadingSpinner');
+        document.getElementById("bodyContainer").innerHTML = err.message;
+        return;
+    }
+
+    hideElement('loadingSpinner');
+    showElement('raw_data_display');  
+}
+
 function GetMaxValue(inputArray){
     return inputArray.reduce((max, current) => Math.max(max, current[0]), -Infinity)
 }
