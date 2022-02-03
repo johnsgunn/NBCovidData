@@ -77,6 +77,11 @@ function hideElement(elementName){
     x.classList.add('hidden');
 }
 
+function setElementContents(elementName,contents){
+  let x = document.getElementById(elementName);
+  x.innerHTML = contents;
+}
+
 async function showDashboard(firstLoad=false){
   if (firstLoad){
       // Preload data needed for dashboard
@@ -193,3 +198,13 @@ function toggleDarkMode(){
        
   }
 }
+
+var triggerTabList = [].slice.call(document.querySelectorAll('#navTab a'))
+triggerTabList.forEach(function (triggerEl) {
+  var tabTrigger = new bootstrap.Tab(triggerEl)
+
+  triggerEl.addEventListener('click', function (event) {
+    event.preventDefault()
+    tabTrigger.show()
+  })
+})

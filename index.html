@@ -1,313 +1,470 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="NB Covid Data Viewer">
-    <meta name="author" content="John Gunn">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="NB Covid Data Viewer">
+        <meta name="author" content="John Gunn">
 
-    <title>NB Covid-19 Data Viewer</title>
+        <title>NB Covid-19 Data Viewer</title>
 
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- XLSX creator -->
-    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+        <!-- XLSX creator -->
+        <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 
-    <!-- ChartJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+        <!-- ChartJS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 
-    <!-- Datatables for Bootstrap 5 -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/af-2.3.7/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/cr-1.5.4/date-1.1.1/fc-4.0.0/fh-3.2.0/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.5/sb-1.2.2/sp-1.4.0/sl-1.3.3/datatables.min.css" />
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/4af115cbe5.js" crossorigin="anonymous"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/af-2.3.7/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/cr-1.5.4/date-1.1.1/fc-4.0.0/fh-3.2.0/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.5/sb-1.2.2/sp-1.4.0/sl-1.3.3/datatables.min.js"></script>
+        <!-- Datatables for Bootstrap 5 -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/af-2.3.7/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/cr-1.5.4/date-1.1.1/fc-4.0.0/fh-3.2.0/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.5/sb-1.2.2/sp-1.4.0/sl-1.3.3/datatables.min.css" />
 
-    <!-- Compiled data as JSON -->
-    <!-- <script type="text/javascript" src="./data/NBPediatricCaseHistory.js"></script> -->
-    <!-- <script type="text/javascript" src="./data/NBCaseTrends.js"></script> -->
-    <script type="text/javascript" src="./data/NBHospitalCases.js"></script>
-    <script type="text/javascript" src="./data/NBICUCases.js"></script>
-    <!-- <script type="text/javascript" src="./data/NBZonePopulations.js"></script> -->
-    <script type="text/javascript" src="./data/NBCases.js"></script>
-    <script type="text/javascript" src="./data/NBCaseHistoryAge.js"></script>
-    <script type="text/javascript" src="./data/NBVaccineAgeGroupHistory.js"></script>
-    <script type="text/javascript" src="./data/NBAgePopulation.js"></script>
-    <script type="text/javascript" src="./data/NBNewCases.js"></script>
-    <!-- <script type="text/javascript" src="./data/NBCaseHistoryAge_v2.js"></script> -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/af-2.3.7/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/cr-1.5.4/date-1.1.1/fc-4.0.0/fh-3.2.0/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sc-2.0.5/sb-1.2.2/sp-1.4.0/sl-1.3.3/datatables.min.js"></script>
 
-    <!-- Styles and Utils -->
-    <link href="./css/style.css" rel="stylesheet">
-    <script src="./js/API_Calls.js"></script>
-    <script src="./js/Globals.js"></script>
-    <script src="./js/GenerateJsonData.js"></script>
-    <script src="./js/BuildRawData.js"></script>
-    <script src="./js/BuildBoards.js"></script>
-    <script src="./js/BuildCharts.js"></script>
-    <script src="./js/Navigation.js"></script>
-    <script src="./js/GetCovidData.js"></script>
-    <script src="./js/uiTools.js"></script>
+        <!-- Compiled data as JSON -->
+        <!-- <script type="text/javascript" src="./data/NBPediatricCaseHistory.js"></script> -->
+        <!-- <script type="text/javascript" src="./data/NBCaseTrends.js"></script> -->
+        <script type="text/javascript" src="./data/NBHospitalCases.js"></script>
+        <script type="text/javascript" src="./data/NBICUCases.js"></script>
+        <!-- <script type="text/javascript" src="./data/NBZonePopulations.js"></script> -->
+        <script type="text/javascript" src="./data/NBCases.js"></script>
+        <script type="text/javascript" src="./data/NBCaseHistoryAge.js"></script>
+        <script type="text/javascript" src="./data/NBVaccineAgeGroupHistory.js"></script>
+        <script type="text/javascript" src="./data/NBAgePopulation.js"></script>
+        <script type="text/javascript" src="./data/NBNewCases.js"></script>
+        <!-- <script type="text/javascript" src="./data/NBCaseHistoryAge_v2.js"></script> -->
 
-    <style>
-    </style>
+        <!-- Styles and Utils -->
+        <link href="./css/style.css" rel="stylesheet">
+        <script src="./js/API_Calls.js"></script>
+        <script src="./js/Globals.js"></script>
+        <script src="./js/GenerateJsonData.js"></script>
+        <script src="./js/BuildRawData.js"></script>
+        <script src="./js/BuildBoards.js"></script>
+        <script src="./js/BuildCharts.js"></script>
+        <script src="./js/Navigation.js"></script>
+        <script src="./js/GetCovidData.js"></script>
+        <script src="./js/uiTools.js"></script>
+        <script src="./js/loadTabData.js"></script>
+
+        <style>
+        </style>
 
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-30Q9WQ4PHV"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-30Q9WQ4PHV"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        gtag('config', 'G-30Q9WQ4PHV');
-    </script>
-</head>
-<body onload="showDashboard(true);">
- 
-<div class="container-fluid main" >
-  <!-- Navbar -->
-  <div class="row" id="navbar"> 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='nav'>
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#" onclick="showDashboard()">NB Daily Covid-19 Data</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-          <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Raw Data
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                <li> 
-                  <a class="dropdown-item" href="#"> Case Details &raquo; </a>
-                  <ul class="submenu dropdown-menu-dark">
-                      <li onclick="showArcGis('ProvincialSummary')"><a class="dropdown-item" href="#">Provincial Summary</a></li>
-                      <li onclick="showArcGis('HealthZoneSummary')"><a class="dropdown-item" href="#">Health Zone Summary</a></li>
-                      <li onclick="showArcGis('CaseAgeStats')"><a class="dropdown-item" href="#">Case Age Statistics</a></li>
-                      <li onclick="showArcGis('DailyTesting')"><a class="dropdown-item" href="#">Daily Testing</a></li>
-                      <li onclick="showArcGis('CaseHistory')"><a class="dropdown-item" href="#">Case History</a></li>
-                      <li onclick="showArcGis('CaseOrigin')"><a class="dropdown-item" href="#">Case Origin</a></li>
-                      <li onclick="showArcGis('Exposures')"><a class="dropdown-item" href="#">Exposures</a></li>
-                      <li onclick="showArcGis('CaseVaccinationStatus')"><a class="dropdown-item" href="#">Case Vaccination Status</a></li>
-                  </ul>
-                </li>
-
-                <li> 
-                  <a class="dropdown-item" href="#"> Healthcare Details &raquo; </a>
-                    <ul class="submenu dropdown-menu-dark">
-                      <li onclick="showArcGis('HospitalStatusAll')"><a class="dropdown-item" href="#">Hospital Status</a></li>
-                      <li onclick="showArcGis('AdultResidentialFacilities')"><a class="dropdown-item" href="#">Adult Residential Facilities</a></li>
-                      <li onclick="showArcGis('HospitalTrends')"><a class="dropdown-item" href="#">Hospital Trends</a></li>
-                    </ul>
-                </li>
-
-                <li> 
-                  <a class="dropdown-item" href="#"> Vaccination Details &raquo; </a>
-                    <ul class="submenu dropdown-menu-dark">
-                      <li onclick="showArcGis('VaccinationSummary')"><a class="dropdown-item" href="#">Vaccination Summary</a></li>
-                      <li onclick="showArcGis('VaccinationAgeGroups')"><a class="dropdown-item" href="#">Vaccination Age Groups</a></li>
-                      <li onclick="showArcGis('VaccinationHistory')"><a class="dropdown-item" href="#">Vaccination History</a></li>
-                      <li onclick="showArcGis('VaccinationTimetable')"><a class="dropdown-item" href="#">Vaccine Timetable</a></li>
-                    </ul>
-                </li>
-
-                <li> 
-                  <a class="dropdown-item" href="#"> Schools Details &raquo; </a>
-                    <ul class="submenu dropdown-menu-dark">
-                      <li onclick="showArcGis('SchoolsSummary')"><a class="dropdown-item" href="#">Schools Summary</a></li>
-                      <li onclick="showArcGis('SchoolsList')"><a class="dropdown-item" href="#">Full List of Schools</a></li>
-                    </ul>
-                </li>
-
-                <li> 
-                  <a class="dropdown-item" href="#"> Compiled Data &raquo; </a>
-                  <ul class="submenu dropdown-menu-dark">
-                      <li onclick="generateData('dailyCases')"><a class="dropdown-item" href="#">Daily Cases</a></li>
-                      <li onclick="generateData('hospitalStatus')"><a class="dropdown-item" href="#">Hospital Status</a></li>
-                      <li onclick="showCompiledData('hospitalCases')"><a class="dropdown-item" href="#">Hospital Cases</a></li>
-                      <li onclick="generateData('hospitalRates')"><a class="dropdown-item" href="#">Hospital Trends</a></li>
-                      <li onclick="showCompiledData('icuCases')"><a class="dropdown-item" href="#">ICU Cases</a></li>
-                      <li onclick="generateData('icuRates')"><a class="dropdown-item" href="#">ICU Trends</a></li>
-                      <li onclick="showCompiledData('pediatricCases')"><a class="dropdown-item" href="#">Pediactric Cases</a></li>
-                      <li onclick="generateData('caseRates')"><a class="dropdown-item" href="#">Case Trends</a></li>
-                      <li onclick="generateData('caseAgeRates')"><a class="dropdown-item" href="#">Case Trends By Age</a></li>
-                      <!-- <li onclick="generateData('caseAgeRates_wUnder19')"><a class="dropdown-item" href="#">Case Trends By Age (Under 19)</a></li> -->
-                      <li onclick="generateData('caseAgeHistory')"><a class="dropdown-item" href="#">Case Age History</a></li>
-                      <li onclick="generateData('vaccinesByAge')"><a class="dropdown-item" href="#">Vaccines By Age</a></li>
-                      <li onclick="showCompiledData('vaccineAgeGroupHistory')"><a class="dropdown-item" href="#">Vaccine Age History</a></li>
-                      <li onclick="generateData('vaccineAgeGroupCount','asc')"><a class="dropdown-item" href="#">Vaccine Age Group Count</a></li>
-                      <li onclick="generateData('dailyCaseRates','asc')"><a class="dropdown-item" href="#">Daily Case Rates</a></li>
-                  </ul>
-                </li>
-                <li onclick="showMore('other_provinces')"><a class="dropdown-item" href="#">Other Provincial Data</a></li>
-              </ul>
-            </li>                          
-
-            <li class="nav-item">
-              <a class="nav-link" href="#" onclick="showChartsDisplay()" id="showCharts" role="button" aria-expanded="false">
-                Charts and Graphs
-              <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Charts and Graphs
-              </a> -->
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                  <li onclick="showDashboard()"><a class="dropdown-item" href="#">Case Dashboard</a></li>
-                  <li onclick="showCharts('CaseRate_7DayAverage')"><a class="dropdown-item" href="#">Case Rate (7-Day Rolling Average)</a></li>
-                  <li onclick="showCharts('CaseRate_Table')"><a class="dropdown-item" href="#">Case Rate Table</a></li>
-                  <li onclick="showFullSizeChart('CaseHistory')"><a class="dropdown-item" href="#">Case History (All Time)</a></li>
-                  <li onclick="showFullSizeChart('VaccineHistory')"><a class="dropdown-item" href="#">Vaccine History (All Time)</a></li>
-                  <li onclick="showFullSizeChart('HealthZoneSummary')"><a class="dropdown-item" href="#">Current Health Zone Breakdown</a></li>
-                  <li onclick="showFullSizeChart('pediatricCases')"><a class="dropdown-item" href="#">Pediatric Cases</a></li>
-                  <li onclick="showFullSizeChart('caseTrends')"><a class="dropdown-item" href="#">Case Rate Trends</a></li>
-                  <li onclick="showCharts('VaccineAgeGroup')"><a class="dropdown-item" href="#">Vaccination By Age Group</a></li>
-                  <li onclick="showCharts('Hospitalizations')"><a class="dropdown-item" href="#">Hospitalization Rate</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  More Info
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                  <li onclick="showMore('about')"><a class="dropdown-item" href="#">About</a></li>
-                  <li onclick="showMore('api_features')"><a class="dropdown-item" href="#">GNB API Features</a></li>
-                  <li onclick="showMore('nbcreators')"><a class="dropdown-item" href="#">NB Data Creators</a></li>
-                  <li onclick="showMore('moresources')"><a class="dropdown-item" href="#">Sources</a></li>
-                  <li onclick="showMore('get_arcgis')"><a class="dropdown-item" href="#">Manual ArcGIS Generation</a></li>
-                  <li onclick="showMore('tipjar')"><a class="dropdown-item" href="#">Tip Jar</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="text-light" id="menuHeader"></div>&nbsp;&nbsp;&nbsp;
-
-        <div class="form-check form-switch d-none d-lg-block">
-          <input class="form-check-input" type="checkbox" id="darkModeSwitch" onclick="toggleDarkMode()" />
-          <label class="form-check-label text-light" for="darkModeSwitch">Dark Mode</label>
-        </div>
-      </div>
-    </nav>  
-
-  </div>
-
-  <div class="row" id="loadingSpinner">
-    <div class="jumbotron d-flex align-items-center min-vh-100 text-center justify-content-md-center">
-        <div class="lds-dual-ring" id="lds-dual-ring"></div>
-    </div>      
-  </div>
-
-   <div class="row hidden" id="export_row">
-    <div class="col col-md-12 text-right">
-        <button type="button" id="json_button" onclick="downloadJSON()" class="btn btn-primary btn-sm">Download as JSON</button>
-    </div>
-  </div>   
-
-  <div class="row hidden" id="generate_row">
-    <div class="col col-md-12 text-right" id="generate_col">
-      <button type="button" id="json_button" onclick="generateData('hospitalRates')" class="btn btn-primary btn-sm">Generate Case Rates</button>
-    </div>
-  </div> 
-
-  <!-- Main Body -->
-  <div class="row justify-content-md-center hidden" id="bodyRow">
-    <div class="col-md-8" id="bodyContainer"></div>
-  </div>
-
-  <!-- Summary Dashboard (landing) -->
-  <div id="summaryDashboard" class="row justify-content-md-center">
-  <div class='col-md-8'>
-    <!-- Sumamry Table Boards (Top Half) -->
-    <div class="row justify-content-md-center">
-      
-      <div class="col-md-4" id="board1"></div>
-      <div class="col-md-4" id="board2"></div>
-      <div class="col-md-4" id="board3"></div>
-      
-    </div>
-    <!-- Charts (Lower Half) -->
-    <div class="row justify-content-sm-center" id="summaryCharts">
-      <!-- Left Column  -->
-      <div class="col-md-4" id="board4">
-      </div>
-      <!-- Right Column -->
-      <div class="col-xl-8 d-none d-lg-block" id="chart1_col">
-            <div id='dataTableSmall' class='hidden'></div>
-            <!-- Active Case History Chart -->
-            <canvas id="chart1" width="700" height="340"></canvas>         
-      </div>
-    </div>
-  </div>  
-
-  <div class="row justify-content-md-center" id="dashboard">
-    <div class="col-md-auto">
-    </div>              
-  </div>
+            gtag('config', 'G-30Q9WQ4PHV');
+        </script>
+    </head>
+    <body onload="LoadActiveCaseData()">
+        <div class="container-fluid main" >
+            <div class="row" id="navbar"> 
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='nav'>
+                  <div class="container-fluid">
+                    <a class="navbar-brand" href="#" onclick="">NB Daily Covid-19 Data</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                      
+                    </div>
+                    
+                    <div class="text-light" id="menuHeader"><a href="./index_old.html" class='nav-link active'>View Old Version</a></div>&nbsp;&nbsp;&nbsp;
+                  </div>
+                </nav>  
             
-</div>  
-<!-- Large Chart Display (for single chart) -->
-<div id="large_chart" class="hidden" style="height:600px"> 
-  <div class="row justify-content-md-center mt-3 mb-3">
-    <div class="col-md-2" id='chartButtons'>
-        <div class="btn-group-vertical" role="group">
-            <!-- Case Info -->
-            <button type="button" class="btn btn-charts btn-outline-primary" id="caseTrends" onclick="showFullSizeChart('caseTrends')">Case Rate Trends</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="caseHistory" onclick="showFullSizeChart('caseHistory')">Case History</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="pediatricCases" onclick="showFullSizeChart('pediatricCases')">Pediatric Cases</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="caseAgeGroups" onclick="showFullSizeChart('caseAgeGroups')">Cases Trends By Age</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="HealthZoneSummary" onclick="showFullSizeChart('HealthZoneSummary')">Cases By Health Zone</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="CaseRate" onclick="showFullSizeChart('CaseRate')">Current Case Rates</button>
+              </div>
+              <div><br/><br/></div>
+            <div class="row justify-content-md-center" id="bodyRow">
+                <div class="row" id="loadingSpinner">
+                    <div class="jumbotron d-flex align-items-center min-vh-100 text-center justify-content-md-center">
+                        <div class="lds-dual-ring" id="lds-dual-ring"></div>
+                    </div>      
+                  </div>
+                <div class="col-md-8 hidden" id="bodyContainer">
+                    
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="navTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="cases-tab" data-bs-toggle="tab" data-bs-target="#cases" 
+                            type="button" role="tab" aria-controls="cases" aria-selected="true"
+                            onclick="LoadActiveCaseData()">Active Cases</button>
+                        </li>
+                        
+                        <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="hospitals-tab" data-bs-toggle="tab" data-bs-target="#hospitals" 
+                            type="button" role="tab" aria-controls="hospitals" aria-selected="false"
+                            onclick="LoadActiveHospitalData()">Hospitals</button>
+                        </li>
 
-            <!-- Hospital Info -->
-            <button type="button" class="btn btn-charts btn-outline-primary" id="hospitalStatus" onclick="showFullSizeChart('hospitalStatus')">Hospital Status</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="hospitalTrends" onclick="showFullSizeChart('hospitalTrends')">Hospital Rate Trends</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="icuTrends" onclick="showFullSizeChart('icuTrends')">ICU Rate Trends</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="hospitalTrends_GNB" onclick="showFullSizeChart('hospitalTrends_GNB')">GNB Hospital Trends</button>
+                        <!-- VACCINATIONS -->
+                        <!-- <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="vaccinations-tab" data-bs-toggle="tab" data-bs-target="#vaccinations" 
+                                type="button" role="tab" aria-controls="vaccinations" aria-selected="false"
+                                >Vaccinations</button>
+                            </li> -->
 
-            <!-- Vaccination -->
-            <button type="button" class="btn btn-charts btn-outline-primary" id="VaccineHistory" onclick="showFullSizeChart('VaccineHistory')">Vaccination History</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="VaccineAgeGroups" onclick="showFullSizeChart('VaccineAgeGroups')">Vaccination Age Groups</button>
-            <button type="button" class="btn btn-charts btn-outline-primary" id="VaccineAgeCount" onclick="showFullSizeChart('VaccineAgeCount')">Vaccination Count By Age</button>
+                        <!-- SCHOOLS  -->
+                        <!-- <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="schools-tab" data-bs-toggle="tab" data-bs-target="#schools" 
+                            type="button" role="tab" aria-controls="schools" aria-selected="false">Schools</button>
+                        </li> -->
 
-            <!-- Schools -->
-            <button type="button" class="btn btn-charts btn-outline-primary" id="schoolList" onclick="showFullSizeChart('schoolList')">School Exposures</button>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="rawdata-tab" data-bs-toggle="tab" data-bs-target="#rawdata" 
+                                type="button" role="tab" aria-controls="rawdata" aria-selected="false">Raw Data</button>
+                        </li>
+                    </ul>
+                    
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- CASE SUMMARY -->
+                        <div class="tab-pane active" id="cases" role="tabpanel" aria-labelledby="cases-tab">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="display-4">Active Case Summary</p>
+                                    <p id="case_dateStamp">Updated on: </p>
+                                </div>
+                            </div>
+                            <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
+                                <div class="col text-center ">
+                                  <div class="p-3 border bg-light h-100">
+                                      <p class="display-6">New Cases</p>
+                                      <div class="h3" id="case_newCases">1234</div>
+                                      <div class=".small" id="case_newPCR">123 PCR</div>
+                                      <div class=".small" id="case_newPOCT">123 POCT</div>
+                                  </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Active Cases</p>
+                                        <div class="h3" id="case_activeCases">1234</div>
+                                        <div class=".small" id="case_activeCasesChange"></div>
+                                        <div class=".small" id="case_activeDisclaimer">*PCR only</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">In Hospital</p>
+                                        <div class="h3" id="case_hospital">123</div>
+                                        <div class=".small" id="case_hospitalChange"><i class="fas fa-arrow-up"></i> 10</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">In ICU</p>
+                                        <div class="h3" id="case_icu">12</div>
+                                        <div class=".small" id="case_icuChange"><i class="fas fa-arrow-up"></i> 1</div>
+                                        <div class=".small" id="case_icuVent">Ventilator</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Total Deaths</p>
+                                        <div class="h3" id="case_deaths">123</div>
+                                        <div class=".small" id="case_deathsChange"><i class="fas fa-arrow-up"></i> 2</div>
+                                    </div>
+                                </div>
+                            </div>  
+                            <hr/>
+                            <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
+                                
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Total Cases</p>
+                                        <div class="h3" id="case_total">123456</div>
+                                        <div class=".small" id="case_totalChange"><i class="fas fa-arrow-up"></i> 123</div>
+                                        <div class=".small" id="case_totalDisclaimer">*PCR + POCT</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6"><i class="fas fa-plus-circle"></i> Rapid Tests</p>
+                                        <div class="h3" id="case_rapid">123456</div>
+                                        <div class=".small" id="case_rapidChange"><i class="fas fa-arrow-up"></i> 123</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6"><i class="fas fa-plus-circle"></i> PCR Tests</p>
+                                        <div class="h3" id="case_totalPCR">123456</div>
+                                        <div class=".small" id="case_totalPCRChange"><i class="fas fa-arrow-up"></i> 123</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Recoveries</p>
+                                        <div class="h3" id="case_recoveries">123456</div>
+                                        <div class=".small" id="case_recoveriesChange"><i class="fas fa-arrow-up"></i> 123</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Total Hospital</p>
+                                        <div class="h3" id="case_totalHospital">1234</div>
+                                        <div class=".small" id="case_totalHospitalChange"><i class="fas fa-arrow-up"></i> 12</div>
+                                    </div>
+                                </div>
+                              </div>
+                        </div>
+                        <!-- VACCINATION SUMMARY -->
+                        <div class="tab-pane" id="vaccinations" role="tabpanel" aria-labelledby="vaccinations-tab">Vaccinations</div>
 
-            <!-- Experimental -->
-            <a href='#' class="btn btn-charts btn-outline-primary" id="circuitBreakerMap" target="_blank" role="button">Circuit Breaker Map</a>
+                        <!-- HOSPITAL SUMMARY -->
+                        <div class="tab-pane" id="hospitals" role="tabpanel" aria-labelledby="hospitals-tab">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="display-4">Active Hospital Summary</p>
+                                    <p id="hosp_dateStamp">Updated on: </p>
+                                </div>
+                            </div>
+                            <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 d-flex ">
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">In Hospital</p>                                        
+                                        <div class="row d-flex">
+                                            <div class="col text-center">                                                
+                                                <div class="fw-bold" id="hosp_hospital">123</div>
+                                                <div class=".small" id="hosp_hospitalChange"><i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="">Primary</div>
+                                                <div class=".small" id="hosp_primaryHosp">123 <i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="">Incidental</div>
+                                                <div class=".small" id="hosp_incHosp">123 <i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="h5">ATH</div>
+                                                <div class="" id="hosp_hospATH">123 on 1/1/2022</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">In ICU</p>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">123</div>
+                                                <div class=".small" id="hosp_icuChange"><i class="fas fa-arrow-up"></i> 10</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="">Primary</div>
+                                                <div class=".small" id="hosp_primaryICU">123 <i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="">Incidental</div>
+                                                <div class=".small" id="hosp_incICU">123 <i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="h5">ATH</div>
+                                                <div class="" id="hosp_icuATH">123 on 1/1/2022</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Ventilated</p>
+                                        <div class="row d-flex">
+                                            <div class="col col-2 text-center"></div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_vent">123</div>
+                                                <div class=".small" >&nbsp;</div>  
+                                            </div>  
+                                            <div class="col text-center">
+                                                <div class=".small" id="hosp_ventChange"><i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                            <div class="col col-2 text-center"></div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="h5">ATH</div>
+                                                <div class="" id="hosp_ventATH">123 on 1/1/2022</div>
+                                            </div>
+                                        </div>       
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">New Deaths</p>
+                                        <div class="row d-flex">
+                                            <div class="col col-2 text-center"></div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_newDeaths">123</div>
+                                                <div class=".small" >&nbsp;</div>  
+                                            </div>  
+                                            <div class="col text-center">
+                                                <div class=".small" id="hosp_newDeathsChange"><i class="fas fa-arrow-up"></i> 10</div>
+                                            </div>
+                                            <div class="col col-2 text-center"></div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="h5">ATH</div>
+                                                <div class="" id="hosp_deathATH">123 on 1/1/2022</div>
+                                            </div>
+                                        </div>       
+                                    </div>
+                                </div>
+                                
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">7-Day Average</p>
+                                        <div class="row d-flex">
+                                            <div class="col col-sm-5 text-center">
+                                                <div class="fw-bold">In Hospital</div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <div id="hosp_avgHosp"></div>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col col-sm-5 text-center">
+                                                <div class="fw-bold">In ICU</div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <div id="hosp_avgICU"></div>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col col-sm-5 text-center">
+                                                <div class="fw-bold">Cases</div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <div id="hosp_avgCases"></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row row-cols-2 row-cols-lg-1 g-2 g-lg-3 d-flex ">
+                                
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Age Groups</p>
 
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                &nbsp;       
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">Under 19</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">20 - 29</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">30 - 39</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">40 - 49</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">50 - 59</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">60 - 69</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">70 - 79</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">80 - 89</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="hosp_icu">90 +</div>        
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="fw-bold" >In Hospital</div>
+                                                <div class="fw-bold" >In ICU</div>
+                                                <div class="fw-bold" >New Deaths</div>
+                                            </div>
+                                            <div class="col text-center" id="hosp_u19">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_2029">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_3039">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_4049">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_5059">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_6069">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_7079">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_8089">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="hosp_90p">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                              </div>
+                        </div>
+                        <div class="tab-pane" id="schools" role="tabpanel" aria-labelledby="schools-tab">Schools</div>
+                        <div class="tab-pane" id="rawdata" role="tabpanel" aria-labelledby="rawdata-tab">
+                            <div class="row">
+                                <div class="col display-4">
+                                    Raw Data Display Coming Soon
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
         </div>
-      
-    </div>
-  <!-- </div>
-  <div class="row justify-content-md-center" id="chart_lg_row"> -->
-    <div class="col-md-8" id="chart_lg_col" >
-      <div id="dataTableContainer"></div>
-        <div class="chart">
-          <canvas id="largeChart" width="800px" height="500px"></canvas>
-        </div>
-    </div>
-  </div>
-</div>        
-</div>
-
-<!-- FOOTER -->
-<footer class="footer mt-auto py-3 bg-light text-center fixed-bottom">
-  <div class="container">
-    <span class="text-muted">
-      Witten By: <a rel="author" href="https://twitter.com/johnsgunn" target="_blank">John Gunn</a> | 
-      Data Source: <a href="#" onclick="showMore('moresources')">View Sources</a> |
-      Source Code (GPLv3): <a href="https://github.com/johnsgunn/NBCovidData" target="_blank">NBCovidData</a> | 
-      Bugs or Requests: <a href="https://github.com/johnsgunn/NBCovidData/issues" target="_blank">Open An Issue</a> | 
-      Tip Jar: <a href="#" onclick="showMore('tipjar')">Buy Me A Coffee</a> 
-      <!-- All your data are belong to us -->
-    </span>
-  </div>
-</footer>
-    
-
-</body>
+    </body>
 </html>

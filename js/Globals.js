@@ -50,6 +50,8 @@ const canvasBG = {
   var hospitalTrendsJSON = null;
   var hospitalStatusAllJSON = null;
   var covidHospitalJSON = null;
+  var covidHospitalAgeStatsJSON = null;
+  var covidNewDeathsAgeStatsJSON = null;
 
   // Store Calculated Data //
   var hospitalCaseRateJSON = [];
