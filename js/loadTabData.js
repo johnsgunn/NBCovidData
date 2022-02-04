@@ -1,7 +1,3 @@
-async function LoadVaccinationData(){
-    var tableData = await checkGetDataJSON(VaccinationSummaryURL,url,true);
-    createTableFromJSON(tableData,VaccinationSummaryURL,'desc','vaccinations','bodyContainer');
-}
 
 async function LoadActiveCaseData(){
     hideElement('bodyContainer');
@@ -337,6 +333,154 @@ async function LoadActiveHospitalData (){
         setElementContents(ageGroupList[i], divContents);
     }
 
+
+    hideElement('loadingSpinner');
+    showElement('bodyContainer');  
+}
+
+async function LoadVaccinationData() {
+    hideElement('bodyContainer');
+    showElement('loadingSpinner');
+
+    var vaccinationHistory = [];
+    var vaccineAgeGroups = [];
+
+    const NBPOPULATION = 790000;
+
+    var upArrow = "<i class='fas fa-arrow-up'></i>";
+    var downArrow = "<i class='fas fa-arrow-down'></i>";
+    var neutral = "<i class='fas fa-minus'></i>";
+
+    try {
+        vaccinationHistoryJSON = await checkGetDataJSON('VaccinationHistory',VaccineTimetableURL,true);
+        vaccineAgeGroupsJSON = await checkGetDataJSON('VaccineAgeGroups',VaccinesByAgeGroupURL, true);
+
+        vaccinationHistory = JSON.parse(vaccinationHistoryJSON);
+        vaccineAgeGroups = JSON.parse(vaccineAgeGroupsJSON);
+    }
+    catch(err) {
+        hideElement('loadingSpinner');
+        document.getElementById("bodyContainer").innerHTML = err.message;
+    }
+
+    console.log(vaccinationHistory);
+
+    // UPDATE DATE // 
+    setElementContents('vacc_dateStamp','Updated On: ' + vaccinationHistory['VaccinationHistory'][0]['Date']);
+
+    // FULLY VACCINATED //
+    var fullyVaccPerc = parseFloat(vaccinationHistory['VaccinationHistory'][0]['PercentSecondDose']);
+    var fullyVaccNum = parseInt(vaccinationHistory['VaccinationHistory'][0]['SecondDose']);
+    var newFullyVacc = parseInt(vaccinationHistory['VaccinationHistory'][0]['NewSecondDose']);
+
+    var newFullyVaccIcon = neutral;
+
+    if (newFullyVacc != 0){
+        newFullyVaccIcon = newFullyVacc > 0 ? upArrow : downArrow;
+    }
+
+    setElementContents('vacc_percFullyVacc',fullyVaccPerc + "%");
+    setElementContents('vacc_numFullyVacc',"Pop: " + fullyVaccNum);
+    setElementContents('vacc_newFullyVacc',newFullyVaccIcon + " " + newFullyVacc);
+
+    // PARTIALLY VACCINATED //
+    var fistDosePerc = parseFloat(vaccinationHistory['VaccinationHistory'][0]['PercentFirstDose']);
+    var firstDoseNum = parseInt(vaccinationHistory['VaccinationHistory'][0]['FirstDose']);
+    var partiallyVaccPerc = (parseFloat(vaccinationHistory['VaccinationHistory'][0]['PercentFirstDose']) - fullyVaccPerc).toFixed(1);
+    var partiallyVaccNum = parseInt(vaccinationHistory['VaccinationHistory'][0]['FirstDose']) - fullyVaccNum;
+    var newPartiallyVacc = parseInt(vaccinationHistory['VaccinationHistory'][0]['NewFirstDose']);
+
+    var newPartiallyVaccIcon = neutral;
+
+    if (newPartiallyVacc != 0){
+        newPartiallyVaccIcon = newPartiallyVacc > 0 ? upArrow : downArrow;
+    }
+
+    setElementContents('vacc_percPartVacc',partiallyVaccPerc + "%");
+    setElementContents('vacc_numPartVacc',"Pop: " + partiallyVaccNum);
+    setElementContents('vacc_newPartVacc',newPartiallyVaccIcon + " " + newPartiallyVacc);
+
+    // BOOSTED //
+    var boostedVaccPerc = parseFloat(vaccinationHistory['VaccinationHistory'][0]['PercentBoosterDose']) ;
+    var boostedVaccNum = parseInt(vaccinationHistory['VaccinationHistory'][0]['BoosterDose']) ;
+    var newBoostedVacc = parseInt(vaccinationHistory['VaccinationHistory'][0]['NewBoosterDose']);
+
+    var newBoostedVaccIcon = neutral;
+
+    if (newBoostedVacc != 0){
+        newBoostedVaccIcon = newBoostedVacc > 0 ? upArrow : downArrow;
+    }
+
+    setElementContents('vacc_percBoost',boostedVaccPerc + "%");
+    setElementContents('vacc_numBoost',"Pop: " + boostedVaccNum);
+    setElementContents('vacc_newBoost',newBoostedVaccIcon + " " + newBoostedVacc);
+
+    // UNVACCINATED //
+    var unVaccPerc = (100.0 - fistDosePerc).toFixed(1);
+    var unVaccNum = NBPOPULATION - firstDoseNum;
+    var newUnVacc = 0;
+
+    var newUnVaccIcon = neutral;
+
+    if (newUnVacc != 0){
+        newUnVaccIcon = newUnVacc > 0 ? upArrow : downArrow;
+    }
+
+    setElementContents('vacc_percUnvacc',unVaccPerc + "%");
+    setElementContents('vacc_numUnvacc',"Pop: " + unVaccNum);
+
+    // FIRST DOSE //
+    var unVaccPerc = (100.0 - fistDosePerc).toFixed(1);
+    var unVaccNum = NBPOPULATION - firstDoseNum;
+    var newUnVacc = 0;
+
+    var newUnVaccIcon = neutral;
+
+    if (newUnVacc != 0){
+        newUnVaccIcon = newUnVacc > 0 ? upArrow : downArrow;
+    }
+
+    setElementContents('vacc_percUnvacc',unVaccPerc + "%");
+    setElementContents('vacc_numUnvacc',"Pop: " + unVaccNum);
+
+    // SUMMARY //
+    setElementContents('vacc_SumFirstDosePerc',fistDosePerc + "% (" + firstDoseNum + ")");
+    setElementContents('vacc_SumSecondDosePerc',fullyVaccPerc + "% (" + fullyVaccNum + ")");
+    setElementContents('vacc_SumBoosterPerc',boostedVaccPerc + "% (" + boostedVaccNum + ")");
+    setElementContents('vacc_SumUnvaccPerc',unVaccPerc + "% (" + unVaccNum + ")");
+
+    // AGE GROUPS //
+    var statGroupList = ['vacc5_11','vacc12_19','vacc20_29','vacc30_39','vacc40_49','vacc50_59','vacc60_64','vacc65_69','vacc70_74','vacc75_79','vacc80_84','vacc85'];
+    var statGroupElements = ['5-11','12-19','20-29','30-39','40-49','50-59','60-64','65-69','70-74','75-79','80-84','85+'];
+
+
+    for (let i = 0 ; i < statGroupList.length ; i++){
+        var firstDosePerc = parseFloat(vaccineAgeGroups['VaccineAgeGroups'][i]['FirstDose']).toFixed(1);
+        var secondDosePerc = parseFloat(vaccineAgeGroups['VaccineAgeGroups'][i]['SecondDose']).toFixed(1);
+        var boosterDosePerc = parseFloat(vaccineAgeGroups['VaccineAgeGroups'][i]['BoosterDose']).toFixed(1);
+        var unvaccPerc = (100 - firstDosePerc).toFixed(1);
+
+        var firstDoseNum = ((firstDosePerc/100) * agePopulation['agePopulation'][i+1].populationSize).toFixed(0);
+        var secondDoseNum = ((secondDosePerc/100) * agePopulation['agePopulation'][i+1].populationSize).toFixed(0);
+        var boosterDoseNum = ((boosterDosePerc/100) * agePopulation['agePopulation'][i+1].populationSize).toFixed(0);
+        var unvaccNum = ((unvaccPerc/100) * agePopulation['agePopulation'][i+1].populationSize).toFixed(0);
+
+        var divFirstDosePerc  = "<div>" + firstDosePerc + "%</div>";
+        var divSecondDosePerc = "<div>" + secondDosePerc + "%</div>";
+        var divBoosterPerc = "<div>" + boosterDosePerc + "%</div>";
+        var divUnvaccPerc = "<div>" + unvaccPerc + "%</div>";
+        var divContentsPerc = divFirstDosePerc + divSecondDosePerc + divBoosterPerc + divUnvaccPerc;
+
+        var divFirstDoseNum  = "<div>" + firstDoseNum + "</div>";
+        var divSecondDoseNum = "<div>" + secondDoseNum + "</div>";
+        var divBoosterNum = "<div>" + boosterDoseNum + "</div>";
+        var divUnvaccNum = "<div>" + unvaccNum + "</div>";
+        var divContentsNum = divFirstDoseNum + divSecondDoseNum + divBoosterNum + divUnvaccNum;
+        
+        setElementContents(statGroupList[i],divContentsPerc);
+        setElementContents(statGroupList[i]+"Num",divContentsNum);
+    }
+   
 
     hideElement('loadingSpinner');
     showElement('bodyContainer');  

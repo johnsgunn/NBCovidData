@@ -80,14 +80,23 @@
                       <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                        
                       
                     </div>
                     
-                    <div class="text-light" id="menuHeader"><a href="./index_old.html" class='nav-link active'>View Old Version</a></div>&nbsp;&nbsp;&nbsp;
+                    <div class="text-light" id="menuHeader">
+                        <div class="btn-group" role="group" aria-label="NavMenuExtras">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#tipJarModal">
+                                Tip Jar
+                            </button>
+                            <a href="./index_old.html" class="btn btn-outline-secondary">View Old Version</a>
+                        </div>
+                        
+                    </div>&nbsp;&nbsp;&nbsp;
                   </div>
-                </nav>  
+                </nav>              
+            </div>
             
-              </div>
               <div><br/><br/></div>
             <div class="row justify-content-md-center" id="bodyRow">
                 <div class="row" id="loadingSpinner">
@@ -100,23 +109,23 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" id="navTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="cases-tab" data-bs-toggle="tab" data-bs-target="#cases" 
-                            type="button" role="tab" aria-controls="cases" aria-selected="true"
-                            onclick="LoadActiveCaseData()">Active Cases</button>
+                            <button class="nav-link active" id="cases-tab" data-bs-toggle="tab" data-bs-target="#cases" 
+                                type="button" role="tab" aria-controls="cases" aria-selected="true"
+                                onclick="LoadActiveCaseData()">Active Cases</button>
                         </li>
                         
                         <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="hospitals-tab" data-bs-toggle="tab" data-bs-target="#hospitals" 
-                            type="button" role="tab" aria-controls="hospitals" aria-selected="false"
-                            onclick="LoadActiveHospitalData()">Hospitals</button>
+                            <button class="nav-link" id="hospitals-tab" data-bs-toggle="tab" data-bs-target="#hospitals" 
+                                type="button" role="tab" aria-controls="hospitals" aria-selected="false"
+                                onclick="LoadActiveHospitalData()">Hospitals</button>
                         </li>
 
                         <!-- VACCINATIONS -->
-                        <!-- <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="vaccinations-tab" data-bs-toggle="tab" data-bs-target="#vaccinations" 
                                 type="button" role="tab" aria-controls="vaccinations" aria-selected="false"
-                                >Vaccinations</button>
-                            </li> -->
+                                onclick="LoadVaccinationData()">Vaccinations</button>
+                        </li>
 
                         <!-- SCHOOLS  -->
                         <!-- <li class="nav-item" role="presentation">
@@ -222,7 +231,268 @@
                               </div>
                         </div>
                         <!-- VACCINATION SUMMARY -->
-                        <div class="tab-pane" id="vaccinations" role="tabpanel" aria-labelledby="vaccinations-tab">Vaccinations</div>
+                        <div class="tab-pane" id="vaccinations" role="tabpanel" aria-labelledby="vaccinations-tab">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="display-4">Vaccination Summary</p>
+                                    <p id="vacc_dateStamp">Updated on: </p>
+                                </div>
+                            </div>
+
+                            <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
+                                <div class="col text-center ">
+                                  <div class="p-3 border bg-light h-100">
+                                      <p class="display-6">Fully Vacc'd</p>
+                                      <div class="h3" id="vacc_percFullyVacc">90%</div>
+                                      <div class=".small" id="vacc_numFullyVacc">123456</div>
+                                      <div class=".small" id="vacc_newFullyVacc">123</div>
+                                  </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Partially Vacc'd</p>
+                                        <div class="h3" id="vacc_percPartVacc">91%</div>
+                                        <div class=".small" id="vacc_numPartVacc">123456</div>
+                                        <div class=".small" id="vacc_newPartVacc">123</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Boosted</p>
+                                        <div class="h3" id="vacc_percBoost">91%</div>
+                                        <div class=".small" id="vacc_numBoost">123456</div>
+                                        <div class=".small" id="vacc_newBoost">1234</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Unvaccinated</p>
+                                        <div class="h3" id="vacc_percUnvacc">10%</div>
+                                        <div class=".small" id="vacc_numUnvacc">123456</div>
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6 text-center">Summary</p>
+                                        <div class="row d-flex">
+                                            <div class="col text-left">
+                                                1st Dose
+                                            </div>
+                                            <div class="col " id="vacc_SumFirstDosePerc">
+                                                &nbsp;       
+                                            </div>
+                                        </div>
+
+                                        <div class="row d-flex">
+                                            <div class="col">
+                                                2nd Dose
+                                            </div>
+                                            <div class="col" id="vacc_SumSecondDosePerc">
+                                                &nbsp;       
+                                            </div>
+                                        </div>
+
+                                        <div class="row d-flex">
+                                            <div class="col">
+                                                Booster
+                                            </div>
+                                            <div class="col" id="vacc_SumBoosterPerc">
+                                                &nbsp;       
+                                            </div>
+                                        </div>
+
+                                        <div class="row d-flex">
+                                            <div class="col">
+                                                Unvaccinated
+                                            </div>
+                                            <div class="col" id="vacc_SumUnvaccPerc">
+                                                &nbsp;       
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+
+                            <hr/>
+                            <div class="row row-cols-2 row-cols-lg-1 g-2 g-lg-3 d-flex ">
+                                
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Age Groups</p>
+
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                &nbsp;       
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">5 - 11</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">12 - 19</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">20 - 29</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">30 - 39</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">40 - 49</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">50 - 59</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">60 - 64</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">65 - 69</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">70 - 74</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">75 - 79</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">80 - 84</div>        
+                                            </div>
+                                            <div class="col text-center">
+                                                <div class="fw-bold" id="">85 +</div>        
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <p class="">% Vaccinated</p>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="fw-bold" >1st Dose</div>
+                                                <div class="fw-bold" >2nd Dose</div>
+                                                <div class="fw-bold" >Booster</div>
+                                                <div class="fw-bold" >Unvaccinated</div>
+                                            </div>
+                                            <div class="col text-center" id="vacc5_11">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc12_19">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc20_29">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc30_39">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc40_49">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc50_59">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc60_64">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc65_69">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc70_74">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc75_79">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc80_84">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc85">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                        </div>
+
+                                        <hr/>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <p class="">Population Count</p>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex">
+                                            <div class="col text-center">
+                                                <div class="fw-bold" >1st Dose</div>
+                                                <div class="fw-bold" >2nd Dose</div>
+                                                <div class="fw-bold" >Booster</div>
+                                                <div class="fw-bold" >Unvaccinated</div>
+                                            </div>
+                                            <div class="col text-center" id="vacc5_11Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc12_19Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc20_29Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc30_39Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc40_49Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc50_59Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc60_64Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc65_69Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc70_74Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc75_79Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc80_84Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                            <div class="col text-center" id="vacc85Num">
+                                                <div class="">123</div>  
+                                                <div class="">123</div>       
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                              </div>
+
+                        </div>
 
                         <!-- HOSPITAL SUMMARY -->
                         <div class="tab-pane" id="hospitals" role="tabpanel" aria-labelledby="hospitals-tab">
@@ -459,7 +729,7 @@
                             <div class="row">
                                 <div class="col">
                                     <p class="display-4">Raw Data View</p>
-                                    <p id="raw_dateStamp">Updated on: </p>
+                                    <!-- <p id="raw_dateStamp">Updated on: </p> -->
                                 </div>
                             </div>
                             <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
@@ -531,5 +801,73 @@
                 </div>
               </div>
         </div>
+        <div class="modal fade " id="tipJarModal" tabindex="-1" aria-labelledby="tipJarModal" aria-hidden="true" >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content w-100">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tipJarModalTitle">Tip Jar</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row p-1">
+                        <div class="col-2 text-center">
+                            <img src="./img/icons/btc-4.svg" style="height:3em"/>
+                        </div>
+                        <div class="col-6 d-flex align-items-center">
+                            bc1q5578fudyehkh34xz2gmnfsqs90rejcceqg7nrl
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-2 text-center">
+                            <img src="./img/icons/eth-4.svg" style="height:3em"/>
+                        </div>
+                        <div class="col-4 d-flex align-items-center">
+                            0xC3b1E22C009BB947B3BDe553f08efA41E77e35D8
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-2 text-center ">
+                            <img src="./img/icons/doge.svg" style="height:3em"/>
+                        </div>
+                        <div class="col-4 d-flex align-items-center">
+                            DPWszs5NmNjt8Vj8B3DxwMjH55RGXcuVDQ
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-2 text-center">
+                            <img src="./img/icons/xlm.svg" style="height:3em"/>
+                        </div>
+                        <div class="col-4 d-flex align-items-center">
+                            GCAJHI6PF6ITA5YA3GUKJI5YTAB6EXNMOHPVWM22BGFDPMTQCWCG5A2L
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-2 text-center">
+                            <img src="./img/icons/xrp.svg" style="height:3em"/>
+                        </div>
+                        <div class="col-4 d-flex align-items-center">
+                            rs9yDjiFPCW3eUE62d4AwGbAkHgo9dbF77
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <br/><br/><br/>
+        <!-- FOOTER -->
+        <footer class="footer fixed-bottom">
+            <div class="row bg-light align-items-center" style="height:50px">
+                <div class="col text-muted text-center">
+                    Witten By: <a rel="author" href="https://twitter.com/johnsgunn" target="_blank">John Gunn</a> | 
+                    Data Source: <a href="https://experience.arcgis.com/experience/8eeb9a2052d641c996dba5de8f25a8aa">GNB Dashboard</a> |
+                    Source Code (GPLv3): <a href="https://github.com/johnsgunn/NBCovidData" target="_blank">NBCovidData</a> | 
+                    Bugs or Requests: <a href="https://github.com/johnsgunn/NBCovidData/issues" target="_blank">Open An Issue</a>
+                </div>
+            </div>
+            <!-- All your data are belong to us -->
+        </footer>  
     </body>
 </html>

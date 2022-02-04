@@ -46,7 +46,10 @@ html { font-size: 80.5%; }
 	max-height: 100%;
 	overflow-y: auto;
 }
-
+.modal-dialog {
+    max-width: 600px;
+    margin: 2rem auto;
+}
 /* Loading Ring */
 .lds-dual-ring {
 	display: inline-block;
