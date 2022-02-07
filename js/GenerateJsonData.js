@@ -283,12 +283,14 @@ function buildCaseAgeTrends_wUnder19(){
 function indexAgeGroups(){
 }
 
-function buildVaccineAgeCount() {
+async function buildVaccineAgeCount() {
 
     var daily = {};
     var vaccineAgeGroupCount = [];
     daily.vaccineAgeGroupCount = vaccineAgeGroupCount;
     
+    // var vaccineAgeGroupsJSON = await checkGetDataJSON("vaccineAgeGroups",VaccinesByAgeGroupURL,true); 
+
     var vaccineAgePercent = JSON.parse(vaccineAgeGroupsJSON);
     var population = [];
     var sortOrder = [];

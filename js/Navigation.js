@@ -108,74 +108,98 @@ async function showDashboardChart(chartName){
     }   
 }
 
+async function showModalChart(chartName,chartURL){
+    var chartJSON = await checkGetDataJSON(chartName, chartURL);
+    showCaseHistoryChart(chartJSON,chartName,'modalChart');
+}
+
 
 // Display full sized chart on page
-async function showFullSizeChart (chartName){
+async function showFullSizeChart (chartName,loc="largeChart",hideOthers=true){
     // Clear and prep area
-    hideAll();
-    showElement("large_chart");
-
-    selectedFullSizeChart(chartName);
+    if (hideOthers){
+        hideAll();
+        selectedFullSizeChart(chartName);
+    }  
+    else {
+        destroyCharts();
+    }
+    
+    showElement(loc);    
 
     var chartJSON;
+    var chartTitle = "Chart";
 
     switch (chartName){
         case "caseHistory":
             chartJSON = await checkGetDataJSON('caseHistory',CaseHistoryURL);
-            showCaseHistoryChart(chartJSON,'caseHistory',"largeChart");         
+            showCaseHistoryChart(chartJSON,'caseHistory',loc);    
+            chartTitle = "Case History";     
             break;
         case "VaccineHistory":
-            chartJSON = await checkGetDataJSON('VaccineHistory',VaccinationHistoryURL);
-            showVaccineHistoryChart(chartJSON,'VaccineHistory',"largeChart");  
+            chartJSON = await checkGetDataJSON('VaccineHistory',VaccineTimetableURL);
+            showVaccineHistoryChart(chartJSON,'VaccineHistory',loc);  
+            chartTitle = "Vaccine History";
             break;
         case "HealthZoneSummary":
             chartJSON = healthZoneJSON;
-            showHealthZoneChart(chartJSON,chartName,"largeChart");
+            showHealthZoneChart(chartJSON,chartName,loc);
             break;
-        case "pediatricCases":
+        case "pediatricCases": 
             chartJSON = await checkBuildDataSet("caseAgeRates");
-            showPedCasesChart(chartJSON,'caseAgeRates',"largeChart");
+            showPedCasesChart(chartJSON,'caseAgeRates',loc);
             break;
         case "caseAgeGroups":
             chartJSON = await checkBuildDataSet("caseAgeRates");
-            showAgeCaseChart(chartJSON,'caseAgeRates',"largeChart");
+            showAgeCaseChart(chartJSON,'caseAgeRates',loc);
             break;
         case "caseTrends":
-            showCaseTrendsChart(caseRatesJSON,'caseRates',"largeChart");
+            chartTitle = "Case Trends";
+            chartJSON = await checkGetDataJSON('caseHistory',CaseHistoryURL);
+            showCaseTrendsChart(chartJSON,'caseHistory',loc);
             break;
         case "schoolList":
             showSchoolListBoard(schoolsListJSON,"SchoolsList",'dataTableContainer');
             break;
         case "VaccineAgeGroups":
-            showVaccineAgeChart(vaccineAgeGroupsJSON,"VaccineAgeGroups","largeChart");
+            chartTitle = "Vaccine % By Age Group";
+            showVaccineAgeChart(vaccineAgeGroupsJSON,"VaccineAgeGroups",loc);
             break;
         case "hospitalTrends":
-            showCaseTrendsChart(hospitalRatesJSON,'hospitalRates',"largeChart");
+            showCaseTrendsChart(hospitalRatesJSON,'hospitalRates',loc);
             break;
         case "icuTrends":
-            showCaseTrendsChart(icuRatesJSON,'icuRates',"largeChart");
+            showCaseTrendsChart(icuRatesJSON,'icuRates',loc);
             break;
         case "VaccineAgeCount":
-            chartJSON = await checkBuildDataSet('vaccineAgeGroupCount');
-            showVaccineAgeCountChart(chartJSON, 'VaccineAgeCount', 'largeChart');
+            vaccineAgeGroupsJSON = await checkGetDataJSON("vaccineAgeGroups",VaccinesByAgeGroupURL,true);              
+            var vaccineAgeCount = await buildVaccineAgeCount();
+            chartJSON = JSON.stringify(vaccineAgeCount,null,2)
+            chartTitle = "Vaccine Count by Age Group";
+            showVaccineAgeCountChart(chartJSON, 'vaccineAgeGroupCount', loc);
             break;
         case "CaseRate":
             chartJSON = await checkBuildDataSet('dailyCaseRates');
-            showDailyCaseRatesChart(chartJSON,'DailyCaseRate','largeChart');
+            showDailyCaseRatesChart(chartJSON,'DailyCaseRate',loc);
             break;
         case "hospitalTrends_GNB":
-            //chartJSON = await checkBuildDataSet('HospitalTrends');
+            chartTitle = "Hospital and ICU Trends - 7-day Rolling Average";
             chartJSON = await checkGetDataJSON('HospitalTrends',hospitalTrendsURL,true);
-            showHospitalTrendsChart(chartJSON,'HospitalTrends','largeChart');
+            showHospitalTrendsChart(chartJSON,'HospitalTrends',loc);
             break;
         case "hospitalStatus":
             chartJSON = await checkBuildDataSet('hospitalStatus');
-            showCurrentHospitalStatus(chartJSON,'HospitalStatus','largeChart');
+            showCurrentHospitalStatus(chartJSON,'HospitalStatus',loc);
             break;
         default:
             // bad selection
             break;
-    }                
+
+       
+    }   
+    if (loc == 'modalChart'){
+        setElementContents('chartModalTitle',chartTitle);
+    }             
 }
 
 function showCompiledData(name){

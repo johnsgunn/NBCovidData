@@ -125,7 +125,7 @@ async function LoadActiveCaseData(){
     setElementContents('case_totalHospitalChange',NewHospitalIcon + " " + caseHistory['CaseHistory'][0]['NewHosp']);
 
     hideElement('loadingSpinner');
-    showElement('bodyContainer');    
+    showElement('bodyContainer');   
 }
 
 

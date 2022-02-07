@@ -111,13 +111,45 @@ function showVaccineHistoryChart(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
-    var dps1 = [];
-    var dps2 = [];
-    var dps3 = [];
+    var dpsFirstDose = [];
+    var dpsSecondDose = [];
+    var dpsBoosterDose = [];
+    
+    var prevFirstDose = 0;
+    var prevSecondDose = 0;
+    var prevBoosterDose = 0;
+
     for (var i=arr[name].length-1 ; i > -1  ; i--){
-        dps1.push({ x: arr[name][i]['Date'], y: arr[name][i]['DoseAdminEng']});
-        dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['FirstDose']});
-        dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['SecondDose']});
+        if (i > 0 && i < arr[name].length-1) {
+            if (!isNaN(parseInt(arr[name][i]['FirstDose'])) && parseInt(arr[name][i]['FirstDose']) > prevFirstDose){
+                dpsFirstDose.push({ x: arr[name][i]['Date'], y: arr[name][i]['FirstDose']});  
+                prevFirstDose = parseInt(arr[name][i]['FirstDose']);       
+            }
+            else {
+                dpsFirstDose.push({ x: arr[name][i]['Date'], y: prevFirstDose});
+            }
+
+            if (!isNaN(parseInt(arr[name][i]['SecondDose'])) && parseInt(arr[name][i]['SecondDose']) > prevSecondDose){
+                dpsSecondDose.push({ x: arr[name][i]['Date'], y: arr[name][i]['SecondDose']});      
+                prevSecondDose = parseInt(arr[name][i]['SecondDose']); 
+            }
+            else {
+                dpsSecondDose.push({ x: arr[name][i]['Date'], y: prevSecondDose});
+            }
+
+            if (!isNaN(parseInt(arr[name][i]['BoosterDose'])) && parseInt(arr[name][i]['BoosterDose']) > prevBoosterDose){
+                dpsBoosterDose.push({ x: arr[name][i]['Date'], y: arr[name][i]['BoosterDose']}); 
+                prevBoosterDose = parseInt(arr[name][i]['BoosterDose']); 
+            }
+            else {
+                dpsBoosterDose.push({ x: arr[name][i]['Date'], y: prevBoosterDose});                
+            }
+        }
+        else if (i == 0) {
+            dpsFirstDose.push({ x: arr[name][i]['Date'], y: arr[name][i]['FirstDose']});   
+            dpsSecondDose.push({ x: arr[name][i]['Date'], y: arr[name][i]['SecondDose']});
+            dpsBoosterDose.push({ x: arr[name][i]['Date'], y: arr[name][i]['BoosterDose']});
+        }
     }
     
     var titleFontSize = getChartTitleSize(loc);
@@ -131,34 +163,41 @@ function showVaccineHistoryChart(json,name,loc) {
             datasets: [
             {
                 type: "line",
+                label: "Booster",
+                data:dpsBoosterDose,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#3389FF",
+                backgroundColor: "#3389FF",
+                tension: 0.1,            
+                yAxisID: 'y'
+            },
+            {
+                type: "line",
                 label: "Second Doses",
-                data:dps3,
-                borderWidth: 1,
-                pointRadius: 1,
-                fill: true,
-                backgroundColor: "#9966ff"
+                data:dpsSecondDose,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#A933FF",
+                backgroundColor: "#A933FF",
+                tension: 0.1,            
+                yAxisID: 'y'
             },{
                 type: "line",
                 label: "First Doses",
-                data:dps2,
-                borderWidth: 0,
-                pointRadius: 1,
-                fill: true,
-                backgroundColor: "#66ffcc"
-            },{
-                type: "line",
-                label: "Total Doses",
-                data:dps1,
-                borderWidth: 1,
-                pointRadius: 1,
-                fill: true,
-                backgroundColor: "#0066ff"
-            }
-            
-        ]
+                data:dpsFirstDose,
+                borderWidth: 4,
+                pointRadius: 0,
+                fill: false,
+                borderColor: "#33EFFF",
+                backgroundColor: "#33EFFF",
+                tension: 0.1,            
+                yAxisID: 'y'
+            }]
         },
-
-        options: {                        
+        options: {                       
             scales: {
                 yAxes: {
                     grid: {
@@ -199,7 +238,7 @@ function showVaccineHistoryChart(json,name,loc) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Vaccination History',
+                    text: 'New Brunswick Vaccination History',
                     color: chartTextColor,
                     font: {
                         size: titleFontSize
@@ -211,9 +250,9 @@ function showVaccineHistoryChart(json,name,loc) {
                         color: chartTextColor
                     }
                 },
-                filler: {
-                    propagate: true
-                }
+                // filler: {
+                //     propagate: true
+                // }
             }
         }
     });
@@ -296,7 +335,7 @@ function showHealthZoneChart(json,name,loc) {
 
 // Render health zone chart to specified location on page
 // Data source: GNB API
-function showCaseTrendsChart(json,name,loc) {
+function showCaseTrendsChart_VaccStatus(json,name,loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
 
@@ -329,7 +368,6 @@ function showCaseTrendsChart(json,name,loc) {
         dps2.push({ x: arr[name][i]['Date'], y: arr[name][i]['Partially Vaccinated Trend']});        
         dps3.push({ x: arr[name][i]['Date'], y: arr[name][i]['Unvaccinated Trend']});
         dps4.push({ x: arr[name][i]['Date'], y: arr[name][i][checkType]});
-        
         
     }
 
@@ -409,6 +447,149 @@ function showCaseTrendsChart(json,name,loc) {
                 title: {
                     display: true,
                     text: 'Cases (Per 100,000)',
+                    color: chartTextColor,
+                    font: {
+                        size: 15
+                    },                        
+                },
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+            }, 
+            y1: {
+                grid: {
+                    drawOnChartArea: false,
+                    color: chartGridColor
+                },
+                title: {
+                    display: true,
+                    text: checkType,
+                    color: chartTextColor,
+                    font: {
+                        size: 15
+                    },                        
+                },
+                display: true,
+                type: 'linear',
+                position: 'right',
+                color: chartTextColor,
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+                
+            },   
+            x: {
+                grid: {
+                    drawOnChartArea: false,
+                    color: chartGridColor
+                },
+                ticks: {
+                    precision: 0,
+                    color: chartTextColor,           
+                }
+            }             
+        },   
+        plugins: {
+            title: {
+                display: true,
+                text: titleText,
+                color: chartTextColor,
+                font: {
+                    size: titleFontSize
+                }, 
+            },
+            legend: {
+                display: true,
+                position:'top',
+                fullWidth: false,
+                labels: {
+                    color: chartTextColor
+                }
+            },
+            filler: {
+                propagate: true
+            }
+        }
+    };
+
+    largeChart = new Chart(ctx, {
+        stacked: false, 
+        data: data,
+        options: options,
+        plugins: [canvasBG]
+    });
+    largeChart.render();
+}
+
+function showCaseTrendsChart(json,name,loc) {
+    var arr = [];
+    arr = JSON.parse(json); 	// Convert JSON to array.
+
+    var titleFontSize = getChartTitleSize(loc);
+
+    var checkType = "New Cases";
+    var titleText = "NB Covid-19 New Case Trend Rate, 7-Day Average";
+
+    var dps1 = [];
+    var dps2 = [];
+    var dps3 = [];
+    var dps4 = [];
+    for (var i=arr[name].length -1 ; i > -1  ; i--){
+        dps1.push({ x: arr[name][i]['DATE'], y: arr[name][i]['SevenDayAverageNewCases']});
+        dps2.push({ x: arr[name][i]['DATE'], y: arr[name][i]['NewToday']});
+    }
+
+    var ctx = document.getElementById(loc);
+    if (largeChart) largeChart.destroy();
+    const data = {
+        datasets: [
+        {
+            type: "line",
+            label: "New Case Trend",
+            data:dps1,
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#00ff66",
+            backgroundColor: "#00ff66",
+            tension: 0.1,            
+            yAxisID: 'y'
+        },
+        {
+            type: "line",
+            label: "New Case Daily",
+            data:dps2,
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+            borderColor: "#ff9900",
+            backgroundColor: "#ff9900",
+            tension: 0.1,            
+            yAxisID: 'y1' 
+        },
+        ]
+    };
+
+    const options = {
+        responsive: true,
+        interaction: {
+            mode: 'index',
+            intersect: false, 
+        },
+        scales: {
+            y: {
+                grid: {
+                    color: chartGridColor
+                },
+                display: true,
+                type: 'linear',
+                position: 'left',
+                color: chartTextColor,
+                title: {
+                    display: true,
+                    text: '7 Day Average New Cases',
                     color: chartTextColor,
                     font: {
                         size: 15
@@ -1459,6 +1640,7 @@ function showCurrentHospitalStatus(json,name,loc) {
 function showVaccineAgeCountChart(json, name, loc) {
     var arr = [];
     arr = JSON.parse(json); 	// Convert JSON to array.
+    console.log(arr);
 
     var titleFontSize = getChartTitleSize(loc);
 
@@ -1492,7 +1674,7 @@ function showVaccineAgeCountChart(json, name, loc) {
     var dps2 = []; // second dose
     var dps3 = []; // unvaccinated
 
-    arr['vaccineAgeGroupCount'].forEach(function (item, index) {
+    arr[name].forEach(function (item, index) {
         var ageGroup = item['Age Group'];
 
         var fullyVaccinated = parseFloat(item['Fully Vaccinated']);

@@ -13,6 +13,8 @@ var vaccineAgeCountsChart = null;
 var caseRateChart = null;
 var hospitalStatusChart = null;
 
+var modalChart = null;
+
 var darkMode = false;
 
 const chartTextColor = "#f2f2f2";

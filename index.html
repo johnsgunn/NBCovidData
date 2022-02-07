@@ -105,6 +105,11 @@
                     </div>      
                   </div>
                 <div class="col-md-8 hidden" id="bodyContainer">
+                    <div class="row p-2">
+                        <div class="col">
+                            
+                        </div>
+                    </div>
                     
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" id="navTab" role="tablist">
@@ -114,6 +119,7 @@
                                 onclick="LoadActiveCaseData()">Active Cases</button>
                         </li>
                         
+                        <!-- HOSPITALS -->
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="hospitals-tab" data-bs-toggle="tab" data-bs-target="#hospitals" 
                                 type="button" role="tab" aria-controls="hospitals" aria-selected="false"
@@ -127,15 +133,16 @@
                                 onclick="LoadVaccinationData()">Vaccinations</button>
                         </li>
 
-                        <!-- SCHOOLS  -->
-                        <!-- <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="schools-tab" data-bs-toggle="tab" data-bs-target="#schools" 
-                            type="button" role="tab" aria-controls="schools" aria-selected="false">Schools</button>
-                        </li> -->
-
+                        <!-- RAW DATA -->
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="rawdata-tab" data-bs-toggle="tab" data-bs-target="#rawdata" 
                                 type="button" role="tab" aria-controls="rawdata" aria-selected="false">Raw Data</button>
+                        </li>
+
+                        <!-- CHARTS AND GRAPHS -->
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="charts-tab" data-bs-toggle="tab" data-bs-target="#charts" 
+                                type="button" role="tab" aria-controls="charts" aria-selected="false">Charts and Graphs</button>
                         </li>
                     </ul>
                     
@@ -146,8 +153,13 @@
                             <div class="row">
                                 <div class="col">
                                     <p class="display-4">Active Case Summary</p>
+                                </div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-2">
                                     <p id="case_dateStamp">Updated on: </p>
                                 </div>
+                                
                             </div>
                             <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
                                 <div class="col text-center ">
@@ -724,7 +736,11 @@
                                 
                               </div>
                         </div>
+
+                        <!-- SCHOOLS (DEPRECATED BY GNB) -->
                         <div class="tab-pane" id="schools" role="tabpanel" aria-labelledby="schools-tab">Schools</div>
+
+                        <!-- RAW DATA -->
                         <div class="tab-pane" id="rawdata" role="tabpanel" aria-labelledby="rawdata-tab">
                             <div class="row">
                                 <div class="col">
@@ -775,6 +791,7 @@
                                 <div class="col text-center ">
                                     <div class="p-3 border bg-light h-100">
                                         <p class="display-6">Schools</p>
+                                        *No longer updated by GNB
                                         <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
                                             <button type="button" class="btn btn-outline-secondary"
                                                 onclick="LoadRawData('SchoolsSummary',SchoolsDataURL)">Schools Summary</button>
@@ -797,12 +814,113 @@
                                 <div class="col" id="raw_data_display"></div>
                             </div>
                         </div>
+
+                        <!-- CHARTS AND GRAPHS -->
+                        <div class="tab-pane" id="charts" role="tabpanel" aria-labelledby="charts-tab">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="display-4">Charts and Graphs</p>
+                                </div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-2">
+                                    <p id="case_dateStamp">Updated on: </p>
+                                </div>
+                                
+                            </div>
+                            <div class="row row-cols row-cols-lg-5 g-2 g-lg-3 d-flex ">
+                                <div class="col text-center ">
+                                  <div class="p-3 border bg-light h-100">
+                                      <p class="display-6">Cases</p>
+                                      <div class="btn-group-vertical btn-group-sm" role="group" aria-label="chart_cases">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#chartModal" onclick="showFullSizeChart('caseHistory','modalChart',false)">
+                                            <i class="fas fa-chart-line"></i> Case History
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#chartModal" onclick="showFullSizeChart('caseTrends','modalChart',false)">
+                                            <i class="fas fa-chart-line"></i> Case Trends
+                                        </button>                                     
+                                    </div>  
+                                  </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Vaccinations</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="chart_vaccines">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#chartModal" onclick="showFullSizeChart('VaccineHistory','modalChart',false)">
+                                                <i class="fas fa-chart-line"></i> Vaccine History
+                                            </button>
+            
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#chartModal" onclick="showFullSizeChart('VaccineAgeCount','modalChart',false)">
+                                                <i class="fas fa-chart-line"></i> Vaccine # Age Groups
+                                            </button>
+
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#chartModal" onclick="showFullSizeChart('VaccineAgeGroups','modalChart',false)">
+                                                <i class="fas fa-chart-line"></i> Vaccine % Age Groups
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Hospital</p>
+                                        <div class="btn-group-vertical btn-group-sm" role="group" aria-label="chart_hospital">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#chartModal" onclick="showFullSizeChart('hospitalTrends_GNB','modalChart',false)">
+                                                <i class="fas fa-chart-line"></i> Hospial and ICU Trends
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Deaths</p>
+                                        <div class=".small" id="">Coming Soon</div>
+                                    </div>
+                                </div>
+                                <div class="col text-center ">
+                                    <div class="p-3 border bg-light h-100">
+                                        <p class="display-6">Compliance</p>
+                                        <div class=".small" id="">Coming Soon</div>
+                                    </div>
+                                </div>
+                            </div>  
+                            
+                        </div>
                     </div>
                 </div>
               </div>
         </div>
+
+        <!-- CHART MODAL -->
+        <div class="modal fade " id="chartModal" tabindex="-1" aria-labelledby="chartModal" aria-hidden="true">
+            <div class="modal-dialog modal-chart modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="chartModalTitle">Chart</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="destroyCharts();"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <canvas id="modalChart" width="800px" height="500px"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="destroyCharts();">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <!-- TIPJAR MODAL -->
         <div class="modal fade " id="tipJarModal" tabindex="-1" aria-labelledby="tipJarModal" aria-hidden="true" >
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-tipjar modal-dialog-centered">
               <div class="modal-content w-100">
                 <div class="modal-header">
                   <h5 class="modal-title" id="tipJarModalTitle">Tip Jar</h5>
