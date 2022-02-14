@@ -363,3 +363,7 @@ async function showArcGis_FromFeatures(feature, jurisdiction){
     await showArcGis_FromLink(url);
 
 }
+
+function openDonorLookup() {
+    window.open("./more/donorLookup.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1600,height=800");
+}
