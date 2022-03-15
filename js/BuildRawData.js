@@ -93,6 +93,109 @@ function createTableFromJSON(jsonData,name,sortOrder="asc",elementLoc="bodyRow",
     showElement(elementLoc);
 }
 
+function createTableFromJSON_OC(jsonData,name,sortOrder="asc",elementLoc="bodyRow",container="bodyContainer") {
+    var arr = [];
+    arr = JSON.parse(jsonData); 	// Convert JSON to array.
+
+    var col = []; // Contains our headers 
+
+    for (var i = 0; i < arr[name].length; i++) {
+        for (var key in arr[name][i]) {
+            if (col.indexOf(key) === -1 
+            && key.indexOf('OBJECTID') == -1
+            && key.indexOf('Shape') == -1
+            && key.indexOf('FID') == -1) {
+                col.push(key);
+            }
+        }
+    }  
+
+    var tableTextColor = "text-dark";
+
+    // Create a dynamic table.
+    var table = document.createElement("table");
+    table.classList.add('table');
+    table.classList.add('display');
+    table.classList.add('nowrap');
+    table.classList.add(tableTextColor);
+
+    table.id = 'tblData';
+    
+    // Create table header.
+    var header = table.createTHead();    
+    var tr = header.insertRow(-1);                   // Table row.
+
+    for (var i = 0; i < col.length; i++) {
+        var th = document.createElement("th");      // Table header.
+        th.innerHTML = col[i];
+        tr.appendChild(th);
+    }
+
+    var body = table.createTBody();
+    // Add JSON to the table rows.
+    for (var i = 0; i < arr[name].length; i++) {
+
+        tr = body.insertRow(-1);  
+
+        for (var j = 0; j < col.length; j++) {
+            var tabCell = tr.insertCell(-1);  
+            
+            if (col[j].includes('date')){
+                
+                let date_string = arr[name][i][col[j]].toString(); 
+                let parts_of_date = date_string.split("-");
+
+                let output = new Date(+parts_of_date[2], parts_of_date[1] - 1, +parts_of_date[0]).toISOString();
+                output = output.substring(0, output.indexOf('T'));
+                tabCell.innerHTML = output;
+            }
+            else {
+                tabCell.innerHTML = arr[name][i][col[j]];
+            }
+        }
+    }
+
+    table.classList.add(tableTextColor);
+
+    // Finally, add the dynamic table to a container.
+    var divContainer = document.getElementById(container);
+    divContainer.innerHTML = "<h4 class='" + tableTextColor + "'>Data: " + name + "</h4>";
+    divContainer.appendChild(table);
+
+    $(document).ready(function() {
+        $('#tblData').DataTable({
+            scrollX:        true,
+            scrollCollapse: true,
+            autoWidth:         true,  
+            paging: true, 
+            "pageLength": 15,
+             dom: 'Bfrtip',
+             buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "order": [[ 0, sortOrder]],
+    });
+    } );    
+
+    showElement(elementLoc);
+}
+
+function convertDateFormat(date){
+    var dateString = date;
+    var dataSplit = dateString.split('/');
+    var dateConverted;
+
+    if (dataSplit[2].split(" ").length > 1) {
+
+        var hora = dataSplit[2].split(" ")[1].split(':');
+        dataSplit[2] = dataSplit[2].split(" ")[0];
+        dateConverted = new Date(dataSplit[2], dataSplit[1]-1, dataSplit[0], hora[0], hora[1]);
+
+    } else {
+        dateConverted = new Date(dataSplit[2], dataSplit[1] - 1, dataSplit[0]);
+    }
+}
+
 function createTableFromArray(arr,name,sortOrder="asc",elementLoc="bodyRow",container="bodyContainer") {
     var col = []; // Contains our headers 
 

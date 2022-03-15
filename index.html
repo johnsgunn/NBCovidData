@@ -55,6 +55,7 @@
         <script src="./js/GetCovidData.js"></script>
         <script src="./js/uiTools.js"></script>
         <script src="./js/loadTabData.js"></script>
+        <script src="./js/API_OpenCovidCa.js"></script>
 
         <style>
         </style>
@@ -793,13 +794,10 @@
                                 </div>
                                 <div class="col text-center ">
                                     <div class="p-3 border bg-light h-100">
-                                        <p class="display-6">Schools</p>
-                                        *No longer updated by GNB
+                                        <p class="display-6">OpenCovid.ca</p>
                                         <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="LoadRawData('SchoolsSummary',SchoolsDataURL)">Schools Summary</button>
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                onclick="LoadRawData('SchoolsList',SchoolsListURL)">Schools List</button>
+                                                onclick="LoadOCRawData('ocCaseHistory_NB',ocCaseHistory_NB)">NB Case History</button>
                                         </div>  
                                     </div>  
                                 </div>

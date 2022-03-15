@@ -505,6 +505,117 @@ async function LoadRawData(name,data){
     showElement('raw_data_display');  
 }
 
+async function LoadOCRawData(name,url){ // OpenCovid.ca Raw Data Loader
+    hideElement('raw_data_display');
+    showElement('loadingSpinner');  
+
+    try {
+        var dataJSON = await getDataJSON(url);
+        // console.log(dataJSON);
+
+        await createTableFromJSON_OC(dataJSON, 'active', 'desc', 'raw_data_display','raw_data_display');
+        // await createTableFromOCJSON(dataJSON,'active');
+    }
+    catch(err) {
+        hideElement('loadingSpinner');
+        document.getElementById("bodyContainer").innerHTML = err.message;
+        return;
+    }
+
+    hideElement('loadingSpinner');
+    showElement('raw_data_display');  
+}
+
+async function getDataJSON(url){
+    return new Promise((resolve,reject)=>{
+            var json = Get(url);
+            resolve(json);
+        });
+        
+}
+
+async function createTableFromOCJSON(dataJSON,name){
+    var arr = [];
+
+    arr = JSON.parse(dataJSON); 	// Convert JSON to array.
+
+    var col = []; // Contains our headers 
+
+    for (var i = 0; i < arr[name].length; i++) {
+        for (var key in arr[name][i]) {
+            col.push(key);
+        }
+    }  
+
+    var tableTextColor = "text-dark";
+
+    // Create a dynamic table.
+    var table = document.createElement("table");
+    table.classList.add('table');
+    table.classList.add('display');
+    table.classList.add('nowrap');
+    table.classList.add(tableTextColor);
+
+    table.id = 'tblData';
+    
+    // Create table header.
+    var header = table.createTHead();    
+    var tr = header.insertRow(-1);                   // Table row.
+
+    for (var i = 0; i < col.length; i++) {
+        var th = document.createElement("th");      // Table header.
+        th.innerHTML = col[i];
+        tr.appendChild(th);
+    }
+
+    var body = table.createTBody();
+
+    // Add JSON to the table rows.
+    for (var i = 0; i < arr[name].length; i++) {
+
+        tr = body.insertRow(-1);  
+
+        for (var j = 0; j < col.length; j++) {
+            var tabCell = tr.insertCell(-1);        
+
+            // if (col[j].includes("date") || col[j].includes("Date") || col[j].includes("DATE"))// Fixing inconsistent date formats
+            // { 
+            //     reportDate = new Date(arr[name][i][col[j]]);
+            //     displayReportDate = reportDate.toISOString();
+
+            //     tabCell.innerHTML = displayReportDate;
+            // }
+            // else {
+                tabCell.innerHTML = arr[name][i][col[j]];
+            // }
+        }
+    }
+
+    table.classList.add(tableTextColor);
+
+    // Finally, add the dynamic table to a container.
+    var divContainer = document.getElementById(container);
+    divContainer.innerHTML = "<h4 class='" + tableTextColor + "'>Data: " + name + "</h4>";
+    divContainer.appendChild(table);
+
+    $(document).ready(function() {
+        $('#tblData').DataTable({
+            scrollX:        true,
+            scrollCollapse: true,
+            autoWidth:         true,  
+            paging: true, 
+            "pageLength": 15,
+             dom: 'Bfrtip',
+             buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            // "order": [[ 0, sortOrder]],
+    });
+    } );    
+
+    showElement(raw_data_display);
+}
+
 function GetMaxValue(inputArray){
     return inputArray.reduce((max, current) => Math.max(max, current[0]), -Infinity)
 }
