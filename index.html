@@ -90,6 +90,9 @@
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#tipJarModal">
                                 Tip Jar
                             </button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#whoToFollowModal">
+                                Who To Follow
+                            </button>
                             <!-- <button type="button" class="btn btn-outline-secondary" onclick="openDonorLookup()">
                                 Donor Lookup
                             </button> -->
@@ -758,11 +761,15 @@
                                         <p class="display-6">Cases</p>
                                         <div class="btn-group-vertical btn-group-sm" role="group" aria-label="raw_caseData">
                                             <button type="button" class="btn btn-outline-secondary"
-                                                onclick="LoadRawData('CaseSummary',ProvincialSummaryURL)">Active Case Summary</button>
+                                                onclick="LoadRawData('CaseSummary',ProvincialSummaryURL)">Active Case Summary NB</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('ZoneSummary',ZoneSummaryURL)">Active Case Summary ALL</button>
                                             <button type="button" class="btn btn-outline-secondary"
                                                 onclick="LoadRawData('CaseHistory',CaseHistoryURL)">Case History</button>
                                             <button type="button" class="btn btn-outline-secondary"
                                                 onclick="LoadRawData('Covid19CaseVaccineStats',Covid19CaseVaccineStatsURL)">Case Rate Stats</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('CaseAgeStats',caseAgeStatsURL)">Case Age Stats</button>
                                         </div>  
                                     </div>  
                                 </div>
@@ -776,6 +783,8 @@
                                                 onclick="LoadRawData('CovidHospitalAgeStats', CovidHospitalAgeStatsURL)">Hospital Age Stats</button>
                                             <button type="button" class="btn btn-outline-secondary"
                                                 onclick="LoadRawData('CovidNewDeathsAgeStatsAll', CovidNewDeathsAgeStatAllURL)">Death Age Stats</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                onclick="LoadRawData('HealthCareStatus', HealthCareStatusURL)">Health Care Status</button>
                                         </div>  
                                     </div>  
                                 </div>
@@ -968,6 +977,51 @@
                             rs9yDjiFPCW3eUE62d4AwGbAkHgo9dbF77
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <!-- WHO TO FOLLOW MODAL -->
+        <div class="modal fade " id="whoToFollowModal" tabindex="-1" aria-labelledby="whoToFollowModal" aria-hidden="true" >
+            <div class="modal-dialog modal-tipjar modal-dialog-centered">
+              <div class="modal-content w-100">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="whoToFollowModalTitle">Who To Follow</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row p-1">
+                        <div class="col-12 text-center">
+                            <h3>Twitter</h3>
+                        </div> 
+                    </div>  
+                    <div class="row p-1">
+                        <div class="col-1 text-center">
+                            <img src="./img/twitter-icons/popnb_kindness.png" style="height:3em"/>
+                        </div>
+                        <div class="col-8 d-flex align-items-center">
+                            <a href="https://twitter.com/popnb_kindness">PoPNB Kindness</a>&nbsp;- New Brunswick Public Health Advocacy
+                        </div>
+                    </div>
+
+                    <div class="row p-1">
+                        <div class="col-1 text-center">
+                            <img src="./img/twitter-icons/projecthalo.jpg" style="height:3em"/>
+                        </div>
+                        <div class="col-8 d-flex align-items-center">
+                            <a href="https://twitter.com/projecthalo">Project Halo</a>&nbsp;- Covid and Public Health Experts
+                        </div>
+                    </div>
+
+                    <div class="row p-1">
+                        <div class="col-12 text-center">
+                            <h3>YouTube</h3>
+                        </div> 
+                    </div>  
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
